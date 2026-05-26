@@ -1,0 +1,180 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  .mn-root { font-family: 'DM Sans', sans-serif; color: var(--color-text-primary); padding: 0; }
+  .mn-nav { display: flex; justify-content: space-between; align-items: center; padding: 18px 32px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .mn-logo { font-family: 'Space Mono', monospace; font-size: 14px; color: var(--color-text-primary); }
+  .mn-logo span { color: #1D9E75; }
+  .mn-navlinks { display: flex; gap: 24px; font-size: 13px; color: var(--color-text-secondary); }
+  .mn-navlinks a { color: inherit; text-decoration: none; cursor: pointer; transition: color 0.2s; }
+  .mn-navlinks a:hover { color: var(--color-text-primary); }
+
+  .mn-hero { padding: 64px 32px 48px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .mn-tag { font-family: 'Space Mono', monospace; font-size: 11px; color: #1D9E75; margin-bottom: 16px; letter-spacing: 0.05em; }
+  .mn-hero h1 { font-size: 48px; font-weight: 300; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; }
+  .mn-hero h1 strong { font-weight: 600; }
+  .mn-hero p { font-size: 16px; color: var(--color-text-secondary); max-width: 480px; line-height: 1.7; margin: 0 0 32px; }
+  .mn-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+  .mn-btn-primary { background: var(--color-text-primary); color: var(--color-background-primary); border: none; padding: 10px 20px; font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 500; border-radius: var(--border-radius-md); cursor: pointer; }
+  .mn-btn-secondary { background: transparent; color: var(--color-text-primary); border: 0.5px solid var(--color-border-secondary); padding: 10px 20px; font-size: 13px; font-family: 'DM Sans', sans-serif; border-radius: var(--border-radius-md); cursor: pointer; }
+
+  .mn-terminal { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 20px 24px; margin: 48px 32px 0; font-family: 'Space Mono', monospace; font-size: 12px; line-height: 1.8; }
+  .mn-terminal .prompt { color: #1D9E75; }
+  .mn-terminal .cmd { color: var(--color-text-primary); }
+  .mn-terminal .out { color: var(--color-text-secondary); }
+
+  .mn-section { padding: 48px 32px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .mn-section-label { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--color-text-tertiary); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 24px; }
+  
+  .mn-projects { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .mn-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 20px; transition: border-color 0.2s; }
+  .mn-card:hover { border-color: var(--color-border-secondary); }
+  .mn-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+  .mn-card-icon { font-size: 20px; color: #1D9E75; }
+  .mn-card-langs { display: flex; gap: 6px; }
+  .mn-lang { font-size: 10px; font-family: 'Space Mono', monospace; background: var(--color-background-secondary); color: var(--color-text-secondary); padding: 2px 8px; border-radius: 20px; }
+  .mn-card h3 { font-size: 14px; font-weight: 600; margin: 0 0 6px; }
+  .mn-card p { font-size: 13px; color: var(--color-text-secondary); margin: 0 0 12px; line-height: 1.6; }
+  .mn-card-stat { font-family: 'Space Mono', monospace; font-size: 11px; color: #1D9E75; }
+
+  .mn-skills-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .mn-skill { font-size: 13px; font-family: 'Space Mono', monospace; border: 0.5px solid var(--color-border-tertiary); padding: 6px 14px; border-radius: 20px; color: var(--color-text-secondary); }
+
+  .mn-about { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+  .mn-about-text p { font-size: 15px; color: var(--color-text-secondary); line-height: 1.8; margin: 0 0 16px; }
+  .mn-stats { display: flex; flex-direction: column; gap: 12px; }
+  .mn-stat-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .mn-stat-label { font-size: 13px; color: var(--color-text-secondary); }
+  .mn-stat-val { font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; color: #1D9E75; }
+
+  .mn-footer { padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; }
+  .mn-footer-text { font-size: 12px; color: var(--color-text-tertiary); font-family: 'Space Mono', monospace; }
+  .mn-socials { display: flex; gap: 16px; }
+  .mn-socials a { font-size: 18px; color: var(--color-text-tertiary); text-decoration: none; transition: color 0.2s; }
+  .mn-socials a:hover { color: #1D9E75; }
+
+  @media (max-width: 520px) {
+    .mn-hero h1 { font-size: 32px; }
+    .mn-about { grid-template-columns: 1fr; }
+  }
+</style>
+
+<h2 class="sr-only">Anteprima del sito personale di Mirco Negri — portfolio da sviluppatore</h2>
+
+<div class="mn-root">
+  <nav class="mn-nav">
+    <div class="mn-logo">mirco<span>.</span>negri</div>
+    <div class="mn-navlinks">
+      <a>about</a>
+      <a>projects</a>
+      <a>skills</a>
+      <a>contact</a>
+    </div>
+  </nav>
+
+  <section class="mn-hero">
+    <div class="mn-tag">// computer science student & builder</div>
+    <h1>Hi, I'm<br><strong>Mirco Negri</strong></h1>
+    <p>I build software that solves real problems for real people. Currently studying CS at UniTrento, always learning something new.</p>
+    <div class="mn-ctas">
+      <button class="mn-btn-primary">View projects</button>
+      <button class="mn-btn-secondary">Download CV</button>
+    </div>
+  </section>
+
+  <div class="mn-terminal">
+    <div><span class="prompt">mirco@negri:~$</span> <span class="cmd">whoami</span></div>
+    <div class="out">CS student · backend developer · educator · scout</div>
+    <div style="margin-top:8px"><span class="prompt">mirco@negri:~$</span> <span class="cmd">ls projects/</span></div>
+    <div class="out">LaundryBot/  MovieRecommender/  ScoutMealPlanner/  CarnivalEffects/  UniArchive/</div>
+    <div style="margin-top:8px"><span class="prompt">mirco@negri:~$</span> <span class="cmd">cat interests.txt</span></div>
+    <div class="out">AI · Big Data · Software Engineering · Teaching technology</div>
+    <div style="margin-top:8px"><span class="prompt">mirco@negri:~$</span> <span class="cmd">_</span></div>
+  </div>
+
+  <section class="mn-section">
+    <div class="mn-section-label">// projects</div>
+    <div class="mn-projects">
+      <div class="mn-card">
+        <div class="mn-card-top">
+          <i class="ti ti-robot mn-card-icon" aria-hidden="true"></i>
+          <div class="mn-card-langs"><span class="mn-lang">Python</span></div>
+        </div>
+        <h3>LaundryBot</h3>
+        <p>Telegram bot automating laundry bookings for 190+ dorm residents.</p>
+        <div class="mn-card-stat">→ 130+ weekly bookings automated</div>
+      </div>
+      <div class="mn-card">
+        <div class="mn-card-top">
+          <i class="ti ti-movie mn-card-icon" aria-hidden="true"></i>
+          <div class="mn-card-langs"><span class="mn-lang">JS</span></div>
+        </div>
+        <h3>MovieRecommender</h3>
+        <p>Desktop app delivering personalized movie picks via TMDb API.</p>
+        <div class="mn-card-stat">→ 30+ real-time records processed</div>
+      </div>
+      <div class="mn-card">
+        <div class="mn-card-top">
+          <i class="ti ti-campfire mn-card-icon" aria-hidden="true"></i>
+          <div class="mn-card-langs"><span class="mn-lang">Python</span></div>
+        </div>
+        <h3>ScoutMealPlanner</h3>
+        <p>Automated menu & shopping lists for scout camps of 40+ people.</p>
+        <div class="mn-card-stat">→ 4h+ saved per event</div>
+      </div>
+      <div class="mn-card">
+        <div class="mn-card-top">
+          <i class="ti ti-wave-sine mn-card-icon" aria-hidden="true"></i>
+          <div class="mn-card-langs"><span class="mn-lang">JS</span></div>
+        </div>
+        <h3>Carnival Effects</h3>
+        <p>Audio-reactive web visualizer projected at a 120-person dorm party.</p>
+        <div class="mn-card-stat">→ 120+ attendees</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mn-section">
+    <div class="mn-section-label">// skills</div>
+    <div class="mn-skills-grid">
+      <span class="mn-skill">Python</span>
+      <span class="mn-skill">C/C++</span>
+      <span class="mn-skill">Java</span>
+      <span class="mn-skill">JavaScript</span>
+      <span class="mn-skill">HTML/CSS</span>
+      <span class="mn-skill">LaTeX</span>
+      <span class="mn-skill">Git / GitHub</span>
+      <span class="mn-skill">AI & ML</span>
+      <span class="mn-skill">Big Data</span>
+      <span class="mn-skill">Algorithms</span>
+      <span class="mn-skill">Data Structures</span>
+    </div>
+  </section>
+
+  <section class="mn-section" style="border-bottom: none;">
+    <div class="mn-section-label">// about</div>
+    <div class="mn-about">
+      <div class="mn-about-text">
+        <p>Computer Science student at Università di Trento. I love building things that actually get used — my Telegram bot handles 130+ weekly bookings, my visualizer ran live at a 120-person party.</p>
+        <p>Outside code: I teach digital skills to seniors, volunteer for food banks, and lead outdoor programs with AGESCI scouts since 2012.</p>
+      </div>
+      <div class="mn-stats">
+        <div class="mn-stat-row"><span class="mn-stat-label">Current degree</span><span class="mn-stat-val">BSc CS @ UniTrento</span></div>
+        <div class="mn-stat-row"><span class="mn-stat-label">English level</span><span class="mn-stat-val">C1 certified</span></div>
+        <div class="mn-stat-row"><span class="mn-stat-label">Users reached</span><span class="mn-stat-val">400+</span></div>
+        <div class="mn-stat-row"><span class="mn-stat-label">Volunteering since</span><span class="mn-stat-val">2012</span></div>
+        <div class="mn-stat-row" style="border:none"><span class="mn-stat-label">Location</span><span class="mn-stat-val">Trento, IT 🇮🇹</span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="mn-footer">
+    <div class="mn-footer-text">mirconegri.com · 2026</div>
+    <div class="mn-socials">
+      <a href="#" aria-label="LinkedIn"><i class="ti ti-brand-linkedin"></i></a>
+      <a href="#" aria-label="GitHub"><i class="ti ti-brand-github"></i></a>
+      <a href="mailto:mirconegri06@gmail.com" aria-label="Email"><i class="ti ti-mail"></i></a>
+    </div>
+  </footer>
+</div>
