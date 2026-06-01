@@ -35,91 +35,85 @@
     </script>
 
     <style>
+         
                 /* ═════════════════════════════════════════
-           GEMINI LAVA LAMP EFFECT
+           GEMINI LAVA LAMP (PERFORMANCE FIX 60FPS)
         ═════════════════════════════════════════ */
         
-        /* I globi: blur leggermente ridotto per far capire la forma liquida */
-        .blob {
-            position: absolute;
-            filter: blur(70px); 
-            opacity: 0.7;
-            mix-blend-mode: screen;
-            /* Partono tutti dal fondo dello schermo */
-            bottom: -30%; 
+        .aurora-bg {
+            position: fixed; /* Rimane inchiodato mentre scorri */
+            top: 0; left: 0; 
+            width: 100vw; height: 100vh; /* Copre SEMPRE tutto */
+            z-index: -1;
+            background: #030712;
+            overflow: hidden;
+            transform: translateZ(0); /* Attiva l'accelerazione GPU */
         }
 
-        /* Colori Gemini e posizioni di partenza */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px); /* L'effetto liquido/fusione */
+            opacity: 0.45; /* Niente "tutto bianco", i colori restano profondi */
+            will-change: transform; /* IL SEGRETO CONTRO GLI SCATTI */
+        }
+
+        /* 5 globi sparsi per riempire ogni buco (sopra e sotto) */
         .blob-1 {
-            left: 10%;
-            width: 45vw; height: 45vw;
-            background: #1a73e8; /* Google Blue */
-            animation: lava-rise-1 22s infinite ease-in-out;
+            width: 70vw; height: 70vw;
+            background: #1a73e8; /* Blu */
+            top: -20%; left: -10%;
+            animation: lava-1 18s infinite alternate ease-in-out;
         }
         .blob-2 {
-            left: 40%;
-            width: 40vw; height: 50vw;
-            background: #9333ea; /* Deep Purple */
-            /* Il delay negativo fa partire l'animazione a metà, 
-               così non salgono tutti insieme */
-            animation: lava-rise-2 26s infinite ease-in-out -10s; 
+            width: 60vw; height: 80vw;
+            background: #9333ea; /* Viola */
+            bottom: -20%; right: -10%;
+            animation: lava-2 22s infinite alternate ease-in-out;
         }
         .blob-3 {
-            right: 10%;
-            width: 50vw; height: 40vw;
-            background: #0891b2; /* Cyan */
-            animation: lava-rise-3 28s infinite ease-in-out -5s;
+            width: 80vw; height: 60vw;
+            background: #0891b2; /* Ciano */
+            bottom: -10%; left: 10%;
+            animation: lava-3 26s infinite alternate ease-in-out;
+        }
+        .blob-4 {
+            width: 50vw; height: 50vw;
+            background: #1a73e8; /* Blu */
+            top: 40%; right: 20%;
+            animation: lava-4 20s infinite alternate ease-in-out;
+        }
+        .blob-5 {
+            width: 60vw; height: 60vw;
+            background: #9333ea; /* Viola */
+            top: 10%; left: 40%;
+            animation: lava-5 24s infinite alternate ease-in-out;
         }
 
         /* 
-           LA FISICA DELLA LAVA:
-           - 0% e 100%: Sul fondo, schiacciati (scaleY minore, scaleX maggiore)
-           - Metà salita: Molto allungati (scaleY maggiore)
-           - Cima: Toccano il soffitto e si schiacciano di nuovo
+           ANIMAZIONI FISICHE E FLUIDE
+           Ora i globi viaggiano in 3D lungo l'asse Y (su e giù).
+           Quando i cerchi sfocati si incrociano, creano visivamente l'effetto "Lava"
         */
-        @keyframes lava-rise-1 {
-            0%, 100% { 
-                transform: translateY(0) scaleX(1.2) scaleY(0.8); 
-                border-radius: 60% 40% 70% 30% / 50% 60% 40% 50%;
-            }
-            30% {
-                transform: translateY(-40vh) scaleX(0.9) scaleY(1.3); /* Si stira verso l'alto */
-            }
-            50% { 
-                transform: translateY(-90vh) scaleX(1.1) scaleY(0.9); /* Arriva in cima e si schiaccia */
-                border-radius: 40% 60% 30% 70% / 60% 40% 50% 40%;
-            }
-            75% {
-                transform: translateY(-40vh) scaleX(0.8) scaleY(1.2); /* Si stira cadendo */
-            }
+        @keyframes lava-1 {
+            0%   { transform: translate3d(0, 0, 0) scale(1); }
+            100% { transform: translate3d(10vw, 55vh, 0) scale(1.2); } /* Scende */
         }
-
-        @keyframes lava-rise-2 {
-            0%, 100% { 
-                transform: translateY(0) scaleX(1.1) scaleY(0.9); 
-                border-radius: 50% 50% 40% 60% / 40% 60% 50% 50%;
-            }
-            50% { 
-                transform: translateY(-110vh) scaleX(0.8) scaleY(1.4); /* Va oltre lo schermo */
-                border-radius: 70% 30% 60% 40% / 50% 40% 60% 50%;
-            }
+        @keyframes lava-2 {
+            0%   { transform: translate3d(0, 0, 0) scale(1.1); }
+            100% { transform: translate3d(-15vw, -65vh, 0) scale(0.9); } /* Sale */
         }
-
-        @keyframes lava-rise-3 {
-            0%, 100% { 
-                transform: translateY(0) scaleX(1.3) scaleY(0.8); 
-                border-radius: 40% 60% 50% 50% / 60% 40% 60% 40%;
-            }
-            25% {
-                transform: translateY(-50vh) scaleX(0.9) scaleY(1.1);
-            }
-            50% { 
-                transform: translateY(-80vh) scaleX(1) scaleY(1); 
-                border-radius: 60% 40% 40% 60% / 40% 50% 50% 60%;
-            }
-            80% {
-                transform: translateY(-20vh) scaleX(1.1) scaleY(0.9);
-            }
+        @keyframes lava-3 {
+            0%   { transform: translate3d(0, 0, 0) scale(0.9); }
+            100% { transform: translate3d(20vw, -50vh, 0) scale(1.2); } /* Sale */
+        }
+        @keyframes lava-4 {
+            0%   { transform: translate3d(0, 0, 0) scale(1); }
+            100% { transform: translate3d(-20vw, 40vh, 0) scale(0.8); } /* Scende */
+        }
+        @keyframes lava-5 {
+            0%   { transform: translate3d(0, 0, 0) scale(1.2); }
+            100% { transform: translate3d(15vw, -45vh, 0) scale(1); } /* Sale */
         }
 
 
@@ -182,11 +176,13 @@
 </head>
 <body class="antialiased selection:bg-blue-500/30 selection:text-white">
 
-    <!-- SFONDO EFFETTO GEMINI (AURORA) -->
+        <!-- SFONDO EFFETTO GEMINI (LAVA LAMP) -->
     <div class="aurora-bg">
         <div class="blob blob-1"></div>
         <div class="blob blob-2"></div>
         <div class="blob blob-3"></div>
+        <div class="blob blob-4"></div>
+        <div class="blob blob-5"></div>
     </div>
 
     <!-- NAVBAR -->
