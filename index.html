@@ -1,1102 +1,596 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mirco Negri — CS Student & Developer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mirco Negri — Portfolio</title>
+    <meta name="description" content="Mirco Negri — CS Student a Trento, sviluppatore, scout, soccorritore. Portfolio personale.">
+    
+    <meta property="og:title" content="Mirco Negri — Portfolio">
+    <meta property="og:description" content="CS Student a Trento, sviluppatore, scout, soccorritore. Portfolio personale.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mirconegri.com">
+    <meta property="og:image" content="https://mirconegri.com/og-image.jpg">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- ═══════════════════════════════════════════════
-       FONTS & ICONS
-  ═══════════════════════════════════════════════ -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0f0f13',
+                        accent: '#00ff88',
+                        muted: '#a1a1aa'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
 
-  <!-- ═══════════════════════════════════════════════
-       TAILWIND CDN
-  ═══════════════════════════════════════════════ -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            neon:    '#00ff88',
-            neonDim: '#00cc6a',
-            cyan:    '#00e5ff',
-            violet:  '#a855f7',
-            bg:      '#0a0a0f',
-            surface: '#111118',
-            card:    '#16161f',
-            border:  '#1e1e2e',
-            muted:   '#4a4a6a',
-            text:    '#e2e2f0',
-          },
-          fontFamily: {
-            mono: ['"Fira Code"', 'monospace'],
-            sans: ['"Space Grotesk"', 'sans-serif'],
-          },
-        },
-      },
-    };
-  </script>
+    <style>
+        body {
+            background-color: #0f0f13;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
 
-  <!-- ═══════════════════════════════════════════════
-       STILI GLOBALI
-  ═══════════════════════════════════════════════ -->
-  <style>
-    /* ── Reset & base ── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+        /* Pure CSS Dot Pattern Background */
+        .bg-dot-pattern {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
 
-    body {
-      background-color: #0a0a0f;
-      color: #e2e2f0;
-      font-family: 'Space Grotesk', sans-serif;
-      overflow-x: hidden;
-      cursor: none; /* custom cursor */
-    }
+        /* Custom Cursor for Desktop */
+        @media (pointer: fine) {
+            body, a, button { cursor: none; }
+            #cursor-dot, #cursor-ring { display: block; }
+        }
+        @media (pointer: coarse) {
+            #cursor-dot, #cursor-ring { display: none !important; }
+        }
 
-    /* ── Custom cursor ── */
-    #cursor {
-      width: 10px; height: 10px;
-      background: #00ff88;
-      border-radius: 50%;
-      position: fixed;
-      top: 0; left: 0;
-      pointer-events: none;
-      z-index: 9999;
-      transform: translate(-50%, -50%);
-      transition: width .2s, height .2s, background .2s;
-      box-shadow: 0 0 8px #00ff88, 0 0 20px #00ff8860;
-    }
-    #cursor-ring {
-      width: 32px; height: 32px;
-      border: 1px solid #00ff8888;
-      border-radius: 50%;
-      position: fixed;
-      top: 0; left: 0;
-      pointer-events: none;
-      z-index: 9998;
-      transform: translate(-50%, -50%);
-      transition: all .15s ease-out;
-    }
-    body:has(a:hover) #cursor, body:has(button:hover) #cursor {
-      width: 6px; height: 6px;
-    }
-    body:has(a:hover) #cursor-ring, body:has(button:hover) #cursor-ring {
-      width: 48px; height: 48px;
-      border-color: #00ff88;
-    }
+        #cursor-dot {
+            width: 8px; height: 8px;
+            background-color: #00ff88;
+            border-radius: 50%;
+            position: fixed;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
 
-    /* ── Canvas Matrix Rain ── */
-    #matrix-canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
-      opacity: .04;
-      pointer-events: none;
-    }
+        #cursor-ring {
+            width: 32px; height: 32px;
+            border: 1px solid rgba(0, 255, 136, 0.4);
+            border-radius: 50%;
+            position: fixed;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out, width 0.2s, height 0.2s;
+        }
 
-    /* ── Scrollbar ── */
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: #0a0a0f; }
-    ::-webkit-scrollbar-thumb { background: #00ff8860; border-radius: 2px; }
+        .cursor-hover #cursor-dot {
+            width: 4px; height: 4px;
+            background-color: white;
+        }
+        
+        .cursor-hover #cursor-ring {
+            width: 48px; height: 48px;
+            border-color: #00ff88;
+            background-color: rgba(0, 255, 136, 0.1);
+        }
 
-    /* ── Glow utilities ── */
-    .glow-text  { text-shadow: 0 0 10px #00ff88, 0 0 30px #00ff8840; }
-    .glow-box   { box-shadow: 0 0 0 1px #00ff8830, 0 0 20px #00ff8818; }
-    .glow-box:hover { box-shadow: 0 0 0 1px #00ff8860, 0 0 30px #00ff8830; }
+        /* Typing Effect Cursor */
+        .typing-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 1em;
+            background-color: #00ff88;
+            vertical-align: middle;
+            animation: blink 1s step-end infinite;
+            margin-left: 2px;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
 
-    /* ── Neon line separator ── */
-    .neon-line {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, #00ff88, transparent);
-    }
+        /* Scroll Progress Bar */
+        #scroll-progress {
+            position: fixed;
+            top: 0; left: 0;
+            width: 0%; height: 2px;
+            background-color: #00ff88;
+            z-index: 10000;
+            box-shadow: 0 0 10px #00ff88;
+        }
 
-    /* ── Section fade-in (IntersectionObserver) ── */
-    .fade-up {
-      opacity: 0;
-      transform: translateY(32px);
-      transition: opacity .7s ease, transform .7s ease;
-    }
-    .fade-up.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+        /* Scroll Reveal Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-    /* ── Typing cursor blink ── */
-    .typing-cursor {
-      display: inline-block;
-      width: 2px;
-      height: 1.1em;
-      background: #00ff88;
-      margin-left: 2px;
-      vertical-align: middle;
-      animation: blink .9s step-end infinite;
-    }
-    @keyframes blink { 50% { opacity: 0; } }
-
-    /* ── Navbar ── */
-    #navbar {
-      position: fixed; top: 0; left: 0; right: 0;
-      z-index: 100;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      background: rgba(10,10,15,.85);
-      border-bottom: 1px solid #1e1e2e;
-      transition: border-color .3s;
-    }
-    #navbar.scrolled { border-bottom-color: #00ff8840; }
-
-    .nav-link {
-      font-family: 'Fira Code', monospace;
-      font-size: .78rem;
-      color: #4a4a6a;
-      transition: color .2s;
-      letter-spacing: .04em;
-    }
-    .nav-link:hover { color: #00ff88; }
-
-    /* ── Hero ── */
-    #hero {
-      min-height: 100vh;
-      display: flex; flex-direction: column;
-      justify-content: center;
-      padding: 6rem 1.5rem 3rem;
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero-tag {
-      font-family: 'Fira Code', monospace;
-      font-size: .75rem;
-      color: #00ff88;
-      letter-spacing: .12em;
-      margin-bottom: .75rem;
-    }
-
-    .hero-name {
-      font-family: 'Fira Code', monospace;
-      font-size: clamp(2.8rem, 8vw, 6.5rem);
-      font-weight: 700;
-      line-height: 1.05;
-      letter-spacing: -.02em;
-      background: linear-gradient(135deg, #e2e2f0 30%, #00ff88 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .hero-subtitle {
-      font-family: 'Fira Code', monospace;
-      font-size: clamp(1rem, 2.5vw, 1.4rem);
-      color: #4a4a6a;
-      margin-top: 1rem;
-    }
-    .hero-subtitle .typed-word { color: #00ff88; }
-
-    /* ── CTA Buttons ── */
-    .btn-primary {
-      display: inline-flex; align-items: center; gap: .5rem;
-      padding: .7rem 1.6rem;
-      background: #00ff88;
-      color: #0a0a0f;
-      font-family: 'Fira Code', monospace;
-      font-size: .85rem;
-      font-weight: 600;
-      border-radius: 4px;
-      text-decoration: none;
-      transition: box-shadow .2s, transform .2s;
-    }
-    .btn-primary:hover {
-      box-shadow: 0 0 20px #00ff8880;
-      transform: translateY(-2px);
-    }
-
-    .btn-outline {
-      display: inline-flex; align-items: center; gap: .5rem;
-      padding: .7rem 1.6rem;
-      border: 1px solid #00ff8860;
-      color: #00ff88;
-      font-family: 'Fira Code', monospace;
-      font-size: .85rem;
-      font-weight: 500;
-      border-radius: 4px;
-      text-decoration: none;
-      transition: background .2s, box-shadow .2s, transform .2s;
-    }
-    .btn-outline:hover {
-      background: #00ff8812;
-      box-shadow: 0 0 16px #00ff8840;
-      transform: translateY(-2px);
-    }
-
-    /* ── Section wrapper ── */
-    .section {
-      position: relative; z-index: 1;
-      padding: 5rem 1.5rem;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-family: 'Fira Code', monospace;
-      font-size: .7rem;
-      letter-spacing: .18em;
-      color: #00ff88;
-      text-transform: uppercase;
-      margin-bottom: .4rem;
-    }
-
-    .section-title {
-      font-family: 'Fira Code', monospace;
-      font-size: clamp(1.6rem, 4vw, 2.4rem);
-      font-weight: 700;
-      color: #e2e2f0;
-      margin-bottom: 2.5rem;
-    }
-
-    /* ── Skill tags ── */
-    .skill-tag {
-      display: inline-flex; align-items: center; gap: .35rem;
-      padding: .35rem .85rem;
-      background: #16161f;
-      border: 1px solid #1e1e2e;
-      border-radius: 99px;
-      font-family: 'Fira Code', monospace;
-      font-size: .78rem;
-      color: #a0a0c0;
-      transition: border-color .2s, color .2s, box-shadow .2s;
-    }
-    .skill-tag:hover {
-      border-color: #00ff8870;
-      color: #00ff88;
-      box-shadow: 0 0 10px #00ff8820;
-    }
-
-    /* ── Project card ── */
-    .project-card {
-      background: #16161f;
-      border: 1px solid #1e1e2e;
-      border-radius: 12px;
-      padding: 1.5rem;
-      transition: border-color .25s, transform .25s, box-shadow .25s;
-      display: flex; flex-direction: column;
-      height: 100%;
-    }
-    .project-card:hover {
-      border-color: #00ff8850;
-      transform: translateY(-4px);
-      box-shadow: 0 8px 32px #00ff8814;
-    }
-    .project-lang {
-      font-family: 'Fira Code', monospace;
-      font-size: .68rem;
-      color: #00ff88;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      margin-bottom: .5rem;
-    }
-    .project-card h3 {
-      font-family: 'Fira Code', monospace;
-      font-size: 1rem;
-      font-weight: 600;
-      color: #e2e2f0;
-      margin-bottom: .5rem;
-    }
-    .project-card p {
-      font-size: .86rem;
-      color: #6a6a8a;
-      line-height: 1.6;
-      flex: 1;
-    }
-    .project-icon {
-      font-size: 1.6rem;
-      margin-bottom: .8rem;
-    }
-
-    /* ── Timeline ── */
-    .timeline { position: relative; padding-left: 1.5rem; }
-    .timeline::before {
-      content: '';
-      position: absolute; left: 0; top: 4px; bottom: 4px;
-      width: 1px;
-      background: linear-gradient(180deg, #00ff88, #00ff8820);
-    }
-    .timeline-item {
-      position: relative;
-      padding-bottom: 2.2rem;
-    }
-    .timeline-item::before {
-      content: '';
-      position: absolute;
-      left: -1.5rem;
-      top: 6px;
-      width: 8px; height: 8px;
-      background: #00ff88;
-      border-radius: 50%;
-      box-shadow: 0 0 8px #00ff88;
-    }
-    .timeline-date {
-      font-family: 'Fira Code', monospace;
-      font-size: .72rem;
-      color: #00ff88;
-      letter-spacing: .08em;
-      margin-bottom: .2rem;
-    }
-    .timeline-title {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #e2e2f0;
-    }
-    .timeline-sub {
-      font-size: .85rem;
-      color: #6a6a8a;
-    }
-
-    /* ── Volunteer card ── */
-    .vol-card {
-      background: #16161f;
-      border: 1px solid #1e1e2e;
-      border-radius: 12px;
-      padding: 1.4rem 1.5rem;
-      display: flex; align-items: flex-start; gap: 1rem;
-      transition: border-color .25s, box-shadow .25s;
-    }
-    .vol-card:hover {
-      border-color: #00ff8850;
-      box-shadow: 0 4px 24px #00ff8810;
-    }
-    .vol-icon {
-      width: 44px; height: 44px;
-      display: flex; align-items: center; justify-content: center;
-      background: #0a0a0f;
-      border: 1px solid #00ff8830;
-      border-radius: 8px;
-      font-size: 1.25rem;
-      flex-shrink: 0;
-    }
-    .vol-years {
-      font-family: 'Fira Code', monospace;
-      font-size: .68rem;
-      color: #00ff88;
-      letter-spacing: .08em;
-      margin-top: .15rem;
-    }
-
-    /* ── Footer ── */
-    #footer {
-      position: relative; z-index: 1;
-      border-top: 1px solid #1e1e2e;
-      padding: 3rem 1.5rem 2rem;
-      text-align: center;
-    }
-    .social-link {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 42px; height: 42px;
-      border: 1px solid #1e1e2e;
-      border-radius: 8px;
-      color: #4a4a6a;
-      font-size: 1.1rem;
-      transition: color .2s, border-color .2s, box-shadow .2s;
-      text-decoration: none;
-    }
-    .social-link:hover {
-      color: #00ff88;
-      border-color: #00ff8860;
-      box-shadow: 0 0 14px #00ff8830;
-    }
-
-    /* ── Bento About ── */
-    .bento-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1rem;
-    }
-    .bento-cell {
-      background: #16161f;
-      border: 1px solid #1e1e2e;
-      border-radius: 12px;
-      padding: 1.5rem;
-      transition: border-color .25s;
-    }
-    .bento-cell:hover { border-color: #00ff8840; }
-    .bento-cell.accent {
-      border-color: #00ff8830;
-      background: linear-gradient(135deg, #16161f 60%, #00ff8808);
-    }
-
-    /* ── Cert badges ── */
-    .cert-badge {
-      display: inline-flex; align-items: center; gap: .5rem;
-      padding: .4rem 1rem;
-      background: #0a0a0f;
-      border: 1px solid #1e1e2e;
-      border-radius: 6px;
-      font-family: 'Fira Code', monospace;
-      font-size: .75rem;
-      color: #a0a0c0;
-    }
-    .cert-badge .dot {
-      width: 6px; height: 6px;
-      background: #00ff88;
-      border-radius: 50%;
-      flex-shrink: 0;
-      box-shadow: 0 0 6px #00ff88;
-    }
-
-    /* ── Terminal prompt decoration ── */
-    .prompt::before {
-      content: '> ';
-      color: #00ff88;
-      font-family: 'Fira Code', monospace;
-    }
-
-    /* ── Mobile tweaks ── */
-    @media (max-width: 640px) {
-      .section { padding: 3.5rem 1.25rem; }
-      #hero { padding: 5rem 1.25rem 2.5rem; }
-    }
-
-    /* ── Scroll progress bar ── */
-    #progress-bar {
-      position: fixed; top: 0; left: 0;
-      height: 2px;
-      background: linear-gradient(90deg, #00ff88, #00e5ff);
-      z-index: 200;
-      width: 0%;
-      transition: width .1s linear;
-      box-shadow: 0 0 8px #00ff88;
-    }
-  </style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f0f13; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00ff88; }
+        
+        /* Hide scrollbar for badge container */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
 </head>
-<body>
+<body class="bg-dot-pattern font-sans antialiased selection:bg-accent selection:text-dark">
 
-<!-- ═══════════════════════════════════════════════
-     EFFETTI VISIVI DI SFONDO
-═══════════════════════════════════════════════ -->
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
 
-<!-- Matrix rain canvas -->
-<canvas id="matrix-canvas"></canvas>
+    <div id="scroll-progress"></div>
 
-<!-- Custom cursor -->
-<div id="cursor"></div>
-<div id="cursor-ring"></div>
+    <header id="navbar" class="fixed w-full top-0 z-50 transition-transform duration-300 bg-dark/80 backdrop-blur-md border-b border-white/5">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="font-mono text-white text-lg font-bold tracking-tighter hover-target">
+                <span class="text-accent">~</span>/mirco
+            </a>
+            
+            <nav class="hidden md:flex gap-8 font-mono text-sm">
+                <a href="#about" class="text-muted hover:text-accent transition-colors hover-target">~/about</a>
+                <a href="#projects" class="text-muted hover:text-accent transition-colors hover-target">~/projects</a>
+                <a href="#education" class="text-muted hover:text-accent transition-colors hover-target">~/education</a>
+                <a href="#volunteer" class="text-muted hover:text-accent transition-colors hover-target">~/volunteer</a>
+                <a href="#contact" class="text-muted hover:text-accent transition-colors hover-target">~/contact</a>
+            </nav>
 
-<!-- Scroll progress bar -->
-<div id="progress-bar"></div>
-
-<!-- ═══════════════════════════════════════════════
-     NAVBAR
-═══════════════════════════════════════════════ -->
-<nav id="navbar">
-  <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
-    <!-- Logo -->
-    <a href="#hero" class="font-mono text-sm font-semibold text-neon glow-text tracking-wider">
-      MN<span class="text-muted">_</span>
-    </a>
-
-    <!-- Desktop nav -->
-    <ul class="hidden md:flex items-center gap-7">
-      <li><a href="#about"     class="nav-link">~/about</a></li>
-      <li><a href="#projects"  class="nav-link">~/projects</a></li>
-      <li><a href="#education" class="nav-link">~/education</a></li>
-      <li><a href="#volunteer" class="nav-link">~/volunteer</a></li>
-      <li><a href="#contact"   class="nav-link">~/contact</a></li>
-    </ul>
-
-    <!-- Mobile hamburger -->
-    <button id="menu-btn" class="md:hidden text-muted hover:text-neon transition-colors" aria-label="Menu">
-      <i class="fa-solid fa-terminal text-lg"></i>
-    </button>
-  </div>
-
-  <!-- Mobile dropdown -->
-  <div id="mobile-menu" class="hidden md:hidden border-t border-border">
-    <ul class="flex flex-col px-6 py-3 gap-3">
-      <li><a href="#about"     class="nav-link block py-1">~/about</a></li>
-      <li><a href="#projects"  class="nav-link block py-1">~/projects</a></li>
-      <li><a href="#education" class="nav-link block py-1">~/education</a></li>
-      <li><a href="#volunteer" class="nav-link block py-1">~/volunteer</a></li>
-      <li><a href="#contact"   class="nav-link block py-1">~/contact</a></li>
-    </ul>
-  </div>
-</nav>
-
-
-<!-- ═══════════════════════════════════════════════
-     SEZIONE 1: HERO
-═══════════════════════════════════════════════ -->
-<section id="hero">
-  <div class="max-w-5xl mx-auto">
-
-    <!-- Prompt decorativo -->
-    <p class="hero-tag fade-up">// mirconegri.com &nbsp;•&nbsp; init portfolio.sh</p>
-
-    <!-- Nome principale -->
-    <h1 class="hero-name fade-up" style="transition-delay:.1s">
-      Mirco<br>Negri
-    </h1>
-
-    <!-- Typing effect subtitle -->
-    <p class="hero-subtitle fade-up" style="transition-delay:.2s">
-      <span class="text-muted font-mono text-sm">const role = &quot;</span><span class="typed-word" id="typed-text"></span><span class="typing-cursor"></span><span class="text-muted font-mono text-sm">&quot;;</span>
-    </p>
-
-    <!-- Bio one-liner -->
-    <p class="mt-5 text-text/60 max-w-xl text-base leading-relaxed fade-up" style="transition-delay:.3s">
-      CS Student @ Università di Trento. Appassionato di software, AI e persone.
-      <span class="text-neon">Codice</span> di giorno, <span class="text-neon">volontario</span> nel cuore.
-    </p>
-
-    <!-- CTA buttons -->
-    <div class="flex flex-wrap gap-3 mt-8 fade-up" style="transition-delay:.4s">
-      <a href="#projects" class="btn-primary">
-        <i class="fa-solid fa-code-branch text-xs"></i> Vedi Progetti
-      </a>
-      <a href="#contact" class="btn-outline">
-        <i class="fa-solid fa-paper-plane text-xs"></i> Contattami
-      </a>
-    </div>
-
-    <!-- Terminal window decorativo -->
-    <div class="mt-14 fade-up" style="transition-delay:.5s; max-width:440px">
-      <div class="bg-card border border-border rounded-xl overflow-hidden">
-        <!-- title bar -->
-        <div class="flex items-center gap-2 px-4 py-2.5 border-b border-border bg-surface">
-          <span class="w-3 h-3 rounded-full bg-red-500/70"></span>
-          <span class="w-3 h-3 rounded-full bg-yellow-500/70"></span>
-          <span class="w-3 h-3 rounded-full bg-green-500/70"></span>
-          <span class="ml-3 font-mono text-xs text-muted">bash — mirco@unitn</span>
+            <button id="mobile-menu-btn" class="md:hidden text-muted hover:text-accent focus:outline-none hover-target">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
         </div>
-        <!-- terminal body -->
-        <div class="p-4 font-mono text-xs leading-6 text-text/80">
-          <p><span class="text-neon">mirco@unitn</span><span class="text-muted">:~$</span> whoami</p>
-          <p class="text-text/60">Mirco Negri</p>
-          <p class="mt-1"><span class="text-neon">mirco@unitn</span><span class="text-muted">:~$</span> cat skills.txt</p>
-          <p class="text-cyan/80">C &nbsp;C++ &nbsp;Java &nbsp;Python &nbsp;JS &nbsp;AI &nbsp;BigData</p>
-          <p class="mt-1"><span class="text-neon">mirco@unitn</span><span class="text-muted">:~$</span> <span class="animate-pulse">▌</span></p>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-dark border-b border-white/5 absolute w-full">
+            <nav class="flex flex-col font-mono text-sm p-6 gap-6">
+                <a href="#about" class="mobile-link text-muted hover:text-accent transition-colors">~/about</a>
+                <a href="#projects" class="mobile-link text-muted hover:text-accent transition-colors">~/projects</a>
+                <a href="#education" class="mobile-link text-muted hover:text-accent transition-colors">~/education</a>
+                <a href="#volunteer" class="mobile-link text-muted hover:text-accent transition-colors">~/volunteer</a>
+                <a href="#contact" class="mobile-link text-muted hover:text-accent transition-colors">~/contact</a>
+            </nav>
         </div>
-      </div>
-    </div>
+    </header>
 
-  </div>
-</section>
+    <main class="max-w-6xl mx-auto px-6 pt-32 pb-20">
 
-<div class="neon-line max-w-5xl mx-auto opacity-30"></div>
+        <section id="hero" class="min-h-[80vh] flex flex-col justify-center items-start reveal">
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-accent mb-4">
+                Mirco Negri
+            </h1>
+            
+            <div class="font-mono text-lg md:text-xl text-muted mb-12 h-8">
+                > <span id="typing-text" class="text-white"></span><span class="typing-cursor"></span>
+            </div>
 
+            <div class="mb-12 bg-white/5 border border-white/10 p-6 rounded-sm w-full max-w-2xl hover:border-accent/50 transition-colors duration-500">
+                <pre class="font-mono text-xs md:text-sm text-gray-300 border-l-2 border-accent pl-4 overflow-x-auto">
+<span class="text-accent font-bold">mirco</span>@<span class="text-white font-bold">portfolio</span>
+───────────────
+<span class="text-accent">OS:</span>      Human v21.0 (Trento, IT)
+<span class="text-accent">DE:</span>      Computer Science @ UniTN
+<span class="text-accent">WM:</span>      Scout + Soccorritore
+<span class="text-accent">Shell:</span>   Python / C / JavaScript
+<span class="text-accent">Uptime:</span>  21 years
+<span class="text-accent">Pkgs:</span>    LaundryBot, MovieRecommender, UniArchive...
+                </pre>
+            </div>
 
+            <div class="flex flex-wrap gap-4 font-mono text-sm">
+                <a href="#projects" class="px-6 py-3 bg-accent text-dark font-bold hover:bg-white transition-colors hover-target">
+                    Esplora i progetti
+                </a>
+                <a href="#contact" class="px-6 py-3 border border-white/20 text-white hover:border-accent hover:text-accent transition-colors hover-target">
+                    Scrivimi
+                </a>
+            </div>
+        </section>
 
-<!-- ═══════════════════════════════════════════════
-     SEZIONE 2: ABOUT ME & SKILLS
-═══════════════════════════════════════════════ -->
-<section id="about">
-  <div class="section">
-    <p class="section-label fade-up">02 / about_me</p>
-    <h2 class="section-title fade-up">Chi sono</h2>
+        <div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-20"></div>
 
-    <!-- Bento grid layout -->
-    <div class="bento-grid fade-up">
+        <section id="about" class="reveal pt-10">
+            <h2 class="font-mono text-xl text-muted mb-10"><span class="text-accent">// 01</span> — su di me</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="text-gray-300 text-lg leading-relaxed font-light">
+                    <p>
+                        Sono uno studente di informatica con una doppia anima: da un lato il codice, i sistemi, l'AI e il problem solving tecnico; dall'altro le persone. Insegno informatica agli adulti per favorire l'inclusione digitale e credo che la tecnologia debba prima di tutto risolvere problemi reali.
+                    </p>
+                </div>
+                
+                <div class="flex flex-wrap content-start gap-3">
+                    <span class="border border-accent/30 text-accent font-mono px-3 py-1 text-sm bg-accent/5">C</span>
+                    <span class="border border-accent/30 text-accent font-mono px-3 py-1 text-sm bg-accent/5">C++</span>
+                    <span class="border border-accent/30 text-accent font-mono px-3 py-1 text-sm bg-accent/5">Java</span>
+                    <span class="border border-accent/30 text-accent font-mono px-3 py-1 text-sm bg-accent/5">PolyML</span>
+                    <span class="border border-accent/30 text-accent font-mono px-3 py-1 text-sm bg-accent/5">JavaScript</span>
+                    <span class="border border-accent/30 text-accent font-mono px-3 py-1 text-sm bg-accent/5">Python</span>
+                    <span class="border border-accent/30 text-accent font-mono px-3 py-1 text-sm bg-accent/5">HTML/CSS</span>
+                    <span class="border border-accent/30 text-accent font-mono px-3 py-1 text-sm bg-accent/5">AI/ML</span>
+                    <span class="border border-accent/30 text-accent font-mono px-3 py-1 text-sm bg-accent/5">Big Data</span>
+                    <span class="border border-accent/30 text-accent font-mono px-3 py-1 text-sm bg-accent/5">LaTeX</span>
+                    <span class="border border-accent/30 text-accent font-mono px-3 py-1 text-sm bg-accent/5">Git</span>
+                    <span class="border border-accent/30 text-accent font-mono px-3 py-1 text-sm bg-accent/5">Linux</span>
+                </div>
+            </div>
+            
+            <div class="mt-12 flex items-center gap-3 font-mono text-sm text-gray-400 bg-white/5 w-fit px-4 py-2 border border-white/10">
+                <span>attualmente → CS @ UniTN</span>
+                <span class="w-2 h-2 rounded-full bg-accent animate-pulse shadow-[0_0_8px_#00ff88]"></span>
+                <span class="text-white">available for interesting things</span>
+            </div>
+        </section>
 
-      <!-- Bio card (grande) -->
-      <div class="bento-cell accent md:col-span-2" style="grid-column: span 2">
-        <p class="text-muted font-mono text-xs mb-2">// bio.txt</p>
-        <p class="text-text/80 leading-relaxed text-sm">
-          Sono uno studente di <span class="text-neon font-semibold">Informatica</span> all'Università di Trento, 
-          appassionato di tutto ciò che riguarda il software, l'intelligenza artificiale e il problem solving creativo.
-          Unisco la mentalità da ingegnere a un forte senso civico: nella vita non ho solo una <em>tastiera</em>,
-          ma anche un <em>cuore</em> orientato alla comunità.
+        <div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-20"></div>
+
+        <section id="projects" class="reveal pt-10">
+            <h2 class="font-mono text-xl text-muted mb-10"><span class="text-accent">// 02</span> — progetti</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <div class="group relative bg-[#13131a] border border-white/10 p-6 hover:border-accent/50 hover:-translate-y-1 transition-all duration-300 flex flex-col hover-target">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-2xl">🤖</span>
+                        <a href="https://github.com/mirconegri" target="_blank" class="text-muted hover:text-white"><i class="fa-brands fa-github text-xl"></i></a>
+                    </div>
+                    <h3 class="font-mono text-white text-lg font-bold mb-1">LaundryBot</h3>
+                    <span class="font-mono text-xs text-accent mb-4">Python · Telegram API</span>
+                    <p class="text-sm text-gray-400 mt-auto">Bot per prenotare le lavatrici in residence. Un piccolo problema quotidiano, una soluzione elegante.</p>
+                </div>
+
+                <div class="group relative bg-[#13131a] border border-white/10 p-6 hover:border-accent/50 hover:-translate-y-1 transition-all duration-300 flex flex-col hover-target">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-2xl">🎬</span>
+                        <a href="https://github.com/mirconegri" target="_blank" class="text-muted hover:text-white"><i class="fa-brands fa-github text-xl"></i></a>
+                    </div>
+                    <h3 class="font-mono text-white text-lg font-bold mb-1">MovieRecommender</h3>
+                    <span class="font-mono text-xs text-accent mb-4">Python · Tkinter · TMDb API</span>
+                    <p class="text-sm text-gray-400 mt-auto">App desktop per trovare film su misura. Il mio primo progetto concreto interagendo con API esterne.</p>
+                </div>
+
+                <div class="group relative bg-[#13131a] border border-white/10 p-6 hover:border-accent/50 hover:-translate-y-1 transition-all duration-300 flex flex-col hover-target">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-2xl">🏕️</span>
+                        <a href="https://github.com/mirconegri" target="_blank" class="text-muted hover:text-white"><i class="fa-brands fa-github text-xl"></i></a>
+                    </div>
+                    <h3 class="font-mono text-white text-lg font-bold mb-1">ScoutMealPlanner</h3>
+                    <span class="font-mono text-xs text-accent mb-4">Python · CLI</span>
+                    <p class="text-sm text-gray-400 mt-auto">Generatore di menu e lista della spesa per i campi scout. Nato da un bisogno logistico reale.</p>
+                </div>
+
+                <div class="group relative bg-[#13131a] border border-white/10 p-6 hover:border-accent/50 hover:-translate-y-1 transition-all duration-300 flex flex-col hover-target">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-2xl">🎧</span>
+                        <a href="https://github.com/mirconegri" target="_blank" class="text-muted hover:text-white"><i class="fa-brands fa-github text-xl"></i></a>
+                    </div>
+                    <h3 class="font-mono text-white text-lg font-bold mb-1">Carnival Effects</h3>
+                    <span class="font-mono text-xs text-accent mb-4">Web · Web Audio API</span>
+                    <p class="text-sm text-gray-400 mt-auto">Visualizzatore audio-reattivo per DJ set. Dove la programmazione web incontra la musica.</p>
+                </div>
+
+                <div class="group relative bg-[#13131a] border border-white/10 p-6 hover:border-accent/50 hover:-translate-y-1 transition-all duration-300 flex flex-col hover-target">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-2xl">📚</span>
+                        <a href="https://github.com/mirconegri" target="_blank" class="text-muted hover:text-white"><i class="fa-brands fa-github text-xl"></i></a>
+                    </div>
+                    <h3 class="font-mono text-white text-lg font-bold mb-1">UniArchive</h3>
+                    <span class="font-mono text-xs text-accent mb-4">LaTeX · GitHub</span>
+                    <p class="text-sm text-gray-400 mt-auto">Appunti universitari strutturati e condivisi open-source. Perché il sapere dovrebbe essere aperto.</p>
+                </div>
+
+                <a href="https://github.com/mirconegri" target="_blank" class="group flex items-center justify-center border border-dashed border-white/20 p-6 hover:border-accent hover:bg-accent/5 transition-all duration-300 hover-target min-h-[200px]">
+                    <span class="font-mono text-muted group-hover:text-accent transition-colors">→ altri progetti su GitHub</span>
+                </a>
+
+            </div>
+        </section>
+
+        <div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-20"></div>
+
+        <section id="education" class="reveal pt-10">
+            <h2 class="font-mono text-xl text-muted mb-10"><span class="text-accent">// 03</span> — formazione</h2>
+            
+            <div class="relative border-l-2 border-accent/30 ml-3 md:ml-4 mb-12">
+                <div class="mb-10 pl-8 relative">
+                    <div class="absolute w-3 h-3 bg-accent rounded-full -left-[7px] top-1.5 shadow-[0_0_10px_#00ff88]"></div>
+                    <span class="font-mono text-xs text-accent block mb-1">2025 → oggi</span>
+                    <h3 class="text-xl font-bold text-white mb-1">Laurea Triennale in Informatica</h3>
+                    <p class="text-gray-400">Università degli Studi di Trento (UniTN)</p>
+                </div>
+                <div class="pl-8 relative">
+                    <div class="absolute w-3 h-3 bg-dark border-2 border-muted rounded-full -left-[7px] top-1.5"></div>
+                    <span class="font-mono text-xs text-muted block mb-1">2020 → 2025</span>
+                    <h3 class="text-xl font-bold text-white mb-1">Diploma Liceo Scientifico</h3>
+                    <p class="text-gray-400">Scienze Applicate, Liceo Primo Levi</p>
+                </div>
+            </div>
+
+            <div class="flex overflow-x-auto gap-4 no-scrollbar pb-4 cursor-grab active:cursor-grabbing">
+                <div class="shrink-0 border border-white/10 bg-white/5 px-4 py-3 flex flex-col gap-1">
+                    <span class="font-mono text-xs text-accent">Certificazione</span>
+                    <span class="text-white text-sm font-medium">Everyday AI — UniTN × IBM</span>
+                </div>
+                <div class="shrink-0 border border-white/10 bg-white/5 px-4 py-3 flex flex-col gap-1">
+                    <span class="font-mono text-xs text-accent">Lingua</span>
+                    <span class="text-white text-sm font-medium">English B2 — Cambridge</span>
+                </div>
+                <div class="shrink-0 border border-white/10 bg-white/5 px-4 py-3 flex flex-col gap-1">
+                    <span class="font-mono text-xs text-accent">Lingua</span>
+                    <span class="text-white text-sm font-medium">English C1 — EF Dublin</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-20"></div>
+
+        <section id="volunteer" class="reveal pt-10">
+            <h2 class="font-mono text-xl text-white font-bold mb-6"><span class="text-gray-500 font-normal">// 04 — volontariato</span> <span class="text-accent drop-shadow-[0_0_5px_#00ff88]">★</span> parte di me</h2>
+            
+            <p class="text-lg text-gray-300 mb-10 max-w-2xl border-l-4 border-accent pl-4 py-1 italic">
+                "Il codice finisce quando chiudo il laptop. Il volontariato no."
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-gradient-to-br from-[#1a1a24] to-[#0f0f13] border border-white/10 p-6 group hover:border-accent/50 transition-colors">
+                    <div class="flex items-center gap-4 mb-3">
+                        <div class="w-12 h-12 flex items-center justify-center bg-white/5 rounded-sm text-accent text-xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-truck-medical"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-bold text-lg">Soccorritore Volontario</h3>
+                            <span class="font-mono text-xs text-muted">AVP</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-400">Primo soccorso, trasporto sanitario ed emergenze sul territorio. Sangue freddo e gestione critica.</p>
+                </div>
+
+                <div class="bg-gradient-to-br from-[#1a1a24] to-[#0f0f13] border border-white/10 p-6 group hover:border-accent/50 transition-colors">
+                    <div class="flex items-center gap-4 mb-3">
+                        <div class="w-12 h-12 flex items-center justify-center bg-white/5 rounded-sm text-accent text-xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-campground"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-bold text-lg">Capo Scout</h3>
+                            <span class="font-mono text-xs text-muted">AGESCI</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-400">Educatore e guida. Quasi 14 anni di cammino tra campi, fuochi, ragazzi e responsabilità.</p>
+                </div>
+
+                <div class="bg-gradient-to-br from-[#1a1a24] to-[#0f0f13] border border-white/10 p-6 group hover:border-accent/50 transition-colors">
+                    <div class="flex items-center gap-4 mb-3">
+                        <div class="w-12 h-12 flex items-center justify-center bg-white/5 rounded-sm text-accent text-xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-hand-holding-heart"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-bold text-lg">Volontario</h3>
+                            <span class="font-mono text-xs text-muted">Sermig, Arsenale della Pace</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-400">Accoglienza e solidarietà concreta in contesti di bisogno e fragilità sociale.</p>
+                </div>
+
+                <div class="bg-gradient-to-br from-[#1a1a24] to-[#0f0f13] border border-white/10 p-6 group hover:border-accent/50 transition-colors">
+                    <div class="flex items-center gap-4 mb-3">
+                        <div class="w-12 h-12 flex items-center justify-center bg-white/5 rounded-sm text-accent text-xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-box-open"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-bold text-lg">Volontario</h3>
+                            <span class="font-mono text-xs text-muted">Banco Alimentare</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-400">Logistica, raccolta e distribuzione di alimenti per chi ne ha bisogno. Ottimizzazione delle risorse umane.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-20"></div>
+
+        <section id="contact" class="reveal pt-10 pb-20 text-center flex flex-col items-center">
+            <h2 class="font-mono text-xl text-muted mb-6"><span class="text-accent">// 05</span> — contatti</h2>
+            
+            <p class="text-gray-300 text-lg mb-10 max-w-lg">
+                Non mando CV in giro. Ma se hai qualcosa di interessante da dirmi, un progetto di cui discutere o un caffè da offrire, ti rispondo volentieri.
+            </p>
+
+            <a href="mailto:mirconegri06@gmail.com" class="px-8 py-4 bg-accent text-dark font-bold hover:bg-white transition-colors hover-target mb-10 inline-block font-mono">
+                mirconegri06@gmail.com
+            </a>
+
+            <div class="flex gap-6">
+                <a href="https://github.com/mirconegri" target="_blank" class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white hover:border-accent hover:text-accent transition-colors hover-target text-xl">
+                    <i class="fa-brands fa-github"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/mirconegri" target="_blank" class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white hover:border-accent hover:text-accent transition-colors hover-target text-xl">
+                    <i class="fa-brands fa-linkedin-in"></i>
+                </a>
+                <a href="https://t.me/mirco_ne" target="_blank" class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white hover:border-accent hover:text-accent transition-colors hover-target text-xl">
+                    <i class="fa-brands fa-telegram"></i>
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="border-t border-white/5 bg-dark py-8 text-center">
+        <p class="font-mono text-xs text-muted">
+            © 2026 Mirco Negri — built with curiosità e troppo caffè
         </p>
-        <p class="mt-3 text-text/70 leading-relaxed text-sm">
-          Sono anche <span class="text-neon font-semibold">insegnante IT per adulti</span>, dove supporto 
-          l'inclusione digitale di persone con scarsa dimestichezza tecnologica: tradurre la complessità 
-          tecnica in qualcosa di accessibile è una delle mie sfide preferite.
-        </p>
-      </div>
-
-      <!-- Interests card -->
-      <div class="bento-cell">
-        <p class="text-muted font-mono text-xs mb-3">// interessi</p>
-        <ul class="space-y-2 text-sm text-text/70">
-          <li class="flex items-center gap-2"><i class="fa-solid fa-robot text-neon text-xs w-4"></i> Intelligenza Artificiale</li>
-          <li class="flex items-center gap-2"><i class="fa-solid fa-database text-neon text-xs w-4"></i> Big Data & Analytics</li>
-          <li class="flex items-center gap-2"><i class="fa-solid fa-terminal text-neon text-xs w-4"></i> System Programming</li>
-          <li class="flex items-center gap-2"><i class="fa-solid fa-music text-neon text-xs w-4"></i> Audio & Creative Tech</li>
-          <li class="flex items-center gap-2"><i class="fa-solid fa-heart text-neon text-xs w-4"></i> Volontariato & Comunità</li>
-        </ul>
-      </div>
-
-      <!-- Location card -->
-      <div class="bento-cell flex flex-col justify-between">
-        <p class="text-muted font-mono text-xs mb-3">// location.json</p>
-        <div class="font-mono text-xs text-text/60 leading-6">
-          <p><span class="text-neon">"city"</span>: "Trento, IT",</p>
-          <p><span class="text-neon">"uni"</span>: "UniTN",</p>
-          <p><span class="text-neon">"status"</span>: "open_to_work"</p>
-        </div>
-        <div class="mt-4 flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-neon animate-pulse"></span>
-          <span class="text-xs text-neon font-mono">available for opportunities</span>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Skills tags -->
-    <div class="mt-8 fade-up">
-      <p class="text-muted font-mono text-xs mb-3">// tech_stack[]</p>
-      <div class="flex flex-wrap gap-2">
-        <!-- Linguaggi -->
-        <span class="skill-tag"><i class="fa-brands fa-c text-xs text-cyan/70"></i> C</span>
-        <span class="skill-tag">C++</span>
-        <span class="skill-tag"><i class="fa-brands fa-java text-xs text-yellow-400/70"></i> Java</span>
-        <span class="skill-tag">PolyML</span>
-        <span class="skill-tag"><i class="fa-brands fa-js text-xs text-yellow-300/70"></i> JavaScript</span>
-        <span class="skill-tag"><i class="fa-brands fa-python text-xs text-blue-400/70"></i> Python</span>
-        <span class="skill-tag"><i class="fa-brands fa-html5 text-xs text-orange-400/70"></i> HTML</span>
-        <span class="skill-tag"><i class="fa-brands fa-css3 text-xs text-blue-300/70"></i> CSS</span>
-        <!-- Aree -->
-        <span class="skill-tag"><i class="fa-solid fa-brain text-xs text-violet-400/70"></i> AI / ML</span>
-        <span class="skill-tag"><i class="fa-solid fa-chart-simple text-xs text-cyan/70"></i> Big Data</span>
-        <span class="skill-tag"><i class="fa-brands fa-git-alt text-xs text-orange-400/70"></i> Git</span>
-        <span class="skill-tag"><i class="fa-brands fa-linux text-xs text-text/50"></i> Linux</span>
-        <span class="skill-tag">LaTeX</span>
-        <span class="skill-tag">Tkinter</span>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<div class="neon-line max-w-5xl mx-auto opacity-20"></div>
-
-
-<!-- ═══════════════════════════════════════════════
-     SEZIONE 3: PROGETTI
-═══════════════════════════════════════════════ -->
-<section id="projects">
-  <div class="section">
-    <p class="section-label fade-up">03 / projects</p>
-    <h2 class="section-title fade-up">Progetti in Evidenza</h2>
-
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-
-      <!-- Card 1: LaundryBot -->
-      <div class="project-card fade-up glow-box">
-        <div class="project-icon">🤖</div>
-        <p class="project-lang">Python · Telegram Bot</p>
-        <h3>LaundryBot</h3>
-        <p>Bot Telegram per la gestione e prenotazione delle lavatrici in residence universitario. Notifiche, slot orari e stato macchine in tempo reale.</p>
-        <div class="mt-4 flex gap-2">
-          <span class="cert-badge"><span class="dot"></span>Python</span>
-          <span class="cert-badge"><span class="dot"></span>Bot API</span>
-        </div>
-      </div>
-
-      <!-- Card 2: MovieRecommender -->
-      <div class="project-card fade-up glow-box" style="transition-delay:.05s">
-        <div class="project-icon">🎬</div>
-        <p class="project-lang">Python · Desktop App</p>
-        <h3>MovieRecommender</h3>
-        <p>App desktop con interfaccia Tkinter che sfrutta le API di TMDb per raccomandare film personalizzati tramite filtri di genere, valutazione e anno.</p>
-        <div class="mt-4 flex gap-2">
-          <span class="cert-badge"><span class="dot"></span>Tkinter</span>
-          <span class="cert-badge"><span class="dot"></span>TMDb API</span>
-        </div>
-      </div>
-
-      <!-- Card 3: ScoutMealPlanner -->
-      <div class="project-card fade-up glow-box" style="transition-delay:.1s">
-        <div class="project-icon">🏕️</div>
-        <p class="project-lang">Python · CLI Tool</p>
-        <h3>ScoutMealPlanner</h3>
-        <p>Generatore automatico di menu e liste della spesa per campi scout. Gestisce allergie, porzioni per gruppi numerosi ed export in PDF.</p>
-        <div class="mt-4 flex gap-2">
-          <span class="cert-badge"><span class="dot"></span>Python</span>
-          <span class="cert-badge"><span class="dot"></span>PDF Export</span>
-        </div>
-      </div>
-
-      <!-- Card 4: Carnival Effects -->
-      <div class="project-card fade-up glow-box" style="transition-delay:.15s">
-        <div class="project-icon">🎧</div>
-        <p class="project-lang">Web · Audio Visualizer</p>
-        <h3>Carnival Effects</h3>
-        <p>Visualizzatore web audio-reattivo per DJ set. Effetti particellari e grafici che si sincronizzano in tempo reale con la musica tramite Web Audio API.</p>
-        <div class="mt-4 flex gap-2">
-          <span class="cert-badge"><span class="dot"></span>Canvas API</span>
-          <span class="cert-badge"><span class="dot"></span>Web Audio</span>
-        </div>
-      </div>
-
-      <!-- Card 5: UniArchive -->
-      <div class="project-card fade-up glow-box" style="transition-delay:.2s">
-        <div class="project-icon">📚</div>
-        <p class="project-lang">LaTeX · Open Resource</p>
-        <h3>UniArchive</h3>
-        <p>Archivio strutturato di appunti universitari in LaTeX. Copertura di corsi di Informatica, ottimizzato per la ricerca e il riutilizzo collaborativo.</p>
-        <div class="mt-4 flex gap-2">
-          <span class="cert-badge"><span class="dot"></span>LaTeX</span>
-          <span class="cert-badge"><span class="dot"></span>GitHub</span>
-        </div>
-      </div>
-
-      <!-- Card "more" -->
-      <div class="project-card fade-up border-dashed flex flex-col items-center justify-center text-center" style="transition-delay:.25s; min-height:180px">
-        <i class="fa-brands fa-github text-3xl text-muted mb-3"></i>
-        <p class="font-mono text-xs text-muted">altri progetti su</p>
-        <a href="https://github.com/" target="_blank" rel="noopener" class="text-neon font-mono text-sm hover:underline mt-1">github.com/mirconegri</a>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<div class="neon-line max-w-5xl mx-auto opacity-20"></div>
-
-
-<!-- ═══════════════════════════════════════════════
-     SEZIONE 4: EDUCATION & CERTIFICATIONS
-═══════════════════════════════════════════════ -->
-<section id="education">
-  <div class="section">
-    <p class="section-label fade-up">04 / education</p>
-    <h2 class="section-title fade-up">Formazione</h2>
-
-    <div class="grid md:grid-cols-2 gap-12">
-
-      <!-- Timeline Education -->
-      <div class="fade-up">
-        <p class="text-muted font-mono text-xs mb-5">// percorso_accademico</p>
-        <div class="timeline">
-
-          <div class="timeline-item">
-            <p class="timeline-date">2025 — Present</p>
-            <p class="timeline-title">Laurea in Informatica</p>
-            <p class="timeline-sub">Università degli Studi di Trento</p>
-            <p class="text-xs text-muted mt-1">Trento, Italia</p>
-          </div>
-
-          <div class="timeline-item">
-            <p class="timeline-date">2020 — 2025</p>
-            <p class="timeline-title">Diploma Liceo Scientifico</p>
-            <p class="timeline-sub">Scienze Applicate — Liceo Primo Levi</p>
-            <p class="text-xs text-muted mt-1">Indirizzo informatico-scientifico</p>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- Certifications -->
-      <div class="fade-up" style="transition-delay:.1s">
-        <p class="text-muted font-mono text-xs mb-5">// certifications[]</p>
-        <div class="space-y-3">
-
-          <div class="bento-cell">
-            <div class="flex items-start gap-3">
-              <i class="fa-solid fa-microchip text-neon mt-0.5"></i>
-              <div>
-                <p class="text-sm font-semibold text-text">Everyday AI</p>
-                <p class="text-xs text-muted">Università di Trento · IBM</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="bento-cell">
-            <div class="flex items-start gap-3">
-              <i class="fa-solid fa-globe text-cyan mt-0.5"></i>
-              <div>
-                <p class="text-sm font-semibold text-text">English B2 Certificate</p>
-                <p class="text-xs text-muted">Cambridge Assessment English</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="bento-cell">
-            <div class="flex items-start gap-3">
-              <i class="fa-solid fa-language text-violet-400 mt-0.5"></i>
-              <div>
-                <p class="text-sm font-semibold text-text">English C1 Certificate</p>
-                <p class="text-xs text-muted">EF Education First — Dublin Campus</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<div class="neon-line max-w-5xl mx-auto opacity-20"></div>
-
-
-<!-- ═══════════════════════════════════════════════
-     SEZIONE 5: VOLONTARIATO (highlight)
-═══════════════════════════════════════════════ -->
-<section id="volunteer">
-  <div class="section">
-
-    <!-- Header con badge speciale -->
-    <div class="flex flex-wrap items-end gap-4 mb-8 fade-up">
-      <div>
-        <p class="section-label">05 / volunteer</p>
-        <h2 class="section-title mb-0">Volontariato & Impegno Sociale</h2>
-      </div>
-      <span class="mb-1 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neon/10 border border-neon/30 font-mono text-xs text-neon">
-        <i class="fa-solid fa-heart text-xs"></i> core identity
-      </span>
-    </div>
-
-    <p class="text-text/60 text-sm leading-relaxed max-w-2xl mb-8 fade-up" style="transition-delay:.05s">
-      Il volontariato non è un hobby: è parte integrante di chi sono. 
-      Unire <span class="text-neon">competenze tecniche</span> e <span class="text-neon">attenzione alla persona</span>
-      è la mia formula per un impatto reale sulla comunità.
-    </p>
-
-    <div class="grid sm:grid-cols-2 gap-4">
-
-      <!-- AVP Soccorritore -->
-      <div class="vol-card fade-up glow-box">
-        <div class="vol-icon">🚑</div>
-        <div>
-          <p class="font-semibold text-text text-sm">Soccorritore Volontario</p>
-          <p class="vol-years">AVP · Associazione Volontari di Protezione</p>
-          <p class="text-xs text-text/60 mt-1 leading-relaxed">
-            Primo soccorso, trasporto sanitario e supporto alla comunità in emergenza.
-          </p>
-        </div>
-      </div>
-
-      <!-- Scout AGESCI -->
-      <div class="vol-card fade-up glow-box" style="transition-delay:.05s">
-        <div class="vol-icon">⚜️</div>
-        <div>
-          <p class="font-semibold text-text text-sm">Capo Scout / Associato</p>
-          <p class="vol-years">AGESCI · quasi 14 anni di cammino</p>
-          <p class="text-xs text-text/60 mt-1 leading-relaxed">
-            Educatore e guida per ragazzi, organizzazione campi, progettazione percorsi educativi.
-          </p>
-        </div>
-      </div>
-
-      <!-- Sermig -->
-      <div class="vol-card fade-up glow-box" style="transition-delay:.1s">
-        <div class="vol-icon">✝️</div>
-        <div>
-          <p class="font-semibold text-text text-sm">Volontario</p>
-          <p class="vol-years">Sermig — Arsenale della Pace</p>
-          <p class="text-xs text-text/60 mt-1 leading-relaxed">
-            Accoglienza, supporto a persone in difficoltà e animazione di iniziative solidali.
-          </p>
-        </div>
-      </div>
-
-      <!-- Banco Alimentare -->
-      <div class="vol-card fade-up glow-box" style="transition-delay:.15s">
-        <div class="vol-icon">🥫</div>
-        <div>
-          <p class="font-semibold text-text text-sm">Volontario</p>
-          <p class="vol-years">Banco Alimentare</p>
-          <p class="text-xs text-text/60 mt-1 leading-relaxed">
-            Raccolta, smistamento e distribuzione di alimenti per famiglie in difficoltà sul territorio.
-          </p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<div class="neon-line max-w-5xl mx-auto opacity-20"></div>
-
-
-<!-- ═══════════════════════════════════════════════
-     SEZIONE 6: FOOTER / CONTATTI
-═══════════════════════════════════════════════ -->
-<footer id="contact" id="footer">
-  <div class="max-w-5xl mx-auto px-6 py-16 text-center">
-
-    <p class="section-label justify-center flex fade-up">06 / contact</p>
-    <h2 class="font-mono text-2xl sm:text-3xl font-bold text-text mt-1 mb-3 fade-up">
-      Parliamoci<span class="text-neon">.</span>
-    </h2>
-    <p class="text-text/50 text-sm max-w-md mx-auto mb-8 fade-up" style="transition-delay:.05s">
-      Sono aperto a collaborazioni, stage, progetti open source o semplicemente una bella chiacchierata tech.
-    </p>
-
-    <!-- Email CTA -->
-    <a href="mailto:mirco.negri@example.com" 
-       class="btn-primary mx-auto inline-flex mb-10 fade-up" 
-       style="transition-delay:.1s">
-      <i class="fa-solid fa-envelope text-xs"></i>
-      mirconegri06@gmail.com
-    </a>
-
-    <!-- Social icons -->
-    <div class="flex justify-center gap-3 mb-10 fade-up" style="transition-delay:.15s">
-      <a href="https://github.com/mirconegri" target="_blank" rel="noopener" 
-         class="social-link" aria-label="GitHub">
-        <i class="fa-brands fa-github"></i>
-      </a>
-      <a href="https://www.linkedin.com/in/mirconegri?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener" 
-         class="social-link" aria-label="LinkedIn">
-        <i class="fa-brands fa-linkedin-in"></i>
-      </a>
-      <a href="https://t.me/mirco_ne" target="_blank" rel="noopener" 
-         class="social-link" aria-label="Telegram">
-        <i class="fa-brands fa-telegram"></i>
-      </a>
-    </div>
-
-    <!-- Copyright -->
-    <p class="text-muted font-mono text-xs fade-up" style="transition-delay:.2s">
-      &copy; 2025 Mirco Negri &nbsp;·&nbsp; Built with 
-      <span class="text-neon">♥</span> &amp; 
-      <span class="text-neon">&lt;/&gt;</span>
-    </p>
-
-  </div>
-</footer>
-
-
-<<!-- ═══════════════════════════════════════════════
-     JAVASCRIPT
-═══════════════════════════════════════════════ -->
-<script>
-/* ── 1. Custom Cursor ── */
-const cursor     = document.getElementById('cursor');
-const cursorRing = document.getElementById('cursor-ring');
-
-document.addEventListener('mousemove', e => {
-  cursor.style.left     = e.clientX + 'px';
-  cursor.style.top      = e.clientY + 'px';
-  // ring segue con piccolo lag visivo tramite requestAnimationFrame
-  requestAnimationFrame(() => {
-    cursorRing.style.left = e.clientX + 'px';
-    cursorRing.style.top  = e.clientY + 'px';
-  });
-});
-
-/* ── 2. Scroll Progress Bar ── */
-const progressBar = document.getElementById('progress-bar');
-window.addEventListener('scroll', () => {
-  const scrollTop    = document.documentElement.scrollTop;
-  const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-  progressBar.style.width = (scrollTop / scrollHeight * 100) + '%';
-});
-
-/* ── 3. Navbar scrolled class ── */
-const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
-  navbar.classList.toggle('scrolled', window.scrollY > 40);
-});
-
-/* ── 4. Mobile menu toggle ── */
-document.getElementById('menu-btn').addEventListener('click', () => {
-  const m = document.getElementById('mobile-menu');
-  m.classList.toggle('hidden');
-});
-// chiudi mobile menu al click di un link
-document.querySelectorAll('#mobile-menu a').forEach(a => {
-  a.addEventListener('click', () => {
-    document.getElementById('mobile-menu').classList.add('hidden');
-  });
-});
-
-/* ── 5. Typing Effect (Hero) ── */
-const phrases  = ['CS Student', 'Tech Enthusiast', 'Volunteer', 'Problem Solver', 'Open Source Fan'];
-let   pIdx     = 0;
-let   cIdx     = 0;
-let   deleting = false;
-const typedEl  = document.getElementById('typed-text');
-const SPEED    = 80;
-const PAUSE    = 1600;
-
-function typeLoop() {
-  const word = phrases[pIdx];
-
-  if (!deleting) {
-    // scrive
-    typedEl.textContent = word.slice(0, ++cIdx);
-    if (cIdx === word.length) {
-      // pausa prima di cancellare
-      deleting = true;
-      setTimeout(typeLoop, PAUSE);
-      return;
-    }
-  } else {
-    // cancella
-    typedEl.textContent = word.slice(0, --cIdx);
-    if (cIdx === 0) {
-      deleting = false;
-      pIdx = (pIdx + 1) % phrases.length;
-    }
-  }
-  setTimeout(typeLoop, deleting ? SPEED / 2 : SPEED);
-}
-typeLoop();
-
-/* ── 6. Intersection Observer — fade-up sections ── */
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.12 });
-
-document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
-
-/* ── 7. Matrix Rain Canvas ── */
-(function matrixRain() {
-  const canvas  = document.getElementById('matrix-canvas');
-  const ctx     = canvas.getContext('2d');
-  const FONT_SZ = 13;
-  const CHARSET = '01アイウエオカキクケコABCDEF{}[];<>=+-_*&^%$#@!';
-  let   cols, drops;
-
-  function resize() {
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-    cols  = Math.floor(canvas.width / FONT_SZ);
-    drops = Array(cols).fill(1);
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  function draw() {
-    ctx.fillStyle = 'rgba(10,10,15,0.04)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = '#00ff88';
-    ctx.font      = FONT_SZ + 'px "Fira Code", monospace';
-
-    for (let i = 0; i < cols; i++) {
-      const char = CHARSET[Math.floor(Math.random() * CHARSET.length)];
-      ctx.fillText(char, i * FONT_SZ, drops[i] * FONT_SZ);
-      if (drops[i] * FONT_SZ > canvas.height && Math.random() > 0.975) drops[i] = 0;
-      drops[i]++;
-    }
-  }
-  setInterval(draw, 55);
-})();
-
-/* ── 8. Subtle parallax on hero name (solo desktop) ── */
-if (window.matchMedia('(hover: hover)').matches) {
-  const heroName = document.querySelector('.hero-name');
-  document.addEventListener('mousemove', e => {
-    const x = (e.clientX / window.innerWidth  - 0.5) * 8;
-    const y = (e.clientY / window.innerHeight - 0.5) * 5;
-    heroName.style.transform = `translate(${x}px, ${y}px)`;
-  });
-}
-</script>
-
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- CUSTOM CURSOR ---
+            const cursorDot = document.getElementById('cursor-dot');
+            const cursorRing = document.getElementById('cursor-ring');
+            const hoverTargets = document.querySelectorAll('.hover-target, a, button');
+
+            // Check if device supports fine pointer (mouse)
+            if (window.matchMedia("(pointer: fine)").matches) {
+                let mouseX = window.innerWidth / 2;
+                let mouseY = window.innerHeight / 2;
+                let ringX = mouseX;
+                let ringY = mouseY;
+
+                window.addEventListener('mousemove', (e) => {
+                    mouseX = e.clientX;
+                    mouseY = e.clientY;
+                    
+                    // Dot follows instantly
+                    cursorDot.style.left = `${mouseX}px`;
+                    cursorDot.style.top = `${mouseY}px`;
+                });
+
+                // Ring follows with slight delay
+                const render = () => {
+                    ringX += (mouseX - ringX) * 0.15;
+                    ringY += (mouseY - ringY) * 0.15;
+                    cursorRing.style.left = `${ringX}px`;
+                    cursorRing.style.top = `${ringY}px`;
+                    requestAnimationFrame(render);
+                };
+                render();
+
+                hoverTargets.forEach(target => {
+                    target.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+                    target.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+                });
+            }
+
+            // --- SCROLL PROGRESS BAR ---
+            const scrollProgress = document.getElementById('scroll-progress');
+            window.addEventListener('scroll', () => {
+                const totalScroll = document.documentElement.scrollTop;
+                const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scroll = `${(totalScroll / windowHeight) * 100}%`;
+                scrollProgress.style.width = scroll;
+            });
+
+            // --- SMART NAVBAR (Hide on scroll down, show on scroll up) ---
+            const navbar = document.getElementById('navbar');
+            let lastScroll = 0;
+            
+            window.addEventListener('scroll', () => {
+                const currentScroll = window.pageYOffset;
+                if (currentScroll <= 0) {
+                    navbar.classList.remove('-translate-y-full');
+                    return;
+                }
+                if (currentScroll > lastScroll && currentScroll > 80) {
+                    // Scroll Down
+                    navbar.classList.add('-translate-y-full');
+                } else {
+                    // Scroll Up
+                    navbar.classList.remove('-translate-y-full');
+                }
+                lastScroll = currentScroll;
+            });
+
+            // --- MOBILE MENU TOGGLE ---
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+            const menuIcon = mobileMenuBtn.querySelector('i');
+
+            const toggleMenu = () => {
+                mobileMenu.classList.toggle('hidden');
+                if (mobileMenu.classList.contains('hidden')) {
+                    menuIcon.classList.remove('fa-xmark');
+                    menuIcon.classList.add('fa-bars');
+                } else {
+                    menuIcon.classList.remove('fa-bars');
+                    menuIcon.classList.add('fa-xmark');
+                }
+            };
+
+            mobileMenuBtn.addEventListener('click', toggleMenu);
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', toggleMenu);
+            });
+
+            // --- TYPING EFFECT ---
+            const typingTextElement = document.getElementById('typing-text');
+            const phrases = [
+                "scrivo codice che risolve problemi veri",
+                "volontario nel tempo libero (e non solo)",
+                "cs student con la testa fuori dal monitor"
+            ];
+            let phraseIndex = 0;
+            let charIndex = 0;
+            let isDeleting = false;
+
+            const type = () => {
+                const currentPhrase = phrases[phraseIndex];
+                
+                if (isDeleting) {
+                    typingTextElement.textContent = currentPhrase.substring(0, charIndex - 1);
+                    charIndex--;
+                } else {
+                    typingTextElement.textContent = currentPhrase.substring(0, charIndex + 1);
+                    charIndex++;
+                }
+
+                let typeSpeed = isDeleting ? 40 : 80;
+
+                if (!isDeleting && charIndex === currentPhrase.length) {
+                    typeSpeed = 2000; // Pause at end
+                    isDeleting = true;
+                } else if (isDeleting && charIndex === 0) {
+                    isDeleting = false;
+                    phraseIndex = (phraseIndex + 1) % phrases.length;
+                    typeSpeed = 500; // Pause before new word
+                }
+
+                setTimeout(type, typeSpeed);
+            };
+            
+            setTimeout(type, 1000); // Start delay
+
+            // --- SCROLL REVEAL ANIMATION ---
+            const reveals = document.querySelectorAll('.reveal');
+            const revealOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, revealOptions);
+
+            reveals.forEach(reveal => {
+                revealOnScroll.observe(reveal);
+            });
+        });
+    </script>
 </body>
 </html>
