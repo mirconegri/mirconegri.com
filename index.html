@@ -3,827 +3,843 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mirco Negri — CS Student & Developer</title>
+  <title>Mirco Negri — CS Student, Developer, Volunteer</title>
+  <meta name="description" content="Mirco Negri — CS Student a Trento, sviluppatore, scout, soccorritore. Portfolio personale." />
+  <meta property="og:title" content="Mirco Negri" />
+  <meta property="og:description" content="CS Student a Trento. Sviluppo software, volontariato, comunità." />
+  <meta property="og:url" content="https://mirconegri.com" />
+  <meta property="og:type" content="website" />
 
-  <!-- ═══════════════════════════════════════════════
-       FONTS & ICONS
-  ═══════════════════════════════════════════════ -->
+  <!-- ═══════════════════════════════════
+       FONTS
+  ═══════════════════════════════════ -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-  <!-- ═══════════════════════════════════════════════
-       TAILWIND CDN
-  ═══════════════════════════════════════════════ -->
+  <!-- ═══════════════════════════════════
+       TAILWIND
+  ═══════════════════════════════════ -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            neon:    '#00ff88',
-            neonDim: '#00cc6a',
-            cyan:    '#00e5ff',
-            violet:  '#a855f7',
-            bg:      '#0a0a0f',
-            surface: '#111118',
-            card:    '#16161f',
-            border:  '#1e1e2e',
-            muted:   '#4a4a6a',
-            text:    '#e2e2f0',
+            neon:   '#00ff88',
+            acid:   '#00e676',
+            dim:    '#00b85c',
+            bg:     '#0d0d0d',
+            surf:   '#111114',
+            card:   '#141418',
+            line:   '#1c1c22',
+            muted:  '#3a3a4a',
+            pale:   '#8888a0',
+            text:   '#e8e8f0',
           },
           fontFamily: {
-            mono: ['"Fira Code"', 'monospace'],
-            sans: ['"Space Grotesk"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+            sans: ['"Geist"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
           },
         },
       },
     };
   </script>
 
-  <!-- ═══════════════════════════════════════════════
-       STILI GLOBALI
-  ═══════════════════════════════════════════════ -->
   <style>
-    /* ── Reset & base ── */
+    /* ───────────────────────────────────
+       CSS VARIABLES & BASE
+    ─────────────────────────────────── */
+    :root {
+      --neon: #00ff88;
+      --neon-glow: rgba(0,255,136,.18);
+      --neon-glow-soft: rgba(0,255,136,.06);
+      --bg: #0d0d0d;
+      --surf: #111114;
+      --card: #141418;
+      --line: #1c1c22;
+    }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
 
     body {
-      background-color: #0a0a0f;
-      color: #e2e2f0;
-      font-family: 'Space Grotesk', sans-serif;
+      background: var(--bg);
+      color: #e8e8f0;
+      font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
       overflow-x: hidden;
-      cursor: none; /* custom cursor */
+      /* Dot grid background — CSS only */
+      background-image: radial-gradient(circle, #1e1e2a 1px, transparent 1px);
+      background-size: 28px 28px;
+      background-attachment: fixed;
     }
 
-    /* ── Custom cursor ── */
-    #cursor {
-      width: 10px; height: 10px;
-      background: #00ff88;
+    /* Dark overlay so dots are subtle */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(13,13,13,.7) 0%, rgba(13,13,13,.4) 50%, rgba(13,13,13,.8) 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: #0d0d0d; }
+    ::-webkit-scrollbar-thumb { background: #00ff8850; }
+
+    /* ── Custom cursor — desktop only ── */
+    @media (hover: hover) {
+      body { cursor: none; }
+      #cur, #cur-ring { display: block; }
+    }
+    @media (hover: none) {
+      body { cursor: auto; }
+      #cur, #cur-ring { display: none; }
+    }
+
+    #cur {
+      width: 8px; height: 8px;
+      background: var(--neon);
       border-radius: 50%;
       position: fixed;
       top: 0; left: 0;
       pointer-events: none;
       z-index: 9999;
-      transform: translate(-50%, -50%);
-      transition: width .2s, height .2s, background .2s;
-      box-shadow: 0 0 8px #00ff88, 0 0 20px #00ff8860;
+      transform: translate(-50%,-50%);
+      box-shadow: 0 0 6px var(--neon), 0 0 18px var(--neon-glow);
+      transition: transform .15s, width .2s, height .2s;
     }
-    #cursor-ring {
-      width: 32px; height: 32px;
-      border: 1px solid #00ff8888;
+    #cur-ring {
+      width: 28px; height: 28px;
+      border: 1px solid rgba(0,255,136,.5);
       border-radius: 50%;
       position: fixed;
       top: 0; left: 0;
       pointer-events: none;
       z-index: 9998;
-      transform: translate(-50%, -50%);
-      transition: all .15s ease-out;
+      transform: translate(-50%,-50%);
+      transition: all .18s ease-out;
     }
-    body:has(a:hover) #cursor, body:has(button:hover) #cursor {
-      width: 6px; height: 6px;
-    }
-    body:has(a:hover) #cursor-ring, body:has(button:hover) #cursor-ring {
-      width: 48px; height: 48px;
-      border-color: #00ff88;
-    }
-
-    /* ── Canvas Matrix Rain ── */
-    #matrix-canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
-      opacity: .04;
-      pointer-events: none;
+    body:has(a:hover) #cur,
+    body:has(button:hover) #cur { width: 5px; height: 5px; }
+    body:has(a:hover) #cur-ring,
+    body:has(button:hover) #cur-ring {
+      width: 40px; height: 40px;
+      border-color: var(--neon);
     }
 
-    /* ── Scrollbar ── */
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: #0a0a0f; }
-    ::-webkit-scrollbar-thumb { background: #00ff8860; border-radius: 2px; }
-
-    /* ── Glow utilities ── */
-    .glow-text  { text-shadow: 0 0 10px #00ff88, 0 0 30px #00ff8840; }
-    .glow-box   { box-shadow: 0 0 0 1px #00ff8830, 0 0 20px #00ff8818; }
-    .glow-box:hover { box-shadow: 0 0 0 1px #00ff8860, 0 0 30px #00ff8830; }
-
-    /* ── Neon line separator ── */
-    .neon-line {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, #00ff88, transparent);
+    /* ── Scroll progress bar ── */
+    #prog {
+      position: fixed; top: 0; left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--neon), #00e5ff);
+      z-index: 200;
+      width: 0;
+      box-shadow: 0 0 6px var(--neon);
+      transition: width .08s linear;
     }
-
-    /* ── Section fade-in (IntersectionObserver) ── */
-    .fade-up {
-      opacity: 0;
-      transform: translateY(32px);
-      transition: opacity .7s ease, transform .7s ease;
-    }
-    .fade-up.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ── Typing cursor blink ── */
-    .typing-cursor {
-      display: inline-block;
-      width: 2px;
-      height: 1.1em;
-      background: #00ff88;
-      margin-left: 2px;
-      vertical-align: middle;
-      animation: blink .9s step-end infinite;
-    }
-    @keyframes blink { 50% { opacity: 0; } }
 
     /* ── Navbar ── */
-    #navbar {
+    #nav {
       position: fixed; top: 0; left: 0; right: 0;
       z-index: 100;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      background: rgba(10,10,15,.85);
-      border-bottom: 1px solid #1e1e2e;
-      transition: border-color .3s;
+      background: rgba(13,13,13,.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+      transition: transform .3s ease, border-color .3s;
     }
-    #navbar.scrolled { border-bottom-color: #00ff8840; }
+    #nav.hide { transform: translateY(-100%); }
+    #nav.scrolled { border-bottom-color: rgba(0,255,136,.2); }
 
-    .nav-link {
-      font-family: 'Fira Code', monospace;
-      font-size: .78rem;
-      color: #4a4a6a;
+    .nav-a {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .72rem;
+      color: #3a3a4a;
+      letter-spacing: .05em;
       transition: color .2s;
-      letter-spacing: .04em;
+      text-decoration: none;
     }
-    .nav-link:hover { color: #00ff88; }
+    .nav-a:hover { color: var(--neon); }
 
-    /* ── Hero ── */
-    #hero {
-      min-height: 100vh;
-      display: flex; flex-direction: column;
-      justify-content: center;
-      padding: 6rem 1.5rem 3rem;
+    /* ── Section base ── */
+    .sec {
+      position: relative;
+      z-index: 1;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 5.5rem 1.5rem;
+    }
+    @media (max-width: 640px) {
+      .sec { padding: 3.5rem 1.25rem; }
+    }
+
+    /* ── Section label & title ── */
+    .s-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .68rem;
+      color: var(--neon);
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      margin-bottom: .3rem;
+    }
+    .s-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(1.4rem, 3.5vw, 2rem);
+      font-weight: 700;
+      color: #e8e8f0;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── Divider ── */
+    .div-line {
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, var(--line) 20%, var(--line) 80%, transparent 100%);
+      max-width: 1080px;
+      margin: 0 auto;
       position: relative;
       z-index: 1;
     }
 
-    .hero-tag {
-      font-family: 'Fira Code', monospace;
-      font-size: .75rem;
-      color: #00ff88;
-      letter-spacing: .12em;
-      margin-bottom: .75rem;
+    /* ── Fade-up scroll animation ── */
+    .fu {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+    .fu.on { opacity: 1; transform: translateY(0); }
+
+    /* ── Hero ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 7rem 1.5rem 4rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .72rem;
+      color: var(--neon);
+      letter-spacing: .16em;
+      margin-bottom: 1rem;
     }
 
     .hero-name {
-      font-family: 'Fira Code', monospace;
-      font-size: clamp(2.8rem, 8vw, 6.5rem);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(3rem, 9vw, 7rem);
       font-weight: 700;
-      line-height: 1.05;
-      letter-spacing: -.02em;
-      background: linear-gradient(135deg, #e2e2f0 30%, #00ff88 100%);
+      line-height: 1;
+      letter-spacing: -.03em;
+      background: linear-gradient(120deg, #e8e8f0 40%, var(--neon) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
-    .hero-subtitle {
-      font-family: 'Fira Code', monospace;
-      font-size: clamp(1rem, 2.5vw, 1.4rem);
-      color: #4a4a6a;
-      margin-top: 1rem;
+    .hero-typed-wrap {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(.85rem, 2vw, 1.05rem);
+      color: #3a3a4a;
+      margin-top: 1.1rem;
+      min-height: 1.6em;
     }
-    .hero-subtitle .typed-word { color: #00ff88; }
+    .hero-typed-wrap .tw { color: #8888a0; }
+    .hero-typed-wrap .tc { color: var(--neon); }
 
-    /* ── CTA Buttons ── */
-    .btn-primary {
-      display: inline-flex; align-items: center; gap: .5rem;
-      padding: .7rem 1.6rem;
-      background: #00ff88;
-      color: #0a0a0f;
-      font-family: 'Fira Code', monospace;
-      font-size: .85rem;
-      font-weight: 600;
-      border-radius: 4px;
+    /* Blinking cursor */
+    .bcur {
+      display: inline-block;
+      width: 2px; height: 1em;
+      background: var(--neon);
+      margin-left: 1px;
+      vertical-align: middle;
+      animation: blink .85s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ── Neofetch block ── */
+    .neofetch {
+      margin-top: 2.5rem;
+      display: inline-flex;
+      gap: 2rem;
+      background: rgba(17,17,20,.85);
+      border: 1px solid var(--line);
+      border-left: 2px solid var(--neon);
+      border-radius: 8px;
+      padding: 1.4rem 1.6rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .72rem;
+      line-height: 1.85;
+      max-width: 520px;
+    }
+    .neofetch .nf-logo {
+      color: var(--neon);
+      font-size: .78rem;
+      white-space: pre;
+      line-height: 1.6;
+      flex-shrink: 0;
+      /* Simple ASCII art logo — minimal */
+      letter-spacing: 0;
+    }
+    .neofetch .nf-info { flex: 1; }
+    .neofetch .nf-key { color: var(--neon); }
+    .neofetch .nf-val { color: #8888a0; }
+    .neofetch .nf-head { color: #e8e8f0; font-weight: 500; }
+    .neofetch .nf-sep { color: var(--line); }
+    @media (max-width: 480px) {
+      .neofetch { flex-direction: column; gap: .8rem; max-width: 100%; }
+      .neofetch .nf-logo { display: none; }
+    }
+
+    /* ── CTA buttons ── */
+    .btn-p {
+      display: inline-flex; align-items: center; gap: .45rem;
+      padding: .65rem 1.4rem;
+      background: var(--neon);
+      color: #0d0d0d;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .78rem;
+      font-weight: 700;
+      border-radius: 5px;
       text-decoration: none;
       transition: box-shadow .2s, transform .2s;
+      letter-spacing: .02em;
     }
-    .btn-primary:hover {
-      box-shadow: 0 0 20px #00ff8880;
+    .btn-p:hover {
+      box-shadow: 0 0 20px rgba(0,255,136,.5);
       transform: translateY(-2px);
     }
-
-    .btn-outline {
-      display: inline-flex; align-items: center; gap: .5rem;
-      padding: .7rem 1.6rem;
-      border: 1px solid #00ff8860;
-      color: #00ff88;
-      font-family: 'Fira Code', monospace;
-      font-size: .85rem;
+    .btn-o {
+      display: inline-flex; align-items: center; gap: .45rem;
+      padding: .65rem 1.4rem;
+      border: 1px solid rgba(0,255,136,.4);
+      color: var(--neon);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .78rem;
       font-weight: 500;
-      border-radius: 4px;
+      border-radius: 5px;
       text-decoration: none;
       transition: background .2s, box-shadow .2s, transform .2s;
+      letter-spacing: .02em;
     }
-    .btn-outline:hover {
-      background: #00ff8812;
-      box-shadow: 0 0 16px #00ff8840;
+    .btn-o:hover {
+      background: rgba(0,255,136,.07);
+      box-shadow: 0 0 14px rgba(0,255,136,.25);
       transform: translateY(-2px);
-    }
-
-    /* ── Section wrapper ── */
-    .section {
-      position: relative; z-index: 1;
-      padding: 5rem 1.5rem;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-family: 'Fira Code', monospace;
-      font-size: .7rem;
-      letter-spacing: .18em;
-      color: #00ff88;
-      text-transform: uppercase;
-      margin-bottom: .4rem;
-    }
-
-    .section-title {
-      font-family: 'Fira Code', monospace;
-      font-size: clamp(1.6rem, 4vw, 2.4rem);
-      font-weight: 700;
-      color: #e2e2f0;
-      margin-bottom: 2.5rem;
     }
 
     /* ── Skill tags ── */
-    .skill-tag {
-      display: inline-flex; align-items: center; gap: .35rem;
-      padding: .35rem .85rem;
-      background: #16161f;
-      border: 1px solid #1e1e2e;
-      border-radius: 99px;
-      font-family: 'Fira Code', monospace;
-      font-size: .78rem;
-      color: #a0a0c0;
-      transition: border-color .2s, color .2s, box-shadow .2s;
+    .stag {
+      display: inline-flex; align-items: center;
+      padding: .28rem .75rem;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .72rem;
+      color: #8888a0;
+      background: var(--surf);
+      transition: border-color .2s, color .2s;
+      cursor: default;
     }
-    .skill-tag:hover {
-      border-color: #00ff8870;
-      color: #00ff88;
-      box-shadow: 0 0 10px #00ff8820;
+    .stag:hover {
+      border-color: rgba(0,255,136,.5);
+      color: var(--neon);
     }
 
-    /* ── Project card ── */
-    .project-card {
-      background: #16161f;
-      border: 1px solid #1e1e2e;
-      border-radius: 12px;
-      padding: 1.5rem;
+    /* ── Project cards ── */
+    .pc {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
       transition: border-color .25s, transform .25s, box-shadow .25s;
-      display: flex; flex-direction: column;
-      height: 100%;
     }
-    .project-card:hover {
-      border-color: #00ff8850;
-      transform: translateY(-4px);
-      box-shadow: 0 8px 32px #00ff8814;
+    .pc:hover {
+      border-color: rgba(0,255,136,.35);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(0,255,136,.07);
     }
-    .project-lang {
-      font-family: 'Fira Code', monospace;
-      font-size: .68rem;
-      color: #00ff88;
+    .pc-stack {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .62rem;
+      color: var(--neon);
       letter-spacing: .1em;
       text-transform: uppercase;
-      margin-bottom: .5rem;
+      margin-bottom: .4rem;
     }
-    .project-card h3 {
-      font-family: 'Fira Code', monospace;
-      font-size: 1rem;
+    .pc-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .92rem;
       font-weight: 600;
-      color: #e2e2f0;
-      margin-bottom: .5rem;
+      color: #e8e8f0;
+      margin-bottom: .4rem;
     }
-    .project-card p {
-      font-size: .86rem;
-      color: #6a6a8a;
-      line-height: 1.6;
+    .pc-desc {
+      font-size: .82rem;
+      color: #3a3a4a;
+      line-height: 1.65;
       flex: 1;
     }
-    .project-icon {
-      font-size: 1.6rem;
-      margin-bottom: .8rem;
+    .pc-emoji {
+      font-size: 1.4rem;
+      margin-bottom: .7rem;
+      line-height: 1;
     }
-
-    /* ── Timeline ── */
-    .timeline { position: relative; padding-left: 1.5rem; }
-    .timeline::before {
-      content: '';
-      position: absolute; left: 0; top: 4px; bottom: 4px;
-      width: 1px;
-      background: linear-gradient(180deg, #00ff88, #00ff8820);
-    }
-    .timeline-item {
-      position: relative;
-      padding-bottom: 2.2rem;
-    }
-    .timeline-item::before {
-      content: '';
-      position: absolute;
-      left: -1.5rem;
-      top: 6px;
-      width: 8px; height: 8px;
-      background: #00ff88;
-      border-radius: 50%;
-      box-shadow: 0 0 8px #00ff88;
-    }
-    .timeline-date {
-      font-family: 'Fira Code', monospace;
-      font-size: .72rem;
-      color: #00ff88;
-      letter-spacing: .08em;
-      margin-bottom: .2rem;
-    }
-    .timeline-title {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #e2e2f0;
-    }
-    .timeline-sub {
-      font-size: .85rem;
-      color: #6a6a8a;
-    }
-
-    /* ── Volunteer card ── */
-    .vol-card {
-      background: #16161f;
-      border: 1px solid #1e1e2e;
-      border-radius: 12px;
-      padding: 1.4rem 1.5rem;
-      display: flex; align-items: flex-start; gap: 1rem;
-      transition: border-color .25s, box-shadow .25s;
-    }
-    .vol-card:hover {
-      border-color: #00ff8850;
-      box-shadow: 0 4px 24px #00ff8810;
-    }
-    .vol-icon {
-      width: 44px; height: 44px;
-      display: flex; align-items: center; justify-content: center;
-      background: #0a0a0f;
-      border: 1px solid #00ff8830;
-      border-radius: 8px;
-      font-size: 1.25rem;
-      flex-shrink: 0;
-    }
-    .vol-years {
-      font-family: 'Fira Code', monospace;
+    .pc-gh {
+      margin-top: 1rem;
+      display: inline-flex; align-items: center; gap: .35rem;
+      font-family: 'JetBrains Mono', monospace;
       font-size: .68rem;
-      color: #00ff88;
-      letter-spacing: .08em;
-      margin-top: .15rem;
-    }
-
-    /* ── Footer ── */
-    #footer {
-      position: relative; z-index: 1;
-      border-top: 1px solid #1e1e2e;
-      padding: 3rem 1.5rem 2rem;
-      text-align: center;
-    }
-    .social-link {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 42px; height: 42px;
-      border: 1px solid #1e1e2e;
-      border-radius: 8px;
-      color: #4a4a6a;
-      font-size: 1.1rem;
-      transition: color .2s, border-color .2s, box-shadow .2s;
+      color: #3a3a4a;
       text-decoration: none;
+      transition: color .2s;
     }
-    .social-link:hover {
-      color: #00ff88;
-      border-color: #00ff8860;
-      box-shadow: 0 0 14px #00ff8830;
-    }
+    .pc-gh:hover { color: var(--neon); }
 
-    /* ── Bento About ── */
-    .bento-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1rem;
-    }
-    .bento-cell {
-      background: #16161f;
-      border: 1px solid #1e1e2e;
-      border-radius: 12px;
-      padding: 1.5rem;
+    /* ghost "more" card */
+    .pc-ghost {
+      background: transparent;
+      border: 1px dashed var(--line);
+      border-radius: 10px;
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 160px;
       transition: border-color .25s;
     }
-    .bento-cell:hover { border-color: #00ff8840; }
-    .bento-cell.accent {
-      border-color: #00ff8830;
-      background: linear-gradient(135deg, #16161f 60%, #00ff8808);
-    }
+    .pc-ghost:hover { border-color: rgba(0,255,136,.3); }
 
-    /* ── Cert badges ── */
-    .cert-badge {
-      display: inline-flex; align-items: center; gap: .5rem;
-      padding: .4rem 1rem;
-      background: #0a0a0f;
-      border: 1px solid #1e1e2e;
-      border-radius: 6px;
-      font-family: 'Fira Code', monospace;
-      font-size: .75rem;
-      color: #a0a0c0;
+    /* ── Timeline ── */
+    .tl { position: relative; padding-left: 1.4rem; }
+    .tl::before {
+      content: '';
+      position: absolute; left: 0; top: 6px; bottom: 6px;
+      width: 1px;
+      background: linear-gradient(180deg, var(--neon) 0%, rgba(0,255,136,.1) 100%);
     }
-    .cert-badge .dot {
-      width: 6px; height: 6px;
-      background: #00ff88;
+    .tl-item { position: relative; padding-bottom: 2rem; }
+    .tl-item:last-child { padding-bottom: 0; }
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      left: -1.4rem;
+      top: 7px;
+      width: 7px; height: 7px;
+      background: var(--neon);
       border-radius: 50%;
+      box-shadow: 0 0 7px var(--neon);
+    }
+    .tl-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .65rem;
+      color: var(--neon);
+      letter-spacing: .08em;
+      margin-bottom: .15rem;
+    }
+    .tl-title { font-size: .95rem; font-weight: 600; color: #e8e8f0; }
+    .tl-sub   { font-size: .82rem; color: #3a3a4a; }
+
+    /* cert badges */
+    .cert {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .35rem .9rem;
+      background: var(--surf);
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .7rem;
+      color: #8888a0;
+      white-space: nowrap;
+    }
+    .cert .dot {
+      width: 5px; height: 5px;
+      background: var(--neon);
+      border-radius: 50%;
+      box-shadow: 0 0 5px var(--neon);
       flex-shrink: 0;
-      box-shadow: 0 0 6px #00ff88;
     }
 
-    /* ── Terminal prompt decoration ── */
-    .prompt::before {
-      content: '> ';
-      color: #00ff88;
-      font-family: 'Fira Code', monospace;
+    /* ── Volunteer cards ── */
+    .vc {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 1.4rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      transition: border-color .25s, box-shadow .25s;
+    }
+    .vc:hover {
+      border-color: rgba(0,255,136,.3);
+      box-shadow: 0 4px 20px rgba(0,255,136,.05);
+    }
+    .vc-icon {
+      font-size: 1.5rem;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: .1rem;
+    }
+    .vc-org {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .62rem;
+      color: var(--neon);
+      letter-spacing: .08em;
+      margin-bottom: .15rem;
+    }
+    .vc-title { font-size: .9rem; font-weight: 600; color: #e8e8f0; }
+    .vc-desc  { font-size: .8rem; color: #3a3a4a; margin-top: .25rem; line-height: 1.6; }
+
+    /* ── Volunteer intro quote ── */
+    .vol-quote {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(.9rem, 2vw, 1.1rem);
+      color: #e8e8f0;
+      border-left: 2px solid var(--neon);
+      padding-left: 1rem;
+      margin-bottom: 2rem;
+      line-height: 1.6;
     }
 
-    /* ── Mobile tweaks ── */
+    /* ── Social links ── */
+    .sl {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: #3a3a4a;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: color .2s, border-color .2s, box-shadow .2s;
+    }
+    .sl:hover {
+      color: var(--neon);
+      border-color: rgba(0,255,136,.4);
+      box-shadow: 0 0 12px rgba(0,255,136,.2);
+    }
+
+    /* ── Status pill ── */
+    .status-pill {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .3rem .8rem;
+      background: rgba(0,255,136,.06);
+      border: 1px solid rgba(0,255,136,.2);
+      border-radius: 99px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .68rem;
+      color: var(--neon);
+    }
+    .pulse-dot {
+      width: 6px; height: 6px;
+      background: var(--neon);
+      border-radius: 50%;
+      box-shadow: 0 0 5px var(--neon);
+      animation: pulse 2s ease infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50%       { transform: scale(1.4); opacity: .6; }
+    }
+
+    /* mobile */
     @media (max-width: 640px) {
-      .section { padding: 3.5rem 1.25rem; }
-      #hero { padding: 5rem 1.25rem 2.5rem; }
-    }
-
-    /* ── Scroll progress bar ── */
-    #progress-bar {
-      position: fixed; top: 0; left: 0;
-      height: 2px;
-      background: linear-gradient(90deg, #00ff88, #00e5ff);
-      z-index: 200;
-      width: 0%;
-      transition: width .1s linear;
-      box-shadow: 0 0 8px #00ff88;
+      #hero { padding: 5.5rem 1.25rem 3rem; }
     }
   </style>
 </head>
+
 <body>
 
-<!-- ═══════════════════════════════════════════════
-     EFFETTI VISIVI DI SFONDO
-═══════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════
+     CURSOR & PROGRESS
+═══════════════════════════════════ -->
+<div id="cur"></div>
+<div id="cur-ring"></div>
+<div id="prog"></div>
 
-<!-- Matrix rain canvas -->
-<canvas id="matrix-canvas"></canvas>
-
-<!-- Custom cursor -->
-<div id="cursor"></div>
-<div id="cursor-ring"></div>
-
-<!-- Scroll progress bar -->
-<div id="progress-bar"></div>
-
-<!-- ═══════════════════════════════════════════════
+<!-- ═══════════════════════════════════
      NAVBAR
-═══════════════════════════════════════════════ -->
-<nav id="navbar">
-  <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
+═══════════════════════════════════ -->
+<nav id="nav">
+  <div class="max-w-5xl mx-auto px-5 py-3 flex items-center justify-between">
+
     <!-- Logo -->
-    <a href="#hero" class="font-mono text-sm font-semibold text-neon glow-text tracking-wider">
-      MN<span class="text-muted">_</span>
+    <a href="#hero" class="font-mono text-sm font-bold text-neon tracking-widest" style="letter-spacing:.12em">
+      MN<span style="color:#1c1c22">_</span>
     </a>
 
-    <!-- Desktop nav -->
-    <ul class="hidden md:flex items-center gap-7">
-      <li><a href="#about"     class="nav-link">~/about</a></li>
-      <li><a href="#projects"  class="nav-link">~/projects</a></li>
-      <li><a href="#education" class="nav-link">~/education</a></li>
-      <li><a href="#volunteer" class="nav-link">~/volunteer</a></li>
-      <li><a href="#contact"   class="nav-link">~/contact</a></li>
+    <!-- Desktop links -->
+    <ul class="hidden md:flex items-center gap-6">
+      <li><a href="#about"     class="nav-a">~/about</a></li>
+      <li><a href="#projects"  class="nav-a">~/projects</a></li>
+      <li><a href="#education" class="nav-a">~/education</a></li>
+      <li><a href="#volunteer" class="nav-a">~/volunteer</a></li>
+      <li><a href="#contact"   class="nav-a">~/contact</a></li>
     </ul>
 
-    <!-- Mobile hamburger -->
-    <button id="menu-btn" class="md:hidden text-muted hover:text-neon transition-colors" aria-label="Menu">
-      <i class="fa-solid fa-terminal text-lg"></i>
+    <!-- Mobile button -->
+    <button id="mbtn" class="md:hidden text-muted hover:text-neon transition-colors p-1" aria-label="Menu" style="color:#3a3a4a">
+      <i class="fa-solid fa-bars-staggered"></i>
     </button>
   </div>
 
-  <!-- Mobile dropdown -->
-  <div id="mobile-menu" class="hidden md:hidden border-t border-border">
-    <ul class="flex flex-col px-6 py-3 gap-3">
-      <li><a href="#about"     class="nav-link block py-1">~/about</a></li>
-      <li><a href="#projects"  class="nav-link block py-1">~/projects</a></li>
-      <li><a href="#education" class="nav-link block py-1">~/education</a></li>
-      <li><a href="#volunteer" class="nav-link block py-1">~/volunteer</a></li>
-      <li><a href="#contact"   class="nav-link block py-1">~/contact</a></li>
+  <!-- Mobile menu -->
+  <div id="mmenu" class="hidden md:hidden border-t" style="border-color:#1c1c22">
+    <ul class="flex flex-col px-5 py-3 gap-2">
+      <li><a href="#about"     class="nav-a block py-1.5">~/about</a></li>
+      <li><a href="#projects"  class="nav-a block py-1.5">~/projects</a></li>
+      <li><a href="#education" class="nav-a block py-1.5">~/education</a></li>
+      <li><a href="#volunteer" class="nav-a block py-1.5">~/volunteer</a></li>
+      <li><a href="#contact"   class="nav-a block py-1.5">~/contact</a></li>
     </ul>
   </div>
 </nav>
 
 
-<!-- ═══════════════════════════════════════════════
-     SEZIONE 1: HERO
-═══════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════
+     HERO
+═══════════════════════════════════ -->
 <section id="hero">
-  <div class="max-w-5xl mx-auto">
+  <div style="max-width:1080px; margin:0 auto">
 
-    <!-- Prompt decorativo -->
-    <p class="hero-tag fade-up">// mirconegri.com &nbsp;•&nbsp; init portfolio.sh</p>
+    <p class="hero-eyebrow fu">$ whoami</p>
 
-    <!-- Nome principale -->
-    <h1 class="hero-name fade-up" style="transition-delay:.1s">
+    <h1 class="hero-name fu" style="transition-delay:.08s">
       Mirco<br>Negri
     </h1>
 
-    <!-- Typing effect subtitle -->
-    <p class="hero-subtitle fade-up" style="transition-delay:.2s">
-      <span class="text-muted font-mono text-sm">const role = &quot;</span><span class="typed-word" id="typed-text"></span><span class="typing-cursor"></span><span class="text-muted font-mono text-sm">&quot;;</span>
-    </p>
-
-    <!-- Bio one-liner -->
-    <p class="mt-5 text-text/60 max-w-xl text-base leading-relaxed fade-up" style="transition-delay:.3s">
-      CS Student @ Università di Trento. Appassionato di software, AI e persone.
-      <span class="text-neon">Codice</span> di giorno, <span class="text-neon">volontario</span> nel cuore.
-    </p>
-
-    <!-- CTA buttons -->
-    <div class="flex flex-wrap gap-3 mt-8 fade-up" style="transition-delay:.4s">
-      <a href="#projects" class="btn-primary">
-        <i class="fa-solid fa-code-branch text-xs"></i> Vedi Progetti
-      </a>
-      <a href="#contact" class="btn-outline">
-        <i class="fa-solid fa-paper-plane text-xs"></i> Contattami
-      </a>
+    <!-- Typing subtitle -->
+    <div class="hero-typed-wrap fu" style="transition-delay:.18s">
+      <span class="tw">// </span><span id="ttext" class="tc"></span><span class="bcur"></span>
     </div>
 
-    <!-- Terminal window decorativo -->
-    <div class="mt-14 fade-up" style="transition-delay:.5s; max-width:440px">
-      <div class="bg-card border border-border rounded-xl overflow-hidden">
-        <!-- title bar -->
-        <div class="flex items-center gap-2 px-4 py-2.5 border-b border-border bg-surface">
-          <span class="w-3 h-3 rounded-full bg-red-500/70"></span>
-          <span class="w-3 h-3 rounded-full bg-yellow-500/70"></span>
-          <span class="w-3 h-3 rounded-full bg-green-500/70"></span>
-          <span class="ml-3 font-mono text-xs text-muted">bash — mirco@unitn</span>
-        </div>
-        <!-- terminal body -->
-        <div class="p-4 font-mono text-xs leading-6 text-text/80">
-          <p><span class="text-neon">mirco@unitn</span><span class="text-muted">:~$</span> whoami</p>
-          <p class="text-text/60">Mirco Negri</p>
-          <p class="mt-1"><span class="text-neon">mirco@unitn</span><span class="text-muted">:~$</span> cat skills.txt</p>
-          <p class="text-cyan/80">C &nbsp;C++ &nbsp;Java &nbsp;Python &nbsp;JS &nbsp;AI &nbsp;BigData</p>
-          <p class="mt-1"><span class="text-neon">mirco@unitn</span><span class="text-muted">:~$</span> <span class="animate-pulse">▌</span></p>
+    <!-- Neofetch block -->
+    <div class="neofetch fu" style="transition-delay:.28s" aria-label="Info su di me in stile neofetch">
+      <!-- ASCII art column -->
+      <div class="nf-logo" aria-hidden="true">╔═══════╗
+║ M · N ║
+╚═══════╝
+  ● ● ●</div>
+
+      <!-- Info column -->
+      <div class="nf-info">
+        <div><span class="nf-head">mirco</span><span class="nf-sep">@</span><span class="nf-head">portfolio</span></div>
+        <div style="color:#1c1c22">──────────────────</div>
+        <div><span class="nf-key">OS</span><span class="nf-sep">: </span><span class="nf-val">Human v21 (Trento, IT)</span></div>
+        <div><span class="nf-key">DE</span><span class="nf-sep">: </span><span class="nf-val">CS @ Università di Trento</span></div>
+        <div><span class="nf-key">WM</span><span class="nf-sep">: </span><span class="nf-val">Scout ∙ Soccorritore ∙ Docente IT</span></div>
+        <div><span class="nf-key">Shell</span><span class="nf-sep">: </span><span class="nf-val">Python / C / JS</span></div>
+        <div><span class="nf-key">Uptime</span><span class="nf-sep">: </span><span class="nf-val">21 anni</span></div>
+        <div><span class="nf-key">Pkgs</span><span class="nf-sep">: </span><span class="nf-val">5 projects (git)</span></div>
+        <div style="color:#1c1c22">──────────────────</div>
+        <div style="display:flex;gap:5px;margin-top:2px">
+          <span style="display:inline-block;width:13px;height:13px;background:#00ff88;border-radius:2px"></span>
+          <span style="display:inline-block;width:13px;height:13px;background:#00e5ff;border-radius:2px"></span>
+          <span style="display:inline-block;width:13px;height:13px;background:#a855f7;border-radius:2px"></span>
+          <span style="display:inline-block;width:13px;height:13px;background:#1c1c22;border:1px solid #3a3a4a;border-radius:2px"></span>
         </div>
       </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="flex flex-wrap gap-3 mt-8 fu" style="transition-delay:.38s">
+      <a href="#projects" class="btn-p">
+        <i class="fa-solid fa-code-branch" style="font-size:.7rem"></i> Esplora i progetti
+      </a>
+      <a href="#contact" class="btn-o">
+        <i class="fa-solid fa-paper-plane" style="font-size:.7rem"></i> Scrivimi
+      </a>
     </div>
 
   </div>
 </section>
 
-<div class="neon-line max-w-5xl mx-auto opacity-30"></div>
+<div class="div-line"></div>
 
 
-<!-- ═══════════════════════════════════════════════
-     SEZIONE 2: ABOUT ME & SKILLS
-═══════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════
+     ABOUT
+═══════════════════════════════════ -->
 <section id="about">
-  <div class="section">
-    <p class="section-label fade-up">02 / about_me</p>
-    <h2 class="section-title fade-up">Chi sono</h2>
+  <div class="sec">
+    <p class="s-label fu">// 01 — su di me</p>
+    <h2 class="s-title fu" style="transition-delay:.05s">Chi sono</h2>
 
-    <!-- Bento grid layout -->
-    <div class="bento-grid fade-up">
+    <!-- Two columns -->
+    <div class="grid md:grid-cols-2 gap-10 fu" style="transition-delay:.1s">
 
-      <!-- Bio card (grande) -->
-      <div class="bento-cell accent md:col-span-2" style="grid-column: span 2">
-        <p class="text-muted font-mono text-xs mb-2">// bio.txt</p>
-        <p class="text-text/80 leading-relaxed text-sm">
-          Sono uno studente di <span class="text-neon font-semibold">Informatica</span> all'Università di Trento, 
-          appassionato di tutto ciò che riguarda il software, l'intelligenza artificiale e il problem solving creativo.
-          Unisco la mentalità da ingegnere a un forte senso civico: nella vita non ho solo una <em>tastiera</em>,
-          ma anche un <em>cuore</em> orientato alla comunità.
+      <!-- Bio text -->
+      <div>
+        <p style="font-size:.88rem; color:#8888a0; line-height:1.8; margin-bottom:1rem">
+          Scrivo codice da quando avevo tredici anni, ma non mi definisco solo quello.
+          Studio informatica a Trento perché voglio capire come funzionano le cose — davvero —
+          non solo usarle.
         </p>
-        <p class="mt-3 text-text/70 leading-relaxed text-sm">
-          Sono anche <span class="text-neon font-semibold">insegnante IT per adulti</span>, dove supporto 
-          l'inclusione digitale di persone con scarsa dimestichezza tecnologica: tradurre la complessità 
-          tecnica in qualcosa di accessibile è una delle mie sfide preferite.
+        <p style="font-size:.88rem; color:#8888a0; line-height:1.8; margin-bottom:1rem">
+          Insegno <span style="color:#e8e8f0">informatica agli adulti</span> come parte di un progetto
+          di inclusione digitale: tradurre la complessità tecnica in qualcosa di accessibile
+          è una delle cose che mi riesce meglio — e che mi piace di più.
+        </p>
+        <p style="font-size:.88rem; color:#8888a0; line-height:1.8">
+          Fuori dal monitor: scout da quasi 14 anni, soccorritore volontario, appassionato di musica
+          e di tutto ciò che sta all'incrocio tra <span style="color:#e8e8f0">tecnologia e persone</span>.
         </p>
       </div>
 
-<!-- Interests card -->
-      <div class="bento-cell">
-        <p class="text-muted font-mono text-xs mb-3">// interessi</p>
-        <ul class="space-y-2 text-sm text-text/70">
-          <li class="flex items-center gap-2"><i class="fa-solid fa-robot text-neon text-xs w-4"></i> Intelligenza Artificiale</li>
-          <li class="flex items-center gap-2"><i class="fa-solid fa-database text-neon text-xs w-4"></i> Big Data & Analytics</li>
-          <li class="flex items-center gap-2"><i class="fa-solid fa-terminal text-neon text-xs w-4"></i> System Programming</li>
-          <li class="flex items-center gap-2"><i class="fa-solid fa-music text-neon text-xs w-4"></i> Audio & Creative Tech</li>
-          <li class="flex items-center gap-2"><i class="fa-solid fa-heart text-neon text-xs w-4"></i> Volontariato & Comunità</li>
-        </ul>
-      </div>
-
-      <!-- Location card -->
-      <div class="bento-cell flex flex-col justify-between">
-        <p class="text-muted font-mono text-xs mb-3">// location.json</p>
-        <div class="font-mono text-xs text-text/60 leading-6">
-          <p><span class="text-neon">"city"</span>: "Trento, IT",</p>
-          <p><span class="text-neon">"uni"</span>: "UniTN",</p>
-          <p><span class="text-neon">"status"</span>: "open_to_work"</p>
-        </div>
-        <div class="mt-4 flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-neon animate-pulse"></span>
-          <span class="text-xs text-neon font-mono">available for opportunities</span>
+      <!-- Skills -->
+      <div>
+        <p class="font-mono text-xs mb-3" style="color:#3a3a4a; font-family:'JetBrains Mono',monospace">$ cat skills.conf</p>
+        <div class="flex flex-wrap gap-2">
+          <span class="stag">C</span>
+          <span class="stag">C++</span>
+          <span class="stag">Java</span>
+          <span class="stag">PolyML</span>
+          <span class="stag">JavaScript</span>
+          <span class="stag">Python</span>
+          <span class="stag">HTML/CSS</span>
+          <span class="stag">AI/ML</span>
+          <span class="stag">Big Data</span>
+          <span class="stag">LaTeX</span>
+          <span class="stag">Git</span>
+          <span class="stag">Linux</span>
         </div>
       </div>
-
     </div>
 
-    <!-- Skills tags -->
-    <div class="mt-8 fade-up">
-      <p class="text-muted font-mono text-xs mb-3">// tech_stack[]</p>
-      <div class="flex flex-wrap gap-2">
-        <!-- Linguaggi -->
-        <span class="skill-tag"><i class="fa-brands fa-c text-xs text-cyan/70"></i> C</span>
-        <span class="skill-tag">C++</span>
-        <span class="skill-tag"><i class="fa-brands fa-java text-xs text-yellow-400/70"></i> Java</span>
-        <span class="skill-tag">PolyML</span>
-        <span class="skill-tag"><i class="fa-brands fa-js text-xs text-yellow-300/70"></i> JavaScript</span>
-        <span class="skill-tag"><i class="fa-brands fa-python text-xs text-blue-400/70"></i> Python</span>
-        <span class="skill-tag"><i class="fa-brands fa-html5 text-xs text-orange-400/70"></i> HTML</span>
-        <span class="skill-tag"><i class="fa-brands fa-css3 text-xs text-blue-300/70"></i> CSS</span>
-        <!-- Aree -->
-        <span class="skill-tag"><i class="fa-solid fa-brain text-xs text-violet-400/70"></i> AI / ML</span>
-        <span class="skill-tag"><i class="fa-solid fa-chart-simple text-xs text-cyan/70"></i> Big Data</span>
-        <span class="skill-tag"><i class="fa-brands fa-git-alt text-xs text-orange-400/70"></i> Git</span>
-        <span class="skill-tag"><i class="fa-brands fa-linux text-xs text-text/50"></i> Linux</span>
-        <span class="skill-tag">LaTeX</span>
-        <span class="skill-tag">Tkinter</span>
+    <!-- Status bar -->
+    <div class="mt-8 flex flex-wrap items-center gap-3 fu" style="transition-delay:.18s">
+      <div class="status-pill">
+        <span class="pulse-dot"></span>
+        <span>CS @ UniTN</span>
       </div>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:.68rem; color:#3a3a4a">
+        available for interesting things
+      </span>
     </div>
 
   </div>
 </section>
 
-<div class="neon-line max-w-5xl mx-auto opacity-20"></div>
+<div class="div-line"></div>
 
 
-<!-- ═══════════════════════════════════════════════
-     SEZIONE 3: PROGETTI
-═══════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════
+     PROJECTS
+═══════════════════════════════════ -->
 <section id="projects">
-  <div class="section">
-    <p class="section-label fade-up">03 / projects</p>
-    <h2 class="section-title fade-up">Progetti in Evidenza</h2>
+  <div class="sec">
+    <p class="s-label fu">// 02 — progetti</p>
+    <h2 class="s-title fu" style="transition-delay:.05s">Cose che ho costruito</h2>
 
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
-      <!-- Card 1: LaundryBot -->
-      <div class="project-card fade-up glow-box">
-        <div class="project-icon">🤖</div>
-        <p class="project-lang">Python · Telegram Bot</p>
-        <h3>LaundryBot</h3>
-        <p>Bot Telegram per la gestione e prenotazione delle lavatrici in residence universitario. Notifiche, slot orari e stato macchine in tempo reale.</p>
-        <div class="mt-4 flex gap-2">
-          <span class="cert-badge"><span class="dot"></span>Python</span>
-          <span class="cert-badge"><span class="dot"></span>Bot API</span>
-        </div>
+      <!-- LaundryBot -->
+      <div class="pc fu" style="transition-delay:.06s">
+        <div class="pc-emoji">🤖</div>
+        <p class="pc-stack">Python · Telegram API</p>
+        <p class="pc-name">LaundryBot</p>
+        <p class="pc-desc">Bot per prenotare le lavatrici in residence. Piccolo problema, soluzione elegante. Notifiche, slot e stato in tempo reale.</p>
+        <a href="#" class="pc-gh"><i class="fa-brands fa-github"></i> github</a>
       </div>
 
-      <!-- Card 2: MovieRecommender -->
-      <div class="project-card fade-up glow-box" style="transition-delay:.05s">
-        <div class="project-icon">🎬</div>
-        <p class="project-lang">Python · Desktop App</p>
-        <h3>MovieRecommender</h3>
-        <p>App desktop con interfaccia Tkinter che sfrutta le API di TMDb per raccomandare film personalizzati tramite filtri di genere, valutazione e anno.</p>
-        <div class="mt-4 flex gap-2">
-          <span class="cert-badge"><span class="dot"></span>Tkinter</span>
-          <span class="cert-badge"><span class="dot"></span>TMDb API</span>
-        </div>
+      <!-- MovieRecommender -->
+      <div class="pc fu" style="transition-delay:.1s">
+        <div class="pc-emoji">🎬</div>
+        <p class="pc-stack">Python · Tkinter · TMDb</p>
+        <p class="pc-name">MovieRecommender</p>
+        <p class="pc-desc">App desktop per trovare film su misura. Il primo progetto con API esterne — da lì non mi sono più fermato.</p>
+        <a href="#" class="pc-gh"><i class="fa-brands fa-github"></i> github</a>
       </div>
 
-      <!-- Card 3: ScoutMealPlanner -->
-      <div class="project-card fade-up glow-box" style="transition-delay:.1s">
-        <div class="project-icon">🏕️</div>
-        <p class="project-lang">Python · CLI Tool</p>
-        <h3>ScoutMealPlanner</h3>
-        <p>Generatore automatico di menu e liste della spesa per campi scout. Gestisce allergie, porzioni per gruppi numerosi ed export in PDF.</p>
-        <div class="mt-4 flex gap-2">
-          <span class="cert-badge"><span class="dot"></span>Python</span>
-          <span class="cert-badge"><span class="dot"></span>PDF Export</span>
-        </div>
+      <!-- ScoutMealPlanner -->
+      <div class="pc fu" style="transition-delay:.14s">
+        <div class="pc-emoji">🏕️</div>
+        <p class="pc-stack">Python · CLI</p>
+        <p class="pc-name">ScoutMealPlanner</p>
+        <p class="pc-desc">Genera menu e lista della spesa per i campi scout. Nato da un bisogno reale: nessuno vuole fare i conti a mano per 40 persone.</p>
+        <a href="#" class="pc-gh"><i class="fa-brands fa-github"></i> github</a>
       </div>
 
-      <!-- Card 4: Carnival Effects -->
-      <div class="project-card fade-up glow-box" style="transition-delay:.15s">
-        <div class="project-icon">🎧</div>
-        <p class="project-lang">Web · Audio Visualizer</p>
-        <h3>Carnival Effects</h3>
-        <p>Visualizzatore web audio-reattivo per DJ set. Effetti particellari e grafici che si sincronizzano in tempo reale con la musica tramite Web Audio API.</p>
-        <div class="mt-4 flex gap-2">
-          <span class="cert-badge"><span class="dot"></span>Canvas API</span>
-          <span class="cert-badge"><span class="dot"></span>Web Audio</span>
-        </div>
+      <!-- Carnival Effects -->
+      <div class="pc fu" style="transition-delay:.18s">
+        <div class="pc-emoji">🎧</div>
+        <p class="pc-stack">Web · Canvas · Web Audio</p>
+        <p class="pc-name">Carnival Effects</p>
+        <p class="pc-desc">Visualizzatore audio-reattivo per DJ set. Dove il suono diventa grafica in tempo reale.</p>
+        <a href="#" class="pc-gh"><i class="fa-brands fa-github"></i> github</a>
       </div>
 
-      <!-- Card 5: UniArchive -->
-      <div class="project-card fade-up glow-box" style="transition-delay:.2s">
-        <div class="project-icon">📚</div>
-        <p class="project-lang">LaTeX · Open Resource</p>
-        <h3>UniArchive</h3>
-        <p>Archivio strutturato di appunti universitari in LaTeX. Copertura di corsi di Informatica, ottimizzato per la ricerca e il riutilizzo collaborativo.</p>
-        <div class="mt-4 flex gap-2">
-          <span class="cert-badge"><span class="dot"></span>LaTeX</span>
-          <span class="cert-badge"><span class="dot"></span>GitHub</span>
-        </div>
+      <!-- UniArchive -->
+      <div class="pc fu" style="transition-delay:.22s">
+        <div class="pc-emoji">📚</div>
+        <p class="pc-stack">LaTeX · GitHub</p>
+        <p class="pc-name">UniArchive</p>
+        <p class="pc-desc">Appunti universitari strutturati e condivisi. Perché il sapere dovrebbe essere aperto — e leggibile.</p>
+        <a href="#" class="pc-gh"><i class="fa-brands fa-github"></i> github</a>
       </div>
 
-      <!-- Card "more" -->
-      <div class="project-card fade-up border-dashed flex flex-col items-center justify-center text-center" style="transition-delay:.25s; min-height:180px">
-        <i class="fa-brands fa-github text-3xl text-muted mb-3"></i>
-        <p class="font-mono text-xs text-muted">altri progetti su</p>
-        <a href="https://github.com/" target="_blank" rel="noopener" class="text-neon font-mono text-sm hover:underline mt-1">github.com/mirconegri</a>
-      </div>
+      <!-- Ghost more -->
+      <a href="https://github.com/mirconegri" target="_blank" rel="noopener" class="pc-ghost fu" style="transition-delay:.26s; text-decoration:none">
+        <i class="fa-brands fa-github" style="font-size:1.6rem; color:#3a3a4a; margin-bottom:.6rem"></i>
+        <span style="font-family:'JetBrains Mono',monospace; font-size:.72rem; color:#3a3a4a">
+          → altri progetti su GitHub
+        </span>
+      </a>
 
     </div>
   </div>
 </section>
 
-<div class="neon-line max-w-5xl mx-auto opacity-20"></div>
+<div class="div-line"></div>
 
 
-<!-- ═══════════════════════════════════════════════
-     SEZIONE 4: EDUCATION & CERTIFICATIONS
-═══════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════
+     EDUCATION
+═══════════════════════════════════ -->
 <section id="education">
-  <div class="section">
-    <p class="section-label fade-up">04 / education</p>
-    <h2 class="section-title fade-up">Formazione</h2>
+  <div class="sec">
+    <p class="s-label fu">// 03 — formazione</p>
+    <h2 class="s-title fu" style="transition-delay:.05s">Percorso</h2>
 
     <div class="grid md:grid-cols-2 gap-12">
 
-      <!-- Timeline Education -->
-      <div class="fade-up">
-        <p class="text-muted font-mono text-xs mb-5">// percorso_accademico</p>
-        <div class="timeline">
-
-          <div class="timeline-item">
-            <p class="timeline-date">2025 — Present</p>
-            <p class="timeline-title">Laurea in Informatica</p>
-            <p class="timeline-sub">Università degli Studi di Trento</p>
-            <p class="text-xs text-muted mt-1">Trento, Italia</p>
+      <!-- Timeline -->
+      <div class="fu" style="transition-delay:.1s">
+        <p class="font-mono text-xs mb-5" style="color:#3a3a4a; font-family:'JetBrains Mono',monospace">$ git log --education</p>
+        <div class="tl">
+          <div class="tl-item">
+            <p class="tl-date">2025 → oggi</p>
+            <p class="tl-title">Laurea Triennale in Informatica</p>
+            <p class="tl-sub">Università degli Studi di Trento</p>
           </div>
-
-          <div class="timeline-item">
-            <p class="timeline-date">2020 — 2025</p>
-            <p class="timeline-title">Diploma Liceo Scientifico</p>
-            <p class="timeline-sub">Scienze Applicate — Liceo Primo Levi</p>
-            <p class="text-xs text-muted mt-1">Indirizzo informatico-scientifico</p>
+          <div class="tl-item">
+            <p class="tl-date">2020 → 2025</p>
+            <p class="tl-title">Diploma Liceo Scientifico</p>
+            <p class="tl-sub">Scienze Applicate — Liceo Primo Levi</p>
           </div>
-
         </div>
       </div>
 
       <!-- Certifications -->
-      <div class="fade-up" style="transition-delay:.1s">
-        <p class="text-muted font-mono text-xs mb-5">// certifications[]</p>
-        <div class="space-y-3">
-
-          <div class="bento-cell">
-            <div class="flex items-start gap-3">
-              <i class="fa-solid fa-microchip text-neon mt-0.5"></i>
-              <div>
-                <p class="text-sm font-semibold text-text">Everyday AI</p>
-                <p class="text-xs text-muted">Università di Trento · IBM</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="bento-cell">
-            <div class="flex items-start gap-3">
-              <i class="fa-solid fa-globe text-cyan mt-0.5"></i>
-              <div>
-                <p class="text-sm font-semibold text-text">English B2 Certificate</p>
-                <p class="text-xs text-muted">Cambridge Assessment English</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="bento-cell">
-            <div class="flex items-start gap-3">
-              <i class="fa-solid fa-language text-violet-400 mt-0.5"></i>
-              <div>
-                <p class="text-sm font-semibold text-text">English C1 Certificate</p>
-                <p class="text-xs text-muted">EF Education First — Dublin Campus</p>
-              </div>
-            </div>
-          </div>
-
+      <div class="fu" style="transition-delay:.15s">
+        <p class="font-mono text-xs mb-5" style="color:#3a3a4a; font-family:'JetBrains Mono',monospace">$ ls ~/certifications/</p>
+        <!-- horizontal scroll on mobile -->
+        <div class="flex flex-wrap gap-2">
+          <div class="cert"><span class="dot"></span> Everyday AI — UniTN × IBM</div>
+          <div class="cert"><span class="dot"></span> English B2 — Cambridge</div>
+          <div class="cert"><span class="dot"></span> English C1 — EF Dublin</div>
         </div>
       </div>
 
@@ -831,79 +847,67 @@
   </div>
 </section>
 
-<div class="neon-line max-w-5xl mx-auto opacity-20"></div>
+<div class="div-line"></div>
 
 
-<!-- ═══════════════════════════════════════════════
-     SEZIONE 5: VOLONTARIATO (highlight)
-═══════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════
+     VOLUNTEER  (peso visivo maggiore)
+═══════════════════════════════════ -->
 <section id="volunteer">
-  <div class="section">
+  <div class="sec">
 
-    <!-- Header con badge speciale -->
-    <div class="flex flex-wrap items-end gap-4 mb-8 fade-up">
-      <div>
-        <p class="section-label">05 / volunteer</p>
-        <h2 class="section-title mb-0">Volontariato & Impegno Sociale</h2>
+    <!-- Header con badge -->
+    <div class="flex flex-wrap items-start gap-3 mb-2">
+      <div class="fu">
+        <p class="s-label">// 04 — volontariato</p>
+        <h2 class="s-title mb-0">Oltre il codice</h2>
       </div>
-      <span class="mb-1 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neon/10 border border-neon/30 font-mono text-xs text-neon">
-        <i class="fa-solid fa-heart text-xs"></i> core identity
+      <span class="fu mt-6" style="transition-delay:.05s; display:inline-flex;align-items:center;gap:.4rem;padding:.25rem .75rem;border-radius:99px;border:1px solid rgba(0,255,136,.3);background:rgba(0,255,136,.06);font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#00ff88">
+        ★ parte di me
       </span>
     </div>
 
-    <p class="text-text/60 text-sm leading-relaxed max-w-2xl mb-8 fade-up" style="transition-delay:.05s">
-      Il volontariato non è un hobby: è parte integrante di chi sono. 
-      Unire <span class="text-neon">competenze tecniche</span> e <span class="text-neon">attenzione alla persona</span>
-      è la mia formula per un impatto reale sulla comunità.
-    </p>
+    <!-- Quote -->
+    <div class="vol-quote fu" style="transition-delay:.08s">
+      Il codice finisce quando chiudo il laptop.<br>Il volontariato no.
+    </div>
 
+    <!-- 4 cards — 2 col desktop, 1 mobile -->
     <div class="grid sm:grid-cols-2 gap-4">
 
-      <!-- AVP Soccorritore -->
-      <div class="vol-card fade-up glow-box">
-        <div class="vol-icon">🚑</div>
+      <div class="vc fu" style="transition-delay:.12s">
+        <div class="vc-icon">🚑</div>
         <div>
-          <p class="font-semibold text-text text-sm">Soccorritore Volontario</p>
-          <p class="vol-years">AVP · Associazione Volontari di Protezione</p>
-          <p class="text-xs text-text/60 mt-1 leading-relaxed">
-            Primo soccorso, trasporto sanitario e supporto alla comunità in emergenza.
-          </p>
+          <p class="vc-org">AVP — Associazione Volontari di Protezione</p>
+          <p class="vc-title">Soccorritore Volontario</p>
+          <p class="vc-desc">Primo soccorso, trasporto sanitario e supporto alla comunità. Quando qualcuno ha bisogno, ci si alza.</p>
         </div>
       </div>
 
-      <!-- Scout AGESCI -->
-      <div class="vol-card fade-up glow-box" style="transition-delay:.05s">
-        <div class="vol-icon">⚜️</div>
+      <div class="vc fu" style="transition-delay:.16s">
+        <div class="vc-icon">⚜️</div>
         <div>
-          <p class="font-semibold text-text text-sm">Capo Scout / Associato</p>
-          <p class="vol-years">AGESCI · quasi 14 anni di cammino</p>
-          <p class="text-xs text-text/60 mt-1 leading-relaxed">
-            Educatore e guida per ragazzi, organizzazione campi, progettazione percorsi educativi.
-          </p>
+          <p class="vc-org">AGESCI</p>
+          <p class="vc-title">Capo Scout</p>
+          <p class="vc-desc">Quasi 14 anni di cammino. Educatore, guida, organizzatore di campi. Lo scautismo mi ha insegnato più del codice.</p>
         </div>
       </div>
 
-      <!-- Sermig -->
-      <div class="vol-card fade-up glow-box" style="transition-delay:.1s">
-        <div class="vol-icon">✝️</div>
+      <div class="vc fu" style="transition-delay:.2s">
+        <div class="vc-icon">✝️</div>
         <div>
-          <p class="font-semibold text-text text-sm">Volontario</p>
-          <p class="vol-years">Sermig — Arsenale della Pace</p>
-          <p class="text-xs text-text/60 mt-1 leading-relaxed">
-            Accoglienza, supporto a persone in difficoltà e animazione di iniziative solidali.
-          </p>
+          <p class="vc-org">Sermig — Arsenale della Pace</p>
+          <p class="vc-title">Volontario</p>
+          <p class="vc-desc">Accoglienza e solidarietà concreta per chi si trova in difficoltà. Perché la prossimità è una scelta.</p>
         </div>
       </div>
 
-      <!-- Banco Alimentare -->
-      <div class="vol-card fade-up glow-box" style="transition-delay:.15s">
-        <div class="vol-icon">🥫</div>
+      <div class="vc fu" style="transition-delay:.24s">
+        <div class="vc-icon">🥫</div>
         <div>
-          <p class="font-semibold text-text text-sm">Volontario</p>
-          <p class="vol-years">Banco Alimentare</p>
-          <p class="text-xs text-text/60 mt-1 leading-relaxed">
-            Raccolta, smistamento e distribuzione di alimenti per famiglie in difficoltà sul territorio.
-          </p>
+          <p class="vc-org">Banco Alimentare</p>
+          <p class="vc-title">Volontario</p>
+          <p class="vc-desc">Raccolta e distribuzione di alimenti. Un gesto semplice, un impatto reale su famiglie del territorio.</p>
         </div>
       </div>
 
@@ -911,190 +915,140 @@
   </div>
 </section>
 
-<div class="neon-line max-w-5xl mx-auto opacity-20"></div>
+<div class="div-line"></div>
 
 
-<!-- ═══════════════════════════════════════════════
-     SEZIONE 6: FOOTER / CONTATTI
-═══════════════════════════════════════════════ -->
-<footer id="contact" id="footer">
-  <div class="max-w-5xl mx-auto px-6 py-16 text-center">
+<!-- ═══════════════════════════════════
+     CONTACT
+═══════════════════════════════════ -->
+<section id="contact">
+  <div class="sec" style="max-width:640px; text-align:center; padding-bottom:3rem">
 
-    <p class="section-label justify-center flex fade-up">06 / contact</p>
-    <h2 class="font-mono text-2xl sm:text-3xl font-bold text-text mt-1 mb-3 fade-up">
-      Parliamoci<span class="text-neon">.</span>
+    <p class="s-label fu" style="justify-content:center; display:block">// 05 — contatti</p>
+    <h2 class="s-title fu" style="transition-delay:.05s; text-align:center">
+      Parliamo<span style="color:#00ff88">.</span>
     </h2>
-    <p class="text-text/50 text-sm max-w-md mx-auto mb-8 fade-up" style="transition-delay:.05s">
-      Sono aperto a collaborazioni, stage, progetti open source o semplicemente una bella chiacchierata tech.
+
+    <p class="fu" style="transition-delay:.1s; font-size:.86rem; color:#3a3a4a; line-height:1.7; margin-bottom:2rem">
+      Non mando CV in giro.<br>
+      Ma se hai qualcosa di interessante da dirmi, ti rispondo.
     </p>
 
     <!-- Email CTA -->
-    <a href="mailto:mirco.negri@example.com" 
-       class="btn-primary mx-auto inline-flex mb-10 fade-up" 
-       style="transition-delay:.1s">
-      <i class="fa-solid fa-envelope text-xs"></i>
-      mirco.negri@example.com
-    </a>
+    <div class="fu" style="transition-delay:.15s; margin-bottom:1.5rem">
+      <a href="mailto:mirco.negri@example.com" class="btn-p" style="justify-content:center">
+        <i class="fa-solid fa-envelope" style="font-size:.7rem"></i>
+        mirco.negri@example.com
+      </a>
+    </div>
 
-    <!-- Social icons -->
-    <div class="flex justify-center gap-3 mb-10 fade-up" style="transition-delay:.15s">
-      <a href="https://github.com/" target="_blank" rel="noopener" 
-         class="social-link" aria-label="GitHub">
+    <!-- Social -->
+    <div class="flex justify-center gap-3 fu" style="transition-delay:.2s">
+      <a href="https://github.com/mirconegri"        target="_blank" rel="noopener" class="sl" aria-label="GitHub">
         <i class="fa-brands fa-github"></i>
       </a>
-      <a href="https://linkedin.com/" target="_blank" rel="noopener" 
-         class="social-link" aria-label="LinkedIn">
+      <a href="https://linkedin.com/in/mirconegri"   target="_blank" rel="noopener" class="sl" aria-label="LinkedIn">
         <i class="fa-brands fa-linkedin-in"></i>
       </a>
-      <a href="https://t.me/" target="_blank" rel="noopener" 
-         class="social-link" aria-label="Telegram">
+      <a href="https://t.me/mirconegri"              target="_blank" rel="noopener" class="sl" aria-label="Telegram">
         <i class="fa-brands fa-telegram"></i>
       </a>
     </div>
 
-    <!-- Copyright -->
-    <p class="text-muted font-mono text-xs fade-up" style="transition-delay:.2s">
-      &copy; 2025 Mirco Negri &nbsp;·&nbsp; Built with 
-      <span class="text-neon">♥</span> &amp; 
-      <span class="text-neon">&lt;/&gt;</span>
-    </p>
-
   </div>
+</section>
+
+
+<!-- ═══════════════════════════════════
+     FOOTER
+═══════════════════════════════════ -->
+<footer style="position:relative;z-index:1;border-top:1px solid #1c1c22;padding:1.5rem;text-align:center">
+  <p style="font-family:'JetBrains Mono',monospace; font-size:.65rem; color:#3a3a4a; letter-spacing:.04em">
+    © 2025 Mirco Negri &nbsp;·&nbsp; built with curiosità e troppo caffè
+  </p>
 </footer>
 
 
-<!-- ═══════════════════════════════════════════════
+<!-- ═══════════════════════════════════
      JAVASCRIPT
-═══════════════════════════════════════════════ -->
+═══════════════════════════════════ -->
 <script>
-/* ── 1. Custom Cursor ── */
-const cursor     = document.getElementById('cursor');
-const cursorRing = document.getElementById('cursor-ring');
-
-document.addEventListener('mousemove', e => {
-  cursor.style.left     = e.clientX + 'px';
-  cursor.style.top      = e.clientY + 'px';
-  // ring segue con piccolo lag visivo tramite requestAnimationFrame
-  requestAnimationFrame(() => {
-    cursorRing.style.left = e.clientX + 'px';
-    cursorRing.style.top  = e.clientY + 'px';
+/* ── Custom cursor ── */
+const cur     = document.getElementById('cur');
+const curRing = document.getElementById('cur-ring');
+if (window.matchMedia('(hover: hover)').matches) {
+  document.addEventListener('mousemove', e => {
+    cur.style.left     = e.clientX + 'px';
+    cur.style.top      = e.clientY + 'px';
+    requestAnimationFrame(() => {
+      curRing.style.left = e.clientX + 'px';
+      curRing.style.top  = e.clientY + 'px';
+    });
   });
-});
+}
 
-/* ── 2. Scroll Progress Bar ── */
-const progressBar = document.getElementById('progress-bar');
+/* ── Scroll progress bar ── */
+const prog = document.getElementById('prog');
+function updateProg() {
+  const st = document.documentElement.scrollTop;
+  const sh = document.documentElement.scrollHeight - window.innerHeight;
+  prog.style.width = (sh > 0 ? (st / sh * 100) : 0) + '%';
+}
+window.addEventListener('scroll', updateProg, { passive: true });
+
+/* ── Navbar: hide on scroll down, show on scroll up ── */
+const nav = document.getElementById('nav');
+let lastY = 0;
 window.addEventListener('scroll', () => {
-  const scrollTop    = document.documentElement.scrollTop;
-  const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-  progressBar.style.width = (scrollTop / scrollHeight * 100) + '%';
-});
+  const y = window.scrollY;
+  nav.classList.toggle('scrolled', y > 30);
+  if (y > lastY && y > 80)  nav.classList.add('hide');
+  else                       nav.classList.remove('hide');
+  lastY = y;
+}, { passive: true });
 
-/* ── 3. Navbar scrolled class ── */
-const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
-  navbar.classList.toggle('scrolled', window.scrollY > 40);
+/* ── Mobile menu ── */
+document.getElementById('mbtn').addEventListener('click', () => {
+  document.getElementById('mmenu').classList.toggle('hidden');
 });
+document.querySelectorAll('#mmenu a').forEach(a =>
+  a.addEventListener('click', () =>
+    document.getElementById('mmenu').classList.add('hidden')
+  )
+);
 
-/* ── 4. Mobile menu toggle ── */
-document.getElementById('menu-btn').addEventListener('click', () => {
-  const m = document.getElementById('mobile-menu');
-  m.classList.toggle('hidden');
-});
-// chiudi mobile menu al click di un link
-document.querySelectorAll('#mobile-menu a').forEach(a => {
-  a.addEventListener('click', () => {
-    document.getElementById('mobile-menu').classList.add('hidden');
-  });
-});
-
-/* ── 5. Typing Effect (Hero) ── */
-const phrases  = ['CS Student', 'Tech Enthusiast', 'Volunteer', 'Problem Solver', 'Open Source Fan'];
-let   pIdx     = 0;
-let   cIdx     = 0;
-let   deleting = false;
-const typedEl  = document.getElementById('typed-text');
-const SPEED    = 80;
-const PAUSE    = 1600;
+/* ── Typing effect ── */
+const phrases = [
+  'scrivo codice che risolve problemi veri',
+  'cs student con la testa fuori dal monitor',
+  'volontario nel tempo libero (e non solo)',
+  'costruisco cose perché mi piace costruire',
+  'leggo i man page per hobby',
+];
+let pi = 0, ci = 0, del = false;
+const tel = document.getElementById('ttext');
+const SPEED = 75, PAUSE = 2000;
 
 function typeLoop() {
-  const word = phrases[pIdx];
-
-  if (!deleting) {
-    // scrive
-    typedEl.textContent = word.slice(0, ++cIdx);
-    if (cIdx === word.length) {
-      // pausa prima di cancellare
-      deleting = true;
-      setTimeout(typeLoop, PAUSE);
-      return;
-    }
+  const w = phrases[pi];
+  if (!del) {
+    tel.textContent = w.slice(0, ++ci);
+    if (ci === w.length) { del = true; setTimeout(typeLoop, PAUSE); return; }
   } else {
-    // cancella
-    typedEl.textContent = word.slice(0, --cIdx);
-    if (cIdx === 0) {
-      deleting = false;
-      pIdx = (pIdx + 1) % phrases.length;
-    }
+    tel.textContent = w.slice(0, --ci);
+    if (ci === 0) { del = false; pi = (pi + 1) % phrases.length; }
   }
-  setTimeout(typeLoop, deleting ? SPEED / 2 : SPEED);
+  setTimeout(typeLoop, del ? SPEED / 2 : SPEED);
 }
 typeLoop();
 
-/* ── 6. Intersection Observer — fade-up sections ── */
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
-    }
+/* ── Intersection Observer fade-up ── */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('on'); obs.unobserve(e.target); }
   });
-}, { threshold: 0.12 });
-
-document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
-
-/* ── 7. Matrix Rain Canvas ── */
-(function matrixRain() {
-  const canvas  = document.getElementById('matrix-canvas');
-  const ctx     = canvas.getContext('2d');
-  const FONT_SZ = 13;
-  const CHARSET = '01アイウエオカキクケコABCDEF{}[];<>=+-_*&^%$#@!';
-  let   cols, drops;
-
-  function resize() {
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-    cols  = Math.floor(canvas.width / FONT_SZ);
-    drops = Array(cols).fill(1);
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  function draw() {
-    ctx.fillStyle = 'rgba(10,10,15,0.04)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = '#00ff88';
-    ctx.font      = FONT_SZ + 'px "Fira Code", monospace';
-
-    for (let i = 0; i < cols; i++) {
-      const char = CHARSET[Math.floor(Math.random() * CHARSET.length)];
-      ctx.fillText(char, i * FONT_SZ, drops[i] * FONT_SZ);
-      if (drops[i] * FONT_SZ > canvas.height && Math.random() > 0.975) drops[i] = 0;
-      drops[i]++;
-    }
-  }
-  setInterval(draw, 55);
-})();
-
-/* ── 8. Subtle parallax on hero name (solo desktop) ── */
-if (window.matchMedia('(hover: hover)').matches) {
-  const heroName = document.querySelector('.hero-name');
-  document.addEventListener('mousemove', e => {
-    const x = (e.clientX / window.innerWidth  - 0.5) * 8;
-    const y = (e.clientY / window.innerHeight - 0.5) * 5;
-    heroName.style.transform = `translate(${x}px, ${y}px)`;
-  });
-}
+}, { threshold: 0.1 });
+document.querySelectorAll('.fu').forEach(el => obs.observe(el));
 </script>
 
 </body>
