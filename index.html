@@ -1,445 +1,1245 @@
 <!DOCTYPE html>
-<html lang="it" class="scroll-smooth">
+<html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mirco Negri | CS Student & Developer</title>
-    <meta name="description" content="Portfolio di Mirco Negri: Studente di Informatica, Sviluppatore Software, Capo Scout e Soccorritore.">
-    
-    <!-- Fonts: Inter (Sans) & JetBrains Mono (Monospace) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mirco Negri</title>
+  <meta name="description" content="Mirco Negri — CS Student a Trento, sviluppatore, scout, soccorritore. Portfolio personale." />
+  <meta property="og:title" content="Mirco Negri" />
+  <meta property="og:description" content="CS Student a Trento. Sviluppo software, volontariato, comunità." />
+  <meta property="og:url" content="https://mirconegri.com" />
+  <meta property="og:type" content="website" />
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
-                    },
-                    colors: {
-                        dark: '#030712', // Background scurissimo
-                        glass: 'rgba(255, 255, 255, 0.03)',
-                        glassBorder: 'rgba(255, 255, 255, 0.08)',
-                    }
-                }
-            }
-        }
-    </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-    <style>
-         
-                /* ═════════════════════════════════════════
-           GEMINI LAVA LAMP (PERFORMANCE FIX 60FPS)
-        ═════════════════════════════════════════ */
-        
-        .aurora-bg {
-            position: fixed; /* Rimane inchiodato mentre scorri */
-            top: 0; left: 0; 
-            width: 100vw; height: 100vh; /* Copre SEMPRE tutto */
-            z-index: -1;
-            background: #030712;
-            overflow: hidden;
-            transform: translateZ(0); /* Attiva l'accelerazione GPU */
-        }
+<style>
+/* ════════════════════════════════════════════════
+   TOKENS
+════════════════════════════════════════════════ */
+:root {
+  --bg:        #07070A;
+  --surf:      #0D0D12;
+  --card:      #111118;
+  --border:    rgba(255,255,255,0.06);
+  --border-hov:rgba(255,255,255,0.12);
+  --t1:        #F5F7FA;
+  --t2:        #A1A8B3;
+  --t3:        #4A5060;
+  --accent-a:  #7c3aed;
+  --accent-b:  #4f46e5;
+  --accent-c:  #06b6d4;
+  --accent-d:  #a855f7;
+  --r:         12px;
+  --ease:      cubic-bezier(.16,1,.3,1);
+}
 
-        .blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px); /* L'effetto liquido/fusione */
-            opacity: 0.45; /* Niente "tutto bianco", i colori restano profondi */
-            will-change: transform; /* IL SEGRETO CONTRO GLI SCATTI */
-        }
+/* ════════════════════════════════════════════════
+   RESET
+════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
 
-        /* 5 globi sparsi per riempire ogni buco (sopra e sotto) */
-        .blob-1 {
-            width: 70vw; height: 70vw;
-            background: #1a73e8; /* Blu */
-            top: -20%; left: -10%;
-            animation: lava-1 18s infinite alternate ease-in-out;
-        }
-        .blob-2 {
-            width: 60vw; height: 80vw;
-            background: #9333ea; /* Viola */
-            bottom: -20%; right: -10%;
-            animation: lava-2 22s infinite alternate ease-in-out;
-        }
-        .blob-3 {
-            width: 80vw; height: 60vw;
-            background: #0891b2; /* Ciano */
-            bottom: -10%; left: 10%;
-            animation: lava-3 26s infinite alternate ease-in-out;
-        }
-        .blob-4 {
-            width: 50vw; height: 50vw;
-            background: #1a73e8; /* Blu */
-            top: 40%; right: 20%;
-            animation: lava-4 20s infinite alternate ease-in-out;
-        }
-        .blob-5 {
-            width: 60vw; height: 60vw;
-            background: #9333ea; /* Viola */
-            top: 10%; left: 40%;
-            animation: lava-5 24s infinite alternate ease-in-out;
-        }
+body {
+  background: var(--bg);
+  color: var(--t1);
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
 
-        /* 
-           ANIMAZIONI FISICHE E FLUIDE
-           Ora i globi viaggiano in 3D lungo l'asse Y (su e giù).
-           Quando i cerchi sfocati si incrociano, creano visivamente l'effetto "Lava"
-        */
-        @keyframes lava-1 {
-            0%   { transform: translate3d(0, 0, 0) scale(1); }
-            100% { transform: translate3d(10vw, 55vh, 0) scale(1.2); } /* Scende */
-        }
-        @keyframes lava-2 {
-            0%   { transform: translate3d(0, 0, 0) scale(1.1); }
-            100% { transform: translate3d(-15vw, -65vh, 0) scale(0.9); } /* Sale */
-        }
-        @keyframes lava-3 {
-            0%   { transform: translate3d(0, 0, 0) scale(0.9); }
-            100% { transform: translate3d(20vw, -50vh, 0) scale(1.2); } /* Sale */
-        }
-        @keyframes lava-4 {
-            0%   { transform: translate3d(0, 0, 0) scale(1); }
-            100% { transform: translate3d(-20vw, 40vh, 0) scale(0.8); } /* Scende */
-        }
-        @keyframes lava-5 {
-            0%   { transform: translate3d(0, 0, 0) scale(1.2); }
-            100% { transform: translate3d(15vw, -45vh, 0) scale(1); } /* Sale */
-        }
+::-webkit-scrollbar{width:2px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:rgba(124,58,237,.4);border-radius:2px}
 
+/* ════════════════════════════════════════════════
+   CURSOR — desktop only
+════════════════════════════════════════════════ */
+@media(hover:hover){body{cursor:none}}
+@media(hover:none){#cur,#cur-r{display:none!important}}
 
+#cur {
+  width: 6px; height: 6px;
+  background: var(--t1);
+  border-radius: 50%;
+  position: fixed; top:0; left:0;
+  pointer-events: none; z-index:9999;
+  transform: translate(-50%,-50%);
+  transition: width .18s var(--ease), height .18s var(--ease), opacity .18s;
+  mix-blend-mode: difference;
+}
+#cur-r {
+  width: 32px; height: 32px;
+  border: 1px solid rgba(124,58,237,.5);
+  border-radius: 50%;
+  position: fixed; top:0; left:0;
+  pointer-events: none; z-index:9998;
+  transform: translate(-50%,-50%);
+  transition: all .22s var(--ease);
+}
+body:has(a:hover) #cur-r,
+body:has(button:hover) #cur-r { width:48px; height:48px; border-color:rgba(168,85,247,.6) }
 
-        /* Glassmorphism Classes */
-        .glass-card {
-            background: var(--glass);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glassBorder);
-            border-radius: 16px;
-            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-        .glass-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 10px 40px -10px rgba(26, 115, 232, 0.3);
-        }
+/* ════════════════════════════════════════════════
+   SCROLL PROGRESS
+════════════════════════════════════════════════ */
+#prog {
+  position:fixed; top:0; left:0; height:1px;
+  background: linear-gradient(90deg, var(--accent-a), var(--accent-c));
+  z-index:500; width:0;
+  box-shadow: 0 0 8px rgba(124,58,237,.6);
+}
 
-        .glass-nav {
-            background: rgba(3, 7, 18, 0.6);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--glassBorder);
-        }
+/* ════════════════════════════════════════════════
+   AURORA BACKGROUND — animated blobs via canvas
+════════════════════════════════════════════════ */
+#aurora-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 1;
+}
 
-        /* Tag per le skills */
-        .skill-tag {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #e5e7eb;
-            padding: 0.3rem 0.8rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-family: 'JetBrains Mono', monospace;
-            transition: all 0.2s;
-        }
-        .skill-tag:hover {
-            background: rgba(26, 115, 232, 0.2);
-            border-color: rgba(26, 115, 232, 0.5);
-            color: #fff;
-        }
+/* ════════════════════════════════════════════════
+   MOUSE LIGHT ORB
+════════════════════════════════════════════════ */
+#mouse-orb {
+  position: fixed;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(124,58,237,.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+  transform: translate(-50%,-50%);
+  transition: left .9s cubic-bezier(.16,1,.3,1), top .9s cubic-bezier(.16,1,.3,1);
+  will-change: left, top;
+}
 
-        /* Scroll Reveal Animation */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
+/* ════════════════════════════════════════════════
+   NAVBAR
+════════════════════════════════════════════════ */
+#nav {
+  position: fixed; top:0; left:0; right:0;
+  z-index: 200;
+  background: rgba(7,7,10,.75);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--border);
+  transition: transform .4s var(--ease), border-color .3s;
+}
+#nav.hide { transform: translateY(-100%) }
+#nav.scrolled { border-bottom-color: rgba(124,58,237,.15) }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #030712; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); }
-    </style>
+.nav-inner {
+  max-width: 1080px; margin: 0 auto;
+  padding: .9rem 1.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.nav-logo {
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--t1);
+  letter-spacing: -.01em;
+  text-decoration: none;
+  transition: opacity .2s;
+}
+.nav-logo:hover { opacity: .7 }
+
+.nav-links { display: flex; align-items: center; gap: 2rem }
+.nav-a {
+  font-size: .8rem;
+  color: var(--t3);
+  text-decoration: none;
+  transition: color .2s;
+  letter-spacing: -.005em;
+}
+.nav-a:hover { color: var(--t1) }
+
+#mbtn {
+  display: none;
+  background: none; border: none;
+  color: var(--t3); font-size: 1rem;
+  cursor: pointer; padding: .25rem;
+  transition: color .2s;
+}
+#mbtn:hover { color: var(--t1) }
+
+@media(max-width:768px) {
+  .nav-links { display: none }
+  #mbtn { display: block }
+}
+
+#mmenu {
+  border-top: 1px solid var(--border);
+  background: rgba(7,7,10,.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+#mmenu ul { padding: .75rem 1.5rem 1rem; display: flex; flex-direction: column; gap: .5rem }
+#mmenu .nav-a { display: block; padding: .5rem 0 }
+
+/* ════════════════════════════════════════════════
+   LAYOUT — sections
+════════════════════════════════════════════════ */
+.sec {
+  position: relative; z-index: 2;
+  max-width: 1080px; margin: 0 auto;
+  padding: 7rem 1.5rem;
+}
+@media(max-width:640px){ .sec{ padding: 4.5rem 1.25rem } }
+
+.sec-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .65rem;
+  letter-spacing: .18em;
+  color: var(--t3);
+  text-transform: uppercase;
+  margin-bottom: .5rem;
+}
+.sec-title {
+  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  font-weight: 700;
+  letter-spacing: -.03em;
+  color: var(--t1);
+  margin-bottom: 3rem;
+  line-height: 1.15;
+}
+
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border) 30%, var(--border) 70%, transparent);
+  position: relative; z-index: 2;
+  max-width: 1080px; margin: 0 auto;
+}
+
+/* ════════════════════════════════════════════════
+   REVEAL ANIMATIONS
+════════════════════════════════════════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .8s var(--ease), transform .8s var(--ease);
+}
+.reveal.vis { opacity:1; transform:translateY(0) }
+
+/* ════════════════════════════════════════════════
+   HERO
+════════════════════════════════════════════════ */
+#hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 8rem 1.5rem 5rem;
+  position: relative; z-index: 2;
+  max-width: 1080px; margin: 0 auto;
+}
+
+.hero-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .68rem;
+  color: var(--t3);
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: .6rem;
+}
+.hero-label::before {
+  content: '';
+  display: inline-block;
+  width: 20px; height: 1px;
+  background: var(--t3);
+}
+
+.hero-name {
+  font-size: clamp(3.5rem, 10vw, 8rem);
+  font-weight: 700;
+  letter-spacing: -.04em;
+  line-height: .95;
+  color: var(--t1);
+  margin-bottom: 1.5rem;
+}
+/* Subtle gradient on the name */
+.hero-name span {
+  background: linear-gradient(135deg, #F5F7FA 0%, rgba(245,247,250,.65) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: clamp(.9rem, 1.8vw, 1.05rem);
+  color: var(--t3);
+  font-weight: 400;
+  margin-bottom: 2.5rem;
+  min-height: 1.6em;
+  letter-spacing: -.01em;
+}
+.hero-sub .typed { color: var(--t2) }
+.bcur {
+  display: inline-block; width: 2px; height: .95em;
+  background: var(--t2); margin-left: 1px;
+  vertical-align: middle;
+  animation: blink .9s step-end infinite;
+}
+@keyframes blink{ 50%{ opacity:0 } }
+
+/* Hero CTA row */
+.hero-ctas { display:flex; flex-wrap:wrap; gap:.75rem; margin-bottom: 3.5rem }
+
+/* ── Neofetch card ── */
+.nf-card {
+  display: inline-flex; gap: 1.5rem;
+  background: rgba(255,255,255,.025);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 1.25rem 1.5rem;
+  backdrop-filter: blur(8px);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .68rem;
+  line-height: 1.9;
+  max-width: 480px;
+}
+.nf-logo {
+  color: var(--accent-d);
+  opacity: .7;
+  white-space: pre;
+  line-height: 1.55;
+  font-size: .62rem;
+  flex-shrink: 0;
+  align-self: center;
+}
+.nf-info { flex:1; min-width:0 }
+.nf-head { color: var(--t1); font-weight:500 }
+.nf-at   { color: var(--t3) }
+.nf-sep  { color: rgba(255,255,255,.08) }
+.nf-key  { color: var(--accent-d); opacity:.8 }
+.nf-val  { color: var(--t2) }
+.nf-swatches { display:flex; gap:4px; margin-top:4px }
+.nf-sw { width:11px; height:11px; border-radius:3px }
+@media(max-width:480px){
+  .nf-card{ flex-direction:column; gap:.75rem; max-width:100% }
+  .nf-logo{ display:none }
+}
+
+/* ════════════════════════════════════════════════
+   BUTTONS
+════════════════════════════════════════════════ */
+.btn-primary {
+  display: inline-flex; align-items: center; gap: .45rem;
+  padding: .65rem 1.35rem;
+  background: var(--t1);
+  color: var(--bg);
+  font-size: .82rem;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  letter-spacing: -.01em;
+  transition: opacity .2s, transform .2s var(--ease), box-shadow .2s;
+  border: none; cursor: pointer;
+}
+.btn-primary:hover {
+  opacity: .9;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(245,247,250,.12);
+}
+
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: .45rem;
+  padding: .65rem 1.35rem;
+  background: transparent;
+  color: var(--t2);
+  font-size: .82rem;
+  font-weight: 500;
+  border-radius: 8px;
+  text-decoration: none;
+  letter-spacing: -.01em;
+  border: 1px solid var(--border);
+  transition: color .2s, border-color .2s, transform .2s var(--ease), background .2s;
+  cursor: pointer;
+}
+.btn-ghost:hover {
+  color: var(--t1);
+  border-color: var(--border-hov);
+  background: rgba(255,255,255,.04);
+  transform: translateY(-1px);
+}
+
+/* ════════════════════════════════════════════════
+   ABOUT
+════════════════════════════════════════════════ */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+@media(max-width:768px){ .about-grid{ grid-template-columns:1fr; gap:2.5rem } }
+
+.about-bio p {
+  font-size: .92rem;
+  color: var(--t2);
+  line-height: 1.85;
+  font-weight: 400;
+  margin-bottom: 1rem;
+  letter-spacing: -.01em;
+}
+.about-bio p:last-child{ margin-bottom:0 }
+.about-bio strong { color: var(--t1); font-weight:500 }
+
+.skill-group-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .6rem;
+  letter-spacing: .15em;
+  color: var(--t3);
+  text-transform: uppercase;
+  margin-bottom: .75rem;
+}
+.skill-chips { display:flex; flex-wrap:wrap; gap:.4rem; margin-bottom:1.5rem }
+.chip {
+  padding: .28rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .65rem;
+  color: var(--t3);
+  background: rgba(255,255,255,.02);
+  transition: border-color .2s, color .2s, background .2s;
+  cursor: default;
+  letter-spacing: .03em;
+}
+.chip:hover {
+  border-color: rgba(124,58,237,.35);
+  color: var(--t2);
+  background: rgba(124,58,237,.06);
+}
+
+.status-row {
+  display: inline-flex; align-items: center; gap: .6rem;
+  padding: .35rem .9rem;
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  font-size: .75rem;
+  color: var(--t3);
+}
+.status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 6px rgba(34,197,94,.6);
+  animation: statusPulse 2.5s ease infinite;
+}
+@keyframes statusPulse {
+  0%,100%{ transform:scale(1); opacity:1 }
+  50%{ transform:scale(1.5); opacity:.5 }
+}
+
+/* ════════════════════════════════════════════════
+   PROJECTS
+════════════════════════════════════════════════ */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+@media(max-width:900px){ .projects-grid{ grid-template-columns:repeat(2,1fr) } }
+@media(max-width:560px){ .projects-grid{ grid-template-columns:1fr } }
+
+.pcard {
+  background: var(--card);
+  padding: 1.75rem;
+  display: flex; flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: background .25s;
+  text-decoration: none;
+  color: inherit;
+}
+.pcard::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(124,58,237,.08) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity .35s var(--ease);
+}
+.pcard:hover { background: #13131c }
+.pcard:hover::before { opacity: 1 }
+
+/* subtle 3D tilt is handled by JS */
+.pcard-emoji { font-size: 1.5rem; margin-bottom: 1rem; line-height:1 }
+.pcard-stack {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .6rem; color: var(--t3);
+  letter-spacing: .1em; text-transform: uppercase; margin-bottom: .35rem;
+}
+.pcard-name { font-size: .92rem; font-weight:600; color:var(--t1); margin-bottom:.4rem; letter-spacing:-.01em }
+.pcard-desc { font-size: .8rem; color:var(--t2); line-height:1.65; flex:1; letter-spacing:-.005em }
+.pcard-link {
+  margin-top: 1.25rem;
+  display: inline-flex; align-items: center; gap: .3rem;
+  font-size: .72rem; color: var(--t3);
+  text-decoration: none;
+  transition: color .2s;
+}
+.pcard:hover .pcard-link { color: var(--t2) }
+
+.pcard-ghost {
+  background: transparent;
+  border: none;
+  display: flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align: center; min-height: 180px; gap: .5rem;
+  text-decoration: none;
+  transition: background .25s;
+}
+.pcard-ghost:hover { background: rgba(255,255,255,.02) }
+.pcard-ghost i { font-size: 1.3rem; color: var(--t3) }
+.pcard-ghost span { font-size: .78rem; color: var(--t3); transition: color .2s }
+.pcard-ghost:hover span { color: var(--t2) }
+
+/* ════════════════════════════════════════════════
+   EDUCATION
+════════════════════════════════════════════════ */
+.edu-grid { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:start }
+@media(max-width:768px){ .edu-grid{ grid-template-columns:1fr; gap:2.5rem } }
+
+.timeline { position:relative; padding-left:1.25rem }
+.timeline::before {
+  content:''; position:absolute; left:0; top:6px; bottom:0;
+  width:1px;
+  background: linear-gradient(180deg, rgba(124,58,237,.5) 0%, rgba(124,58,237,.05) 100%);
+}
+.tl-item { position:relative; padding-bottom:1.75rem }
+.tl-item:last-child{ padding-bottom:0 }
+.tl-item::before {
+  content:''; position:absolute; left:-1.25rem; top:6px;
+  width:7px; height:7px;
+  border-radius:50%;
+  background: var(--surf);
+  border: 1px solid rgba(124,58,237,.5);
+  box-shadow: 0 0 8px rgba(124,58,237,.3);
+}
+.tl-date { font-family:'JetBrains Mono',monospace; font-size:.62rem; color:var(--t3); letter-spacing:.06em; margin-bottom:.2rem }
+.tl-title { font-size:.9rem; font-weight:600; color:var(--t1); letter-spacing:-.01em }
+.tl-sub { font-size:.78rem; color:var(--t2); margin-top:.1rem }
+
+.cert-list { display:flex; flex-direction:column; gap:.75rem }
+.cert-item {
+  display:flex; align-items:center; gap:.9rem;
+  padding: .85rem 1rem;
+  background: rgba(255,255,255,.025);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: border-color .2s, background .2s;
+}
+.cert-item:hover { border-color: var(--border-hov); background: rgba(255,255,255,.04) }
+.cert-icon { font-size:.9rem; opacity:.6; flex-shrink:0 }
+.cert-name { font-size:.82rem; font-weight:500; color:var(--t1); letter-spacing:-.01em }
+.cert-org  { font-size:.72rem; color:var(--t3) }
+
+/* ════════════════════════════════════════════════
+   VOLUNTEER
+════════════════════════════════════════════════ */
+.vol-intro {
+  font-size: clamp(.95rem, 2vw, 1.15rem);
+  font-weight: 400;
+  color: var(--t2);
+  line-height: 1.75;
+  max-width: 560px;
+  margin-bottom: 3rem;
+  letter-spacing: -.01em;
+  border-left: 1px solid rgba(124,58,237,.4);
+  padding-left: 1.25rem;
+}
+.vol-badge {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .25rem .75rem;
+  border: 1px solid rgba(168,85,247,.25);
+  border-radius: 99px;
+  background: rgba(168,85,247,.06);
+  font-size: .68rem; color: rgba(168,85,247,.8);
+  letter-spacing: .05em;
+  margin-left: 1rem;
+  vertical-align: middle;
+}
+
+.vol-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); border:1px solid var(--border); border-radius:var(--r); overflow:hidden }
+@media(max-width:640px){ .vol-grid{ grid-template-columns:1fr } }
+
+.vcard {
+  background: var(--card);
+  padding: 1.75rem;
+  display: flex; gap:1rem; align-items:flex-start;
+  transition: background .25s;
+}
+.vcard:hover { background: #13131c }
+.vcard-icon { font-size:1.4rem; flex-shrink:0; margin-top:.05rem; line-height:1 }
+.vcard-org { font-family:'JetBrains Mono',monospace; font-size:.6rem; letter-spacing:.1em; color:var(--t3); text-transform:uppercase; margin-bottom:.2rem }
+.vcard-title { font-size:.9rem; font-weight:600; color:var(--t1); letter-spacing:-.01em }
+.vcard-desc { font-size:.78rem; color:var(--t2); margin-top:.35rem; line-height:1.65; letter-spacing:-.005em }
+
+/* ════════════════════════════════════════════════
+   CONTACT
+════════════════════════════════════════════════ */
+#contact .sec { text-align:center; max-width:560px }
+.contact-title {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 700;
+  letter-spacing: -.04em;
+  line-height: 1.1;
+  color: var(--t1);
+  margin-bottom: 1rem;
+}
+.contact-sub {
+  font-size: .9rem;
+  color: var(--t3);
+  line-height: 1.75;
+  margin-bottom: 2.5rem;
+  letter-spacing: -.01em;
+}
+
+.social-row { display:flex; justify-content:center; gap:.6rem; margin-top:1.25rem }
+.soc {
+  display:inline-flex; align-items:center; justify-content:center;
+  width:38px; height:38px;
+  border:1px solid var(--border); border-radius:8px;
+  color: var(--t3); font-size:.9rem; text-decoration:none;
+  transition: color .2s, border-color .2s, background .2s;
+}
+.soc:hover { color:var(--t1); border-color:var(--border-hov); background:rgba(255,255,255,.04) }
+
+/* ════════════════════════════════════════════════
+   FOOTER
+════════════════════════════════════════════════ */
+footer {
+  position: relative; z-index:2;
+  border-top: 1px solid var(--border);
+  padding: 1.75rem 1.5rem;
+  text-align: center;
+}
+footer p {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .6rem;
+  color: var(--t3);
+  letter-spacing: .04em;
+}
+</style>
 </head>
-<body class="antialiased selection:bg-blue-500/30 selection:text-white">
+<body>
 
-        <!-- SFONDO EFFETTO GEMINI (LAVA LAMP) -->
-    <div class="aurora-bg">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
-        <div class="blob blob-4"></div>
-        <div class="blob blob-5"></div>
+<!-- ══════════════════════════════════════
+     CURSOR
+══════════════════════════════════════ -->
+<div id="cur"></div>
+<div id="cur-r"></div>
+<div id="prog"></div>
+<div id="mouse-orb"></div>
+
+<!-- ══════════════════════════════════════
+     AURORA CANVAS
+══════════════════════════════════════ -->
+<canvas id="aurora-canvas"></canvas>
+
+<!-- ══════════════════════════════════════
+     NAVBAR
+══════════════════════════════════════ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo">Mirco Negri</a>
+    <ul class="nav-links">
+      <li><a href="#about"     class="nav-a">About</a></li>
+      <li><a href="#projects"  class="nav-a">Projects</a></li>
+      <li><a href="#education" class="nav-a">Education</a></li>
+      <li><a href="#volunteer" class="nav-a">Volunteer</a></li>
+      <li><a href="#contact"   class="nav-a">Contact</a></li>
+    </ul>
+    <button id="mbtn" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+  </div>
+  <div id="mmenu" class="hidden">
+    <ul>
+      <li><a href="#about"     class="nav-a">About</a></li>
+      <li><a href="#projects"  class="nav-a">Projects</a></li>
+      <li><a href="#education" class="nav-a">Education</a></li>
+      <li><a href="#volunteer" class="nav-a">Volunteer</a></li>
+      <li><a href="#contact"   class="nav-a">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<!-- ══════════════════════════════════════
+     HERO
+══════════════════════════════════════ -->
+<section id="hero">
+
+  <p class="hero-label reveal">Computer Science Student</p>
+
+  <h1 class="hero-name reveal" style="transition-delay:.1s">
+    <span>Mirco<br>Negri</span>
+  </h1>
+
+  <p class="hero-sub reveal" style="transition-delay:.2s">
+    <span class="typed" id="ttext"></span><span class="bcur"></span>
+  </p>
+
+  <div class="hero-ctas reveal" style="transition-delay:.3s">
+    <a href="#projects" class="btn-primary">
+      <i class="fa-solid fa-arrow-down" style="font-size:.65rem"></i> Esplora i progetti
+    </a>
+    <a href="#contact" class="btn-ghost">Scrivimi</a>
+  </div>
+
+  <!-- Neofetch -->
+  <div class="nf-card reveal" style="transition-delay:.42s" aria-label="Info sistema">
+    <div class="nf-logo" aria-hidden="true"> ╭─────╮
+ │ M·N │
+ ╰─────╯
+  ●  ●  ●</div>
+    <div class="nf-info">
+      <div><span class="nf-head">mirco</span><span class="nf-at">@</span><span class="nf-head">portfolio</span></div>
+      <div style="color:rgba(255,255,255,.06)">─────────────────</div>
+      <div><span class="nf-key">OS</span><span class="nf-at">: </span><span class="nf-val">Human v21 — Trento, IT</span></div>
+      <div><span class="nf-key">DE</span><span class="nf-at">: </span><span class="nf-val">CS @ Università di Trento</span></div>
+      <div><span class="nf-key">WM</span><span class="nf-at">: </span><span class="nf-val">Scout · Soccorritore · IT Teacher</span></div>
+      <div><span class="nf-key">Shell</span><span class="nf-at">: </span><span class="nf-val">Python / C / JavaScript</span></div>
+      <div><span class="nf-key">Uptime</span><span class="nf-at">: </span><span class="nf-val">21 anni</span></div>
+      <div><span class="nf-key">Packages</span><span class="nf-at">: </span><span class="nf-val">5 projects (git)</span></div>
+      <div style="color:rgba(255,255,255,.06)">─────────────────</div>
+      <div class="nf-swatches">
+        <div class="nf-sw" style="background:#7c3aed"></div>
+        <div class="nf-sw" style="background:#4f46e5"></div>
+        <div class="nf-sw" style="background:#06b6d4"></div>
+        <div class="nf-sw" style="background:#a855f7"></div>
+        <div class="nf-sw" style="background:var(--card);border:1px solid var(--border)"></div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<div class="divider"></div>
+
+
+<!-- ══════════════════════════════════════
+     ABOUT
+══════════════════════════════════════ -->
+<section id="about">
+  <div class="sec">
+    <p class="sec-label reveal">01 — Su di me</p>
+    <h2 class="sec-title reveal" style="transition-delay:.05s">Chi sono</h2>
+
+    <div class="about-grid reveal" style="transition-delay:.1s">
+      <div class="about-bio">
+        <p>
+          Scrivo codice da quando avevo tredici anni, ma non mi definisco solo quello.
+          Studio informatica a Trento perché voglio capire come funzionano le cose — <strong>davvero</strong> — non solo usarle.
+        </p>
+        <p>
+          Insegno <strong>informatica agli adulti</strong> nell'ambito dell'inclusione digitale: tradurre la complessità tecnica in qualcosa di accessibile è una delle cose che mi riesce meglio — e che mi piace di più.
+        </p>
+        <p>
+          Fuori dal monitor: scout da quasi 14 anni, soccorritore volontario, appassionato di musica e di tutto ciò che sta all'incrocio tra <strong>tecnologia e persone</strong>.
+        </p>
+        <br/>
+        <div class="status-row">
+          <span class="status-dot"></span>
+          <span style="font-size:.75rem;color:var(--t2)">CS @ UniTN</span>
+          <span style="font-size:.75rem;color:var(--t3)">·</span>
+          <span style="font-size:.75rem;color:var(--t3)">available for interesting things</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="skill-group-label">Languages</div>
+        <div class="skill-chips">
+          <span class="chip">C</span>
+          <span class="chip">C++</span>
+          <span class="chip">Java</span>
+          <span class="chip">PolyML</span>
+          <span class="chip">JavaScript</span>
+          <span class="chip">Python</span>
+          <span class="chip">HTML/CSS</span>
+        </div>
+        <div class="skill-group-label">Areas</div>
+        <div class="skill-chips">
+          <span class="chip">AI / ML</span>
+          <span class="chip">Big Data</span>
+          <span class="chip">LaTeX</span>
+          <span class="chip">Git</span>
+          <span class="chip">Linux</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+
+<!-- ══════════════════════════════════════
+     PROJECTS
+══════════════════════════════════════ -->
+<section id="projects">
+  <div class="sec">
+    <p class="sec-label reveal">02 — Progetti</p>
+    <h2 class="sec-title reveal" style="transition-delay:.05s">Cose che ho costruito</h2>
+
+    <div class="projects-grid reveal" style="transition-delay:.1s">
+
+      <div class="pcard">
+        <div class="pcard-emoji">🤖</div>
+        <p class="pcard-stack">Python · Telegram API</p>
+        <p class="pcard-name">LaundryBot</p>
+        <p class="pcard-desc">Bot per prenotare le lavatrici in residence. Piccolo problema, soluzione elegante. Notifiche, slot e stato in tempo reale.</p>
+        <a href="#" class="pcard-link"><i class="fa-brands fa-github"></i> github</a>
+      </div>
+
+      <div class="pcard">
+        <div class="pcard-emoji">🎬</div>
+        <p class="pcard-stack">Python · Tkinter · TMDb</p>
+        <p class="pcard-name">MovieRecommender</p>
+        <p class="pcard-desc">App desktop per trovare film su misura. Il primo progetto con API esterne — da lì non mi sono più fermato.</p>
+        <a href="#" class="pcard-link"><i class="fa-brands fa-github"></i> github</a>
+      </div>
+
+      <div class="pcard">
+        <div class="pcard-emoji">🏕️</div>
+        <p class="pcard-stack">Python · CLI</p>
+        <p class="pcard-name">ScoutMealPlanner</p>
+        <p class="pcard-desc">Genera menu e lista della spesa per i campi scout. Nato da un bisogno reale: nessuno vuole fare i conti a mano per 40 persone.</p>
+        <a href="#" class="pcard-link"><i class="fa-brands fa-github"></i> github</a>
+      </div>
+
+      <div class="pcard">
+        <div class="pcard-emoji">🎧</div>
+        <p class="pcard-stack">Web · Canvas · Web Audio</p>
+        <p class="pcard-name">Carnival Effects</p>
+        <p class="pcard-desc">Visualizzatore audio-reattivo per DJ set. Dove il suono diventa grafica in tempo reale.</p>
+        <a href="#" class="pcard-link"><i class="fa-brands fa-github"></i> github</a>
+      </div>
+
+      <div class="pcard">
+        <div class="pcard-emoji">📚</div>
+        <p class="pcard-stack">LaTeX · GitHub</p>
+        <p class="pcard-name">UniArchive</p>
+        <p class="pcard-desc">Appunti universitari strutturati e condivisi. Perché il sapere dovrebbe essere aperto — e leggibile.</p>
+        <a href="#" class="pcard-link"><i class="fa-brands fa-github"></i> github</a>
+      </div>
+
+      <a href="https://github.com/mirconegri" target="_blank" rel="noopener" class="pcard pcard-ghost">
+        <i class="fa-brands fa-github"></i>
+        <span>Altri progetti su GitHub</span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+
+<!-- ══════════════════════════════════════
+     EDUCATION
+══════════════════════════════════════ -->
+<section id="education">
+  <div class="sec">
+    <p class="sec-label reveal">03 — Formazione</p>
+    <h2 class="sec-title reveal" style="transition-delay:.05s">Percorso</h2>
+
+    <div class="edu-grid">
+
+      <div class="reveal" style="transition-delay:.1s">
+        <div class="timeline">
+          <div class="tl-item">
+            <p class="tl-date">2025 → oggi</p>
+            <p class="tl-title">Laurea Triennale in Informatica</p>
+            <p class="tl-sub">Università degli Studi di Trento</p>
+          </div>
+          <div class="tl-item">
+            <p class="tl-date">2020 → 2025</p>
+            <p class="tl-title">Diploma Liceo Scientifico</p>
+            <p class="tl-sub">Scienze Applicate — Liceo Primo Levi</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal" style="transition-delay:.15s">
+        <p class="skill-group-label" style="margin-bottom:1rem">Certificazioni</p>
+        <div class="cert-list">
+          <div class="cert-item">
+            <span class="cert-icon">🤖</span>
+            <div>
+              <p class="cert-name">Everyday AI</p>
+              <p class="cert-org">Università di Trento × IBM</p>
+            </div>
+          </div>
+          <div class="cert-item">
+            <span class="cert-icon">🌐</span>
+            <div>
+              <p class="cert-name">English B2 Certificate</p>
+              <p class="cert-org">Cambridge Assessment English</p>
+            </div>
+          </div>
+          <div class="cert-item">
+            <span class="cert-icon">✈️</span>
+            <div>
+              <p class="cert-name">English C1 Certificate</p>
+              <p class="cert-org">EF Education First — Dublin</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+
+<!-- ══════════════════════════════════════
+     VOLUNTEER
+══════════════════════════════════════ -->
+<section id="volunteer">
+  <div class="sec">
+
+    <div class="reveal" style="display:flex;align-items:baseline;gap:.5rem;flex-wrap:wrap;margin-bottom:.3rem">
+      <p class="sec-label" style="margin-bottom:0">04 — Volontariato</p>
+      <span class="vol-badge">★ parte di me</span>
+    </div>
+    <h2 class="sec-title reveal" style="transition-delay:.05s">Oltre il codice</h2>
+
+    <p class="vol-intro reveal" style="transition-delay:.08s">
+      Il codice finisce quando chiudo il laptop.<br>Il volontariato no.
+    </p>
+
+    <div class="vol-grid reveal" style="transition-delay:.12s">
+
+      <div class="vcard">
+        <div class="vcard-icon">🚑</div>
+        <div>
+          <p class="vcard-org">AVP — Associazione Volontari di Protezione</p>
+          <p class="vcard-title">Soccorritore Volontario</p>
+          <p class="vcard-desc">Primo soccorso, trasporto sanitario e supporto alla comunità. Quando qualcuno ha bisogno, ci si alza.</p>
+        </div>
+      </div>
+
+      <div class="vcard">
+        <div class="vcard-icon">⚜️</div>
+        <div>
+          <p class="vcard-org">AGESCI</p>
+          <p class="vcard-title">Capo Scout</p>
+          <p class="vcard-desc">Quasi 14 anni di cammino. Educatore, guida, organizzatore di campi. Lo scautismo mi ha insegnato più del codice.</p>
+        </div>
+      </div>
+
+      <div class="vcard">
+        <div class="vcard-icon">✝️</div>
+        <div>
+          <p class="vcard-org">Sermig — Arsenale della Pace</p>
+          <p class="vcard-title">Volontario</p>
+          <p class="vcard-desc">Accoglienza e solidarietà concreta per chi si trova in difficoltà. Perché la prossimità è una scelta.</p>
+        </div>
+      </div>
+
+      <div class="vcard">
+        <div class="vcard-icon">🥫</div>
+        <div>
+          <p class="vcard-org">Banco Alimentare</p>
+          <p class="vcard-title">Volontario</p>
+          <p class="vcard-desc">Raccolta e distribuzione di alimenti. Un gesto semplice, un impatto reale su famiglie del territorio.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+
+<!-- ══════════════════════════════════════
+     CONTACT
+══════════════════════════════════════ -->
+<section id="contact">
+  <div class="sec" style="max-width:560px;text-align:center;padding-bottom:4rem">
+
+    <p class="sec-label reveal" style="justify-content:center;display:block">05 — Contatti</p>
+
+    <h2 class="contact-title reveal" style="transition-delay:.05s">
+      Parliamo.
+    </h2>
+
+    <p class="contact-sub reveal" style="transition-delay:.1s">
+      Non mando CV in giro.<br>
+      Ma se hai qualcosa di interessante da dirmi, ti rispondo.
+    </p>
+
+    <div class="reveal" style="transition-delay:.15s">
+      <a href="mailto:mirco.negri@example.com" class="btn-primary" style="display:inline-flex;justify-content:center">
+        <i class="fa-solid fa-envelope" style="font-size:.65rem"></i>
+        mirco.negri@example.com
+      </a>
     </div>
 
-    <!-- NAVBAR -->
-    <nav class="fixed top-0 w-full z-50 glass-nav transition-all duration-300">
-        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="font-mono font-bold text-xl tracking-tighter text-white">
-                M<span class="text-blue-400">N</span>_
-            </a>
-            <div class="hidden md:flex gap-8 text-sm font-mono text-gray-400">
-                <a href="#about" class="hover:text-white transition-colors">~/about</a>
-                <a href="#projects" class="hover:text-white transition-colors">~/projects</a>
-                <a href="#volunteer" class="hover:text-white transition-colors">~/volunteer</a>
-            </div>
-            <a href="#contact" class="hidden md:block px-4 py-2 rounded-full border border-gray-600 hover:border-blue-400 hover:bg-blue-900/20 transition-all font-mono text-sm text-white">
-                Contact Me
-            </a>
-        </div>
-    </nav>
+    <div class="social-row reveal" style="transition-delay:.2s">
+      <a href="https://github.com/mirconegri"      target="_blank" rel="noopener" class="soc" aria-label="GitHub">
+        <i class="fa-brands fa-github"></i>
+      </a>
+      <a href="https://linkedin.com/in/mirconegri" target="_blank" rel="noopener" class="soc" aria-label="LinkedIn">
+        <i class="fa-brands fa-linkedin-in"></i>
+      </a>
+      <a href="https://t.me/mirconegri"            target="_blank" rel="noopener" class="soc" aria-label="Telegram">
+        <i class="fa-brands fa-telegram"></i>
+      </a>
+    </div>
 
-    <!-- MAIN CONTENT -->
-    <main class="relative z-10 max-w-6xl mx-auto px-6 pt-32 pb-20">
+  </div>
+</section>
 
-        <!-- HERO SECTION -->
-        <section class="min-h-[70vh] flex flex-col justify-center reveal">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-300 font-mono text-xs mb-6 w-max">
-                <span class="relative flex h-2 w-2">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                  <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-                </span>
-                CS Student @ UniTN
-            </div>
-            <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
-                Mirco Negri
-            </h1>
-            <h2 class="text-xl md:text-2xl text-gray-400 font-light mb-8 max-w-2xl leading-relaxed">
-                <span class="font-mono text-blue-400">&gt;</span> Sviluppatore software, <span class="text-white">capo scout</span>, e <span class="text-white">soccorritore</span>. 
-                Scrivo codice per passione e agisco per la comunità.
-            </h2>
-            <div class="flex gap-4">
-                <a href="#projects" class="px-6 py-3 rounded-lg bg-white text-black font-semibold hover:bg-gray-200 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-                    Esplora Progetti
-                </a>
-                <a href="https://github.com/mirconegri" target="_blank" class="px-6 py-3 rounded-lg glass-card flex items-center gap-2 hover:text-white text-gray-300">
-                    <i class="fa-brands fa-github"></i> GitHub
-                </a>
-            </div>
-        </section>
 
-        <!-- ABOUT & SKILLS -->
-        <section id="about" class="py-20 reveal">
-            <h3 class="text-3xl font-bold mb-10"><span class="text-blue-500">01.</span> Profilo</h3>
-            <div class="grid md:grid-cols-2 gap-12">
-                <!-- Info text -->
-                <div class="glass-card p-8">
-                    <div class="font-mono text-sm text-gray-400 border-b border-gray-700/50 pb-4 mb-4 flex justify-between">
-                        <span>system_info.json</span>
-                        <span>[Read-Only]</span>
-                    </div>
-                    <ul class="space-y-4 font-mono text-sm text-gray-300">
-                        <li><span class="text-blue-400">"nome"</span>: <span class="text-green-400">"Mirco Negri"</span>,</li>
-                        <li><span class="text-blue-400">"uptime_anni"</span>: <span class="text-purple-400">20</span>,</li>
-                        <li><span class="text-blue-400">"location"</span>: <span class="text-green-400">"Trento, Italia"</span>,</li>
-                        <li><span class="text-blue-400">"istruzione"</span>: [
-                            <ul class="pl-6 mt-2 border-l border-gray-700 space-y-2">
-                                <li><span class="text-gray-400">/* 2025 - Oggi */</span><br>"Laurea Triennale in Informatica, UniTN",</li>
-                                <li><span class="text-gray-400">/* 2020 - 2025 */</span><br>"Liceo Scientifico (Scienze Applicate)"</li>
-                            </ul>
-                        ],</li>
-                        <li><span class="text-blue-400">"certificazioni"</span>: [<span class="text-yellow-300">"Everyday AI (UniTN/IBM)"</span>, <span class="text-yellow-300">"English C1 (EF)"</span>]</li>
-                    </ul>
-                </div>
-                
-                <!-- Skills -->
-                <div class="flex flex-col justify-center gap-8">
-                    <div>
-                        <h4 class="text-sm font-mono text-gray-400 mb-4 uppercase tracking-widest">Linguaggi</h4>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="skill-tag">Python</span>
-                            <span class="skill-tag">C++</span>
-                            <span class="skill-tag">C</span>
-                            <span class="skill-tag">Java</span>
-                            <span class="skill-tag">JavaScript</span>
-                            <span class="skill-tag">PolyML</span>
-                            <span class="skill-tag">HTML/CSS</span>
-                        </div>
-                    </div>
-                    <div>
-                        <h4 class="text-sm font-mono text-gray-400 mb-4 uppercase tracking-widest">Tecnologie & Tools</h4>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="skill-tag">AI/ML</span>
-                            <span class="skill-tag">Big Data</span>
-                            <span class="skill-tag">Git</span>
-                            <span class="skill-tag">Linux</span>
-                            <span class="skill-tag">LaTeX</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+<!-- ══════════════════════════════════════
+     FOOTER
+══════════════════════════════════════ -->
+<footer>
+  <p>© 2025 Mirco Negri · built with curiosità e troppo caffè</p>
+</footer>
 
-        <!-- PROGETTI -->
-        <section id="projects" class="py-20 reveal">
-            <h3 class="text-3xl font-bold mb-10"><span class="text-purple-500">02.</span> Progetti</h3>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                
-                <!-- Project 1 -->
-                <div class="glass-card p-6 flex flex-col h-full relative group overflow-hidden">
-                    <div class="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    <div class="text-3xl mb-4">🤖</div>
-                    <h4 class="text-xl font-bold text-white mb-2">LaundryBot</h4>
-                    <p class="text-sm text-gray-400 mb-4 flex-grow">Bot per prenotare le lavatrici negli studentati. Gestisce notifiche e stato in tempo reale, risolvendo un problema pratico quotidiano.</p>
-                    <div class="flex flex-wrap gap-2 font-mono text-[10px] text-blue-300">
-                        <span>#Python</span> <span>#TelegramAPI</span>
-                    </div>
-                </div>
 
-                <!-- Project 2 -->
-                <div class="glass-card p-6 flex flex-col h-full relative group overflow-hidden">
-                    <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    <div class="text-3xl mb-4">🎬</div>
-                    <h4 class="text-xl font-bold text-white mb-2">MovieRecommender</h4>
-                    <p class="text-sm text-gray-400 mb-4 flex-grow">Applicazione desktop per trovare film su misura interagendo con API esterne.</p>
-                    <div class="flex flex-wrap gap-2 font-mono text-[10px] text-purple-300">
-                        <span>#Python</span> <span>#Tkinter</span> <span>#TMDb</span>
-                    </div>
-                </div>
+<!-- ══════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════ -->
+<script>
+/* ═════════════════════════════════════════════
+   AURORA CANVAS — animated gradient blobs
+   Smooth, slow, cinematic. No matrix. No grid.
+═════════════════════════════════════════════ */
+(function aurora() {
+  const canvas = document.getElementById('aurora-canvas');
+  const ctx = canvas.getContext('2d');
 
-                <!-- Project 3 -->
-                <div class="glass-card p-6 flex flex-col h-full relative group overflow-hidden">
-                    <div class="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    <div class="text-3xl mb-4">🏕️</div>
-                    <h4 class="text-xl font-bold text-white mb-2">ScoutMealPlanner</h4>
-                    <p class="text-sm text-gray-400 mb-4 flex-grow">Tool CLI progettato per generare menu completi e liste della spesa precise per i grandi campi scout.</p>
-                    <div class="flex flex-wrap gap-2 font-mono text-[10px] text-green-300">
-                        <span>#Python</span> <span>#CLI</span>
-                    </div>
-                </div>
+  let W, H;
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
 
-                <!-- Project 4 -->
-                <div class="glass-card p-6 flex flex-col h-full relative group overflow-hidden">
-                    <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    <div class="text-3xl mb-4">🎧</div>
-                    <h4 class="text-xl font-bold text-white mb-2">Carnival Effects</h4>
-                    <p class="text-sm text-gray-400 mb-4 flex-grow">Visualizzatore audio-reattivo dinamico pensato per DJ set, trasforma il suono in grafica sul web.</p>
-                    <div class="flex flex-wrap gap-2 font-mono text-[10px] text-cyan-300">
-                        <span>#WebAudio</span> <span>#Canvas</span>
-                    </div>
-                </div>
+  /* Define blobs */
+  const blobs = [
+    { x:.15, y:.25, r:.55, colorA:'#7c3aed', colorB:'#4f46e5', speed:.00018, phase:0,    drift:.00012 },
+    { x:.80, y:.20, r:.50, colorA:'#4f46e5', colorB:'#06b6d4', speed:.00013, phase:2.1,  drift:.00009 },
+    { x:.50, y:.70, r:.60, colorA:'#a855f7', colorB:'#7c3aed', speed:.00015, phase:4.3,  drift:.00011 },
+    { x:.85, y:.75, r:.45, colorA:'#06b6d4', colorB:'#4f46e5', speed:.00010, phase:1.2,  drift:.00008 },
+    { x:.20, y:.75, r:.40, colorA:'#6366f1', colorB:'#a855f7', speed:.00020, phase:3.5,  drift:.00014 },
+  ];
 
-                <!-- Project 5 -->
-                <div class="glass-card p-6 flex flex-col h-full relative group overflow-hidden">
-                    <div class="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    <div class="text-3xl mb-4">📚</div>
-                    <h4 class="text-xl font-bold text-white mb-2">UniArchive</h4>
-                    <p class="text-sm text-gray-400 mb-4 flex-grow">Progetto open source di appunti universitari strutturati e condivisi liberamente con la community.</p>
-                    <div class="flex flex-wrap gap-2 font-mono text-[10px] text-orange-300">
-                        <span>#LaTeX</span> <span>#GitHub</span>
-                    </div>
-                </div>
+  let t = 0;
 
-            </div>
-        </section>
+  function hexToRgb(hex) {
+    const r = parseInt(hex.slice(1,3),16);
+    const g = parseInt(hex.slice(3,5),16);
+    const b = parseInt(hex.slice(5,7),16);
+    return [r,g,b];
+  }
 
-        <!-- VOLONTARIATO -->
-        <section id="volunteer" class="py-20 reveal">
-            <h3 class="text-3xl font-bold mb-4"><span class="text-cyan-500">03.</span> Oltre il Codice</h3>
-            <p class="text-gray-400 mb-10 max-w-2xl font-light">L'informatica è il mio percorso professionale, ma il volontariato è la mia bussola morale. Dedico il mio tempo per supportare chi ha bisogno.</p>
-            
-            <div class="space-y-4">
-                <!-- Vol 1 -->
-                <div class="glass-card p-6 flex flex-col md:flex-row gap-6 items-start md:items-center">
-                    <div class="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center text-2xl flex-shrink-0">🚑</div>
-                    <div>
-                        <h4 class="text-lg font-bold text-white">AVP (Associazione Volontari di Protezione)</h4>
-                        <p class="text-sm font-mono text-red-400 mb-2">Soccorritore Volontario</p>
-                        <p class="text-sm text-gray-400">Interventi di primo soccorso e trasporto sanitario per garantire supporto medico tempestivo alla comunità.</p>
-                    </div>
-                </div>
-                
-                <!-- Vol 2 -->
-                <div class="glass-card p-6 flex flex-col md:flex-row gap-6 items-start md:items-center">
-                    <div class="w-16 h-16 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-2xl flex-shrink-0">⚜️</div>
-                    <div>
-                        <h4 class="text-lg font-bold text-white">AGESCI</h4>
-                        <p class="text-sm font-mono text-blue-400 mb-2">Capo Scout</p>
-                        <p class="text-sm text-gray-400">Da quasi 14 anni nell'associazione. Opero come educatore e guida, occupandomi dell'organizzazione di campi formativi e vita all'aperto.</p>
-                    </div>
-                </div>
+  function lerp(a,b,v){ return a+(b-a)*v }
 
-                <!-- Vol 3 & 4 (Grid) -->
-                <div class="grid md:grid-cols-2 gap-4">
-                    <div class="glass-card p-6 flex items-start gap-4">
-                        <div class="text-2xl">🤝</div>
-                        <div>
-                            <h4 class="text-md font-bold text-white">Sermig - Arsenale della Pace</h4>
-                            <p class="text-sm text-gray-400 mt-1">Volontario dedito all'accoglienza e alla solidarietà concreta verso chi si trova in situazioni di disagio.</p>
-                        </div>
-                    </div>
-                    <div class="glass-card p-6 flex items-start gap-4">
-                        <div class="text-2xl">🥫</div>
-                        <div>
-                            <h4 class="text-md font-bold text-white">Banco Alimentare</h4>
-                            <p class="text-sm text-gray-400 mt-1">Impegnato nella raccolta e distribuzione di alimenti sul territorio per sostenere le famiglie in difficoltà.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+  function drawBlob(blob, time) {
+    /* Slowly wander */
+    const px = blob.x + Math.sin(time * blob.speed * 1000 + blob.phase)            * 0.18
+                      + Math.cos(time * blob.drift * 1000 + blob.phase * 1.3)      * 0.10;
+    const py = blob.y + Math.cos(time * blob.speed * 1000 + blob.phase + 1)        * 0.14
+                      + Math.sin(time * blob.drift * 1000 + blob.phase * 0.7 + 2)  * 0.08;
 
-<!-- FOOTER & CONTATTI -->
-        <section id="contact" class="py-20 border-t border-gray-800 mt-10 reveal text-center">
-            <h2 class="text-4xl font-bold mb-6">Mettiamoci in contatto</h2>
-            <p class="text-gray-400 mb-8 max-w-lg mx-auto">Che si tratti di un progetto interessante, di codice, o di un caffè per parlare di tecnologia e innovazione sociale, la mia inbox è aperta.</p>
-            
-            <div class="flex flex-wrap justify-center gap-4 mb-12">
-                <a href="mailto:mirconegri06@gmail.com" class="px-6 py-3 glass-card hover:bg-white/5 transition-colors flex items-center gap-3">
-                    <i class="fa-solid fa-envelope text-blue-400"></i> mirconegri06@gmail.com
-                </a>
-                <a href="https://t.me/mirco_ne" target="_blank" class="px-6 py-3 glass-card hover:bg-white/5 transition-colors flex items-center gap-3">
-                    <i class="fa-brands fa-telegram text-blue-400"></i> @mirco_ne
-                </a>
-            </div>
+    /* Pulsing radius */
+    const rad = blob.r * Math.min(W,H) * (1 + 0.05 * Math.sin(time * 0.0007 + blob.phase));
 
-            <div class="flex justify-center gap-6 text-xl">
-                <a href="https://github.com/mirconegri" target="_blank" class="text-gray-500 hover:text-white transition-colors" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
-                <a href="https://linkedin.com/in/mirconegri" target="_blank" class="text-gray-500 hover:text-white transition-colors" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
-            </div>
-            
-            <p class="mt-12 text-xs font-mono text-gray-600">
-                &copy; 2026 Mirco Negri. Costruito con <i class="fa-solid fa-heart text-gray-500 mx-1"></i> e tantissimo caffè.
-            </p>
-        </section>
+    /* Interpolate color */
+    const mix = (Math.sin(time * 0.0004 + blob.phase) + 1) / 2;
+    const cA = hexToRgb(blob.colorA);
+    const cB = hexToRgb(blob.colorB);
+    const r  = Math.round(lerp(cA[0], cB[0], mix));
+    const g  = Math.round(lerp(cA[1], cB[1], mix));
+    const b  = Math.round(lerp(cA[2], cB[2], mix));
 
-    </main>
+    const grad = ctx.createRadialGradient(
+      px * W, py * H, 0,
+      px * W, py * H, rad
+    );
+    grad.addColorStop(0,   `rgba(${r},${g},${b},0.14)`);
+    grad.addColorStop(0.4, `rgba(${r},${g},${b},0.06)`);
+    grad.addColorStop(1,   `rgba(${r},${g},${b},0)`);
 
-    <!-- Script per le animazioni di Scroll (Intersection Observer) -->
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const reveals = document.querySelectorAll(".reveal");
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(px * W, py * H, rad, 0, Math.PI * 2);
+    ctx.fill();
+  }
 
-            const revealOnScroll = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add("active");
-                        observer.unobserve(entry.target); // Anima solo una volta
-                    }
-                });
-            }, {
-                root: null,
-                threshold: 0.1,
-                rootMargin: "0px 0px -50px 0px"
-            });
+  function frame(ts) {
+    t = ts;
+    ctx.clearRect(0, 0, W, H);
 
-            reveals.forEach(reveal => {
-                revealOnScroll.observe(reveal);
-            });
-        });
-    </script>
+    /* blend mode for nebula depth */
+    ctx.globalCompositeOperation = 'screen';
+
+    blobs.forEach(b => drawBlob(b, t));
+
+    ctx.globalCompositeOperation = 'source-over';
+
+    /* Dark vignette to keep content readable */
+    const vig = ctx.createRadialGradient(W/2, H/2, H*.1, W/2, H/2, H*.9);
+    vig.addColorStop(0, 'rgba(7,7,10,0)');
+    vig.addColorStop(1, 'rgba(7,7,10,0.72)');
+    ctx.fillStyle = vig;
+    ctx.fillRect(0, 0, W, H);
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+
+/* ═════════════════════════════════════════════
+   MOUSE ORB — Apple-style subtle light
+═════════════════════════════════════════════ */
+const orb = document.getElementById('mouse-orb');
+let orbX = window.innerWidth/2, orbY = window.innerHeight/2;
+let targetX = orbX, targetY = orbY;
+
+if (window.matchMedia('(hover:hover)').matches) {
+  document.addEventListener('mousemove', e => {
+    targetX = e.clientX;
+    targetY = e.clientY;
+  });
+  (function animOrb() {
+    orbX += (targetX - orbX) * 0.04;
+    orbY += (targetY - orbY) * 0.04;
+    orb.style.left = orbX + 'px';
+    orb.style.top  = orbY + 'px';
+    requestAnimationFrame(animOrb);
+  })();
+}
+
+/* ═════════════════════════════════════════════
+   CURSOR
+═════════════════════════════════════════════ */
+const cur  = document.getElementById('cur');
+const curR = document.getElementById('cur-r');
+let cx = 0, cy = 0, rx = 0, ry = 0;
+
+if (window.matchMedia('(hover:hover)').matches) {
+  document.addEventListener('mousemove', e => { cx = e.clientX; cy = e.clientY; });
+  (function animCursor() {
+    cur.style.left = cx + 'px'; cur.style.top = cy + 'px';
+    rx += (cx - rx) * .22; ry += (cy - ry) * .22;
+    curR.style.left = rx + 'px'; curR.style.top = ry + 'px';
+    requestAnimationFrame(animCursor);
+  })();
+}
+
+/* ═════════════════════════════════════════════
+   SCROLL PROGRESS
+═════════════════════════════════════════════ */
+const prog = document.getElementById('prog');
+window.addEventListener('scroll', () => {
+  const st = document.documentElement.scrollTop;
+  const sh = document.documentElement.scrollHeight - window.innerHeight;
+  prog.style.width = (sh > 0 ? st/sh*100 : 0) + '%';
+}, {passive:true});
+
+/* ═════════════════════════════════════════════
+   NAVBAR — hide / show on scroll
+═════════════════════════════════════════════ */
+const nav = document.getElementById('nav');
+let lastY = 0;
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  nav.classList.toggle('scrolled', y > 30);
+  nav.classList.toggle('hide', y > lastY && y > 100);
+  lastY = y;
+}, {passive:true});
+
+/* ═════════════════════════════════════════════
+   MOBILE MENU
+═════════════════════════════════════════════ */
+document.getElementById('mbtn').addEventListener('click', () => {
+  document.getElementById('mmenu').classList.toggle('hidden');
+});
+document.querySelectorAll('#mmenu .nav-a').forEach(a =>
+  a.addEventListener('click', () => document.getElementById('mmenu').classList.add('hidden'))
+);
+
+/* ═════════════════════════════════════════════
+   TYPING EFFECT
+═════════════════════════════════════════════ */
+const phrases = [
+  'scrivo codice che risolve problemi veri',
+  'cs student con la testa fuori dal monitor',
+  'volontario nel tempo libero (e non solo)',
+  'costruisco cose perché mi piace costruire',
+  'leggo i man page per hobby',
+];
+let pi=0, ci=0, del=false;
+const tel = document.getElementById('ttext');
+const SPEED=78, PAUSE=2200;
+
+function typeLoop() {
+  const w = phrases[pi];
+  if (!del) {
+    tel.textContent = w.slice(0, ++ci);
+    if (ci === w.length) { del=true; setTimeout(typeLoop,PAUSE); return; }
+  } else {
+    tel.textContent = w.slice(0, --ci);
+    if (ci===0) { del=false; pi=(pi+1)%phrases.length; }
+  }
+  setTimeout(typeLoop, del ? SPEED*.45 : SPEED);
+}
+typeLoop();
+
+/* ═════════════════════════════════════════════
+   REVEAL ON SCROLL — cinematic fade
+═════════════════════════════════════════════ */
+const revObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('vis'); revObs.unobserve(e.target); }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+/* Trigger hero elements immediately */
+document.querySelectorAll('#hero .reveal').forEach(el => el.classList.add('vis'));
+
+/* ═════════════════════════════════════════════
+   CARD 3D TILT — micro interaction
+═════════════════════════════════════════════ */
+if (window.matchMedia('(hover:hover)').matches) {
+  document.querySelectorAll('.pcard:not(.pcard-ghost), .vcard, .cert-item').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width  - 0.5;
+      const y = (e.clientY - r.top)  / r.height - 0.5;
+      card.style.transform = `perspective(600px) rotateY(${x*4}deg) rotateX(${-y*4}deg) translateZ(2px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+      card.style.transition = 'transform .5s cubic-bezier(.16,1,.3,1), background .25s';
+    });
+    card.addEventListener('mouseenter', () => {
+      card.style.transition = 'transform .1s, background .25s';
+    });
+  });
+}
+</script>
+
 </body>
 </html>
