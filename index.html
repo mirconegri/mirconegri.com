@@ -55,34 +55,6 @@ body {
 ::-webkit-scrollbar-thumb{background:rgba(124,58,237,.4);border-radius:2px}
 
 /* ════════════════════════════════════════════════
-   CURSOR — desktop only
-════════════════════════════════════════════════ */
-@media(hover:hover){body{cursor:none}}
-@media(hover:none){#cur,#cur-r{display:none!important}}
-
-#cur {
-  width: 6px; height: 6px;
-  background: var(--t1);
-  border-radius: 50%;
-  position: fixed; top:0; left:0;
-  pointer-events: none; z-index:9999;
-  transform: translate(-50%,-50%);
-  transition: width .18s var(--ease), height .18s var(--ease), opacity .18s;
-  mix-blend-mode: difference;
-}
-#cur-r {
-  width: 32px; height: 32px;
-  border: 1px solid rgba(124,58,237,.5);
-  border-radius: 50%;
-  position: fixed; top:0; left:0;
-  pointer-events: none; z-index:9998;
-  transform: translate(-50%,-50%);
-  transition: all .22s var(--ease);
-}
-body:has(a:hover) #cur-r,
-body:has(button:hover) #cur-r { width:48px; height:48px; border-color:rgba(168,85,247,.6) }
-
-/* ════════════════════════════════════════════════
    SCROLL PROGRESS
 ════════════════════════════════════════════════ */
 #prog {
@@ -119,70 +91,6 @@ body:has(button:hover) #cur-r { width:48px; height:48px; border-color:rgba(168,8
   transition: left .9s cubic-bezier(.16,1,.3,1), top .9s cubic-bezier(.16,1,.3,1);
   will-change: left, top;
 }
-
-/* ════════════════════════════════════════════════
-   NAVBAR
-════════════════════════════════════════════════ */
-#nav {
-  position: fixed; top:0; left:0; right:0;
-  z-index: 200;
-  background: rgba(7,7,10,.75);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: 1px solid var(--border);
-  transition: transform .4s var(--ease), border-color .3s;
-}
-#nav.hide { transform: translateY(-100%) }
-#nav.scrolled { border-bottom-color: rgba(124,58,237,.15) }
-
-.nav-inner {
-  max-width: 1080px; margin: 0 auto;
-  padding: .9rem 1.5rem;
-  display: flex; align-items: center; justify-content: space-between;
-}
-
-.nav-logo {
-  font-size: .82rem;
-  font-weight: 600;
-  color: var(--t1);
-  letter-spacing: -.01em;
-  text-decoration: none;
-  transition: opacity .2s;
-}
-.nav-logo:hover { opacity: .7 }
-
-.nav-links { display: flex; align-items: center; gap: 2rem }
-.nav-a {
-  font-size: .8rem;
-  color: var(--t3);
-  text-decoration: none;
-  transition: color .2s;
-  letter-spacing: -.005em;
-}
-.nav-a:hover { color: var(--t1) }
-
-#mbtn {
-  display: none;
-  background: none; border: none;
-  color: var(--t3); font-size: 1rem;
-  cursor: pointer; padding: .25rem;
-  transition: color .2s;
-}
-#mbtn:hover { color: var(--t1) }
-
-@media(max-width:768px) {
-  .nav-links { display: none }
-  #mbtn { display: block }
-}
-
-#mmenu {
-  border-top: 1px solid var(--border);
-  background: rgba(7,7,10,.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-}
-#mmenu ul { padding: .75rem 1.5rem 1rem; display: flex; flex-direction: column; gap: .5rem }
-#mmenu .nav-a { display: block; padding: .5rem 0 }
 
 /* ════════════════════════════════════════════════
    LAYOUT — sections
@@ -635,49 +543,11 @@ footer p {
 </head>
 <body>
 
-<!-- ══════════════════════════════════════
-     CURSOR
-══════════════════════════════════════ -->
-<div id="cur"></div>
-<div id="cur-r"></div>
 <div id="prog"></div>
 <div id="mouse-orb"></div>
 
-<!-- ══════════════════════════════════════
-     AURORA CANVAS
-══════════════════════════════════════ -->
 <canvas id="aurora-canvas"></canvas>
 
-<!-- ══════════════════════════════════════
-     NAVBAR
-══════════════════════════════════════ -->
-<nav id="nav">
-  <div class="nav-inner">
-    <a href="#hero" class="nav-logo">Mirco Negri</a>
-    <ul class="nav-links">
-      <li><a href="#about"     class="nav-a">About</a></li>
-      <li><a href="#projects"  class="nav-a">Projects</a></li>
-      <li><a href="#education" class="nav-a">Education</a></li>
-      <li><a href="#volunteer" class="nav-a">Volunteer</a></li>
-      <li><a href="#contact"   class="nav-a">Contact</a></li>
-    </ul>
-    <button id="mbtn" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
-  </div>
-  <div id="mmenu" class="hidden">
-    <ul>
-      <li><a href="#about"     class="nav-a">About</a></li>
-      <li><a href="#projects"  class="nav-a">Projects</a></li>
-      <li><a href="#education" class="nav-a">Education</a></li>
-      <li><a href="#volunteer" class="nav-a">Volunteer</a></li>
-      <li><a href="#contact"   class="nav-a">Contact</a></li>
-    </ul>
-  </div>
-</nav>
-
-
-<!-- ══════════════════════════════════════
-     HERO
-══════════════════════════════════════ -->
 <section id="hero">
 
   <p class="hero-label reveal">Computer Science Student</p>
@@ -697,7 +567,6 @@ footer p {
     <a href="#contact" class="btn-ghost">Scrivimi</a>
   </div>
 
-  <!-- Neofetch -->
   <div class="nf-card reveal" style="transition-delay:.42s" aria-label="Info sistema">
     <div class="nf-logo" aria-hidden="true"> ╭─────╮
  │ M·N │
@@ -727,10 +596,6 @@ footer p {
 
 <div class="divider"></div>
 
-
-<!-- ══════════════════════════════════════
-     ABOUT
-══════════════════════════════════════ -->
 <section id="about">
   <div class="sec">
     <p class="sec-label reveal">01 — Su di me</p>
@@ -783,10 +648,6 @@ footer p {
 
 <div class="divider"></div>
 
-
-<!-- ══════════════════════════════════════
-     PROJECTS
-══════════════════════════════════════ -->
 <section id="projects">
   <div class="sec">
     <p class="sec-label reveal">02 — Progetti</p>
@@ -845,10 +706,6 @@ footer p {
 
 <div class="divider"></div>
 
-
-<!-- ══════════════════════════════════════
-     EDUCATION
-══════════════════════════════════════ -->
 <section id="education">
   <div class="sec">
     <p class="sec-label reveal">03 — Formazione</p>
@@ -904,10 +761,6 @@ footer p {
 
 <div class="divider"></div>
 
-
-<!-- ══════════════════════════════════════
-     VOLUNTEER
-══════════════════════════════════════ -->
 <section id="volunteer">
   <div class="sec">
 
@@ -965,10 +818,6 @@ footer p {
 
 <div class="divider"></div>
 
-
-<!-- ══════════════════════════════════════
-     CONTACT
-══════════════════════════════════════ -->
 <section id="contact">
   <div class="sec" style="max-width:560px;text-align:center;padding-bottom:4rem">
 
@@ -1005,22 +854,14 @@ footer p {
   </div>
 </section>
 
-
-<!-- ══════════════════════════════════════
-     FOOTER
-══════════════════════════════════════ -->
 <footer>
   <p>© 2025 Mirco Negri · built with curiosità e troppo caffè</p>
 </footer>
 
-
-<!-- ══════════════════════════════════════
-     SCRIPTS
-══════════════════════════════════════ -->
 <script>
 /* ═════════════════════════════════════════════
    AURORA CANVAS — animated gradient blobs
-   Smooth, slow, cinematic. No matrix. No grid.
+   Fixed Math logic for smooth interpolation
 ═════════════════════════════════════════════ */
 (function aurora() {
   const canvas = document.getElementById('aurora-canvas');
@@ -1055,11 +896,11 @@ footer p {
   function lerp(a,b,v){ return a+(b-a)*v }
 
   function drawBlob(blob, time) {
-    /* Slowly wander */
-    const px = blob.x + Math.sin(time * blob.speed * 1000 + blob.phase)            * 0.18
-                      + Math.cos(time * blob.drift * 1000 + blob.phase * 1.3)      * 0.10;
-    const py = blob.y + Math.cos(time * blob.speed * 1000 + blob.phase + 1)        * 0.14
-                      + Math.sin(time * blob.drift * 1000 + blob.phase * 0.7 + 2)  * 0.08;
+    /* Slowly wander — Removed the * 1000 multiplier to stop flickering */
+    const px = blob.x + Math.sin(time * blob.speed + blob.phase)            * 0.18
+                      + Math.cos(time * blob.drift + blob.phase * 1.3)      * 0.10;
+    const py = blob.y + Math.cos(time * blob.speed + blob.phase + 1)        * 0.14
+                      + Math.sin(time * blob.drift + blob.phase * 0.7 + 2)  * 0.08;
 
     /* Pulsing radius */
     const rad = blob.r * Math.min(W,H) * (1 + 0.05 * Math.sin(time * 0.0007 + blob.phase));
@@ -1090,14 +931,10 @@ footer p {
     t = ts;
     ctx.clearRect(0, 0, W, H);
 
-    /* blend mode for nebula depth */
     ctx.globalCompositeOperation = 'screen';
-
     blobs.forEach(b => drawBlob(b, t));
-
     ctx.globalCompositeOperation = 'source-over';
 
-    /* Dark vignette to keep content readable */
     const vig = ctx.createRadialGradient(W/2, H/2, H*.1, W/2, H/2, H*.9);
     vig.addColorStop(0, 'rgba(7,7,10,0)');
     vig.addColorStop(1, 'rgba(7,7,10,0.72)');
@@ -1131,23 +968,6 @@ if (window.matchMedia('(hover:hover)').matches) {
 }
 
 /* ═════════════════════════════════════════════
-   CURSOR
-═════════════════════════════════════════════ */
-const cur  = document.getElementById('cur');
-const curR = document.getElementById('cur-r');
-let cx = 0, cy = 0, rx = 0, ry = 0;
-
-if (window.matchMedia('(hover:hover)').matches) {
-  document.addEventListener('mousemove', e => { cx = e.clientX; cy = e.clientY; });
-  (function animCursor() {
-    cur.style.left = cx + 'px'; cur.style.top = cy + 'px';
-    rx += (cx - rx) * .22; ry += (cy - ry) * .22;
-    curR.style.left = rx + 'px'; curR.style.top = ry + 'px';
-    requestAnimationFrame(animCursor);
-  })();
-}
-
-/* ═════════════════════════════════════════════
    SCROLL PROGRESS
 ═════════════════════════════════════════════ */
 const prog = document.getElementById('prog');
@@ -1156,28 +976,6 @@ window.addEventListener('scroll', () => {
   const sh = document.documentElement.scrollHeight - window.innerHeight;
   prog.style.width = (sh > 0 ? st/sh*100 : 0) + '%';
 }, {passive:true});
-
-/* ═════════════════════════════════════════════
-   NAVBAR — hide / show on scroll
-═════════════════════════════════════════════ */
-const nav = document.getElementById('nav');
-let lastY = 0;
-window.addEventListener('scroll', () => {
-  const y = window.scrollY;
-  nav.classList.toggle('scrolled', y > 30);
-  nav.classList.toggle('hide', y > lastY && y > 100);
-  lastY = y;
-}, {passive:true});
-
-/* ═════════════════════════════════════════════
-   MOBILE MENU
-═════════════════════════════════════════════ */
-document.getElementById('mbtn').addEventListener('click', () => {
-  document.getElementById('mmenu').classList.toggle('hidden');
-});
-document.querySelectorAll('#mmenu .nav-a').forEach(a =>
-  a.addEventListener('click', () => document.getElementById('mmenu').classList.add('hidden'))
-);
 
 /* ═════════════════════════════════════════════
    TYPING EFFECT
