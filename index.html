@@ -125,7 +125,7 @@ transparent 75%);
 
 .nav-links { display: flex; align-items: center; gap: 3rem }
 .nav-a {
-  font-size: .1rem;
+  font-size: 1rem;
   font-weight: 500;
   color: var(--t3);
   text-decoration: none;
@@ -976,12 +976,12 @@ footer p {
 
   /* Define blobs */
   const blobs = [
-    { x:.15, y:.25, r:.55, colorA:'#7c3aed', colorB:'#4f46e5', speed:.00018, phase:0,    drift:.00012 },
-    { x:.80, y:.20, r:.50, colorA:'#4f46e5', colorB:'#06b6d4', speed:.00013, phase:2.1,  drift:.00009 },
-    { x:.50, y:.70, r:.60, colorA:'#a855f7', colorB:'#7c3aed', speed:.00015, phase:4.3,  drift:.00011 },
-    { x:.85, y:.75, r:.45, colorA:'#06b6d4', colorB:'#4f46e5', speed:.00010, phase:1.2,  drift:.00008 },
-    { x:.20, y:.75, r:.40, colorA:'#6366f1', colorB:'#a855f7', speed:.00020, phase:3.5,  drift:.00014 },
-  ];
+  { x:.15, y:.25, r:.95, colorA:'#7c3aed', colorB:'#4f46e5', speed:.00018, phase:0, drift:.00012 },
+  { x:.80, y:.20, r:.90, colorA:'#4f46e5', colorB:'#06b6d4', speed:.00013, phase:2.1, drift:.00009 },
+  { x:.50, y:.70, r:1.05, colorA:'#a855f7', colorB:'#7c3aed', speed:.00015, phase:4.3, drift:.00011 },
+  { x:.85, y:.75, r:.85, colorA:'#06b6d4', colorB:'#4f46e5', speed:.00010, phase:1.2, drift:.00008 },
+  { x:.20, y:.75, r:.80, colorA:'#6366f1', colorB:'#a855f7', speed:.00020, phase:3.5, drift:.00014 }
+];
 
   let t = 0;
 
@@ -1020,14 +1020,6 @@ footer p {
     grad.addColorStop(0.35,`rgba(${r},${g},${b},0.18)`);
     grad.addColorStop(0.7, `rgba(${r},${g},${b},0.08)`);
     grad.addColorStop(1,   `rgba(${r},${g},${b},0)`);
-
-    const blobs = [
-  { x:.15, y:.25, r:.75, ... },
-  { x:.80, y:.20, r:.70, ... },
-  { x:.50, y:.70, r:.85, ... },
-  { x:.85, y:.75, r:.65, ... },
-  { x:.20, y:.75, r:.60, ... },
-];
 
     ctx.fillStyle = grad;
     ctx.beginPath();
