@@ -1014,9 +1014,19 @@ footer p {
       px * W, py * H, 0,
       px * W, py * H, rad
     );
-    grad.addColorStop(0,   `rgba(${r},${g},${b},0.14)`);
-    grad.addColorStop(0.4, `rgba(${r},${g},${b},0.06)`);
+
+    grad.addColorStop(0,   `rgba(${r},${g},${b},0.35)`);
+    grad.addColorStop(0.35,`rgba(${r},${g},${b},0.18)`);
+    grad.addColorStop(0.7, `rgba(${r},${g},${b},0.08)`);
     grad.addColorStop(1,   `rgba(${r},${g},${b},0)`);
+
+    const blobs = [
+  { x:.15, y:.25, r:.75, ... },
+  { x:.80, y:.20, r:.70, ... },
+  { x:.50, y:.70, r:.85, ... },
+  { x:.85, y:.75, r:.65, ... },
+  { x:.20, y:.75, r:.60, ... },
+];
 
     ctx.fillStyle = grad;
     ctx.beginPath();
