@@ -1040,9 +1040,11 @@ footer p {
 
     /* blend mode for nebula depth */
     ctx.globalCompositeOperation = 'screen';
+    ctx.filter = 'blur(40px)';
 
     blobs.forEach(b => drawBlob(b, t));
 
+    ctx.filter = 'none';
     ctx.globalCompositeOperation = 'source-over';
 
     /* Dark vignette to keep content readable */
