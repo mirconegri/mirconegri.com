@@ -587,6 +587,38 @@ html.light-mode #mmenu { background: rgba(245,247,250,.95); }
 .soc:hover { color:var(--t1); border-color:var(--border-hov); background:rgba(124,58,237,.06) }
 
 /* ════════════════════════════════════════════════
+   3D WIREFRAME
+════════════════════════════════════════════════ */
+#hero-3d {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%; /* Occupa la metà destra su desktop */
+  height: 100%;
+  z-index: 0; /* Dietro al testo, ma sopra l'aurora */
+  pointer-events: none; /* Fondamentale: permette di cliccare i bottoni sottostanti */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Rendi gli elementi di testo "solidi" per stare sopra al 3D */
+#hero .hero-label, 
+#hero .hero-name, 
+#hero .hero-ctas {
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 768px) {
+  #hero-3d {
+    width: 100%; /* Su mobile prende tutto lo schermo */
+    opacity: 0.15; /* Molto trasparente per non disturbare la lettura */
+  }
+}
+
+
+/* ════════════════════════════════════════════════
    FOOTER
 ════════════════════════════════════════════════ */
 footer {
@@ -639,12 +671,14 @@ footer p {
   </div>
 </nav>
 
-
 <section id="hero">
+  <div id="hero-3d"></div>
+  
   <p class="hero-label reveal">Computer Science Student</p>
   <h1 class="hero-name reveal" style="transition-delay:.1s">
     <span>Mirco<br>Negri</span>
   </h1>
+  </section>
 
   <div class="hero-ctas reveal" style="transition-delay:.3s">
     <a href="#projects" class="btn-primary" data-it="<i class='fa-solid fa-arrow-down' style='font-size:.65rem'></i> Esplora i progetti" data-en="<i class='fa-solid fa-arrow-down' style='font-size:.65rem'></i> Explore projects">
@@ -912,6 +946,82 @@ footer p {
 </footer>
 
 <script>
+
+/* ═════════════════════════════════════════════
+   3D WIREFRAME (Three.js)
+═════════════════════════════════════════════ */
+(function init3D() {
+  const container = document.getElementById('hero-3d');
+  if (!container || typeof THREE === 'undefined') return;
+
+  // 1. Setup Scena, Camera e Renderer
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+  
+  // alpha: true è cruciale per vedere la tua aurora sotto!
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true }); 
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  container.appendChild(renderer.domElement);
+
+  // 2. Creazione Oggetto (Icosaedro)
+  const geometry = new THREE.IcosahedronGeometry(2, 1); // Raggio 2, dettaglio 1
+  
+  const material = new THREE.MeshBasicMaterial({ 
+    color: 0x8B93A3, // Colore grigio chiaro/bluastro che si sposa col tuo tema
+    wireframe: true,
+    transparent: true,
+    opacity: 0.35 // Trasparenza delicata
+  });
+  
+  const shape = new THREE.Mesh(geometry, material);
+  scene.add(shape);
+
+  camera.position.z = 5;
+
+  // 3. Interazione col Mouse
+  let mouseX = 0;
+  let mouseY = 0;
+  let targetX = 0;
+  let targetY = 0;
+  const windowHalfX = window.innerWidth / 2;
+  const windowHalfY = window.innerHeight / 2;
+
+  // Usa lo stesso listener di mousemove che hai già o aggiungine uno specifico
+  document.addEventListener('mousemove', (event) => {
+    mouseX = (event.clientX - windowHalfX) * 0.001;
+    mouseY = (event.clientY - windowHalfY) * 0.001;
+  });
+
+  // 4. Ciclo di Animazione
+  function animate() {
+    requestAnimationFrame(animate);
+
+    // Rotazione automatica di base
+    shape.rotation.x += 0.001;
+    shape.rotation.y += 0.002;
+
+    // Aggiunge la rotazione influenzata dal mouse (con effetto elastico)
+    targetX = mouseX * 1.5;
+    targetY = mouseY * 1.5;
+    shape.rotation.y += 0.05 * (targetX - shape.rotation.y);
+    shape.rotation.x += 0.05 * (targetY - shape.rotation.x);
+
+    renderer.render(scene, camera);
+  }
+
+  animate();
+
+  // 5. Gestione del Resize della finestra
+  window.addEventListener('resize', () => {
+    if(!container) return;
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
+})();
+
+
+
 /* ═════════════════════════════════════════════
    AURORA CANVAS — animated gradient blobs
 ═════════════════════════════════════════════ */
@@ -1115,7 +1225,9 @@ if (window.matchMedia('(hover:hover)').matches) {
     });
   });
 }
+
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
 </body>
 </html>
