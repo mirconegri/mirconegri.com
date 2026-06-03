@@ -98,18 +98,37 @@ body {
 }
 
 /* ════════════════════════════════════════════════
-   MOUSE LIGHT ORB
+   MOUSE LIGHT ORB (Ora è un Blob!)
 ════════════════════════════════════════════════ */
 #mouse-orb {
   position: fixed;
   width: 600px; height: 600px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(124,58,237,.20) 0%, rgba(6,182,212,.12) 40%, transparent 75%);
+  /* Gradiente leggermente più intenso per far risaltare i cambi di colore */
+  background: radial-gradient(circle, rgba(124,58,237,.25) 0%, rgba(6,182,212,.15) 40%, transparent 70%);
   pointer-events: none;
   z-index: 1;
   transform: translate(-50%,-50%);
-  transition: left .9s cubic-bezier(.16,1,.3,1), top .9s cubic-bezier(.16,1,.3,1);
   will-change: left, top;
+  
+  /* Ho rimosso la "transition" lenta. Ora fa tutto il JS fluidamente! */
+  
+  /* Aggiungiamo le animazioni per forma (morph) e colore */
+  animation: orbMorph 8s ease-in-out infinite both alternate, 
+             orbColors 10s linear infinite;
+}
+
+/* Deforma dinamicamente il border-radius per creare l'effetto blob organico */
+@keyframes orbMorph {
+  0%   { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+  34%  { border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%; }
+  67%  { border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%; }
+  100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+}
+
+/* Ruota la tonalità (hue) per far cambiare i colori in un ciclo continuo */
+@keyframes orbColors {
+  0%   { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
 }
 
 /* ════════════════════════════════════════════════
@@ -978,8 +997,10 @@ if (window.matchMedia('(hover:hover)').matches) {
     targetY = e.clientY;
   });
   (function animOrb() {
-    orbX += (targetX - orbX) * 0.04;
-    orbY += (targetY - orbY) * 0.04;
+    // Aumentando questo valore (da 0.04 a 0.15) il blob seguirà il mouse molto più velocemente!
+    orbX += (targetX - orbX) * 0.15;
+    orbY += (targetY - orbY) * 0.15;
+    
     orb.style.left = orbX + 'px';
     orb.style.top  = orbY + 'px';
     requestAnimationFrame(animOrb);
