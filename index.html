@@ -652,10 +652,6 @@ footer p {
     <span>Mirco<br>Negri</span>
   </h1>
 
-  <p class="hero-sub reveal" style="transition-delay:.2s">
-    <span class="typed" id="ttext"></span><span class="bcur"></span>
-  </p>
-
   <div class="hero-ctas reveal" style="transition-delay:.3s">
     <a href="#projects" class="btn-primary">
       <i class="fa-solid fa-arrow-down" style="font-size:.65rem"></i> Esplora i progetti
@@ -1067,25 +1063,6 @@ document.querySelectorAll('#mmenu .nav-a').forEach(a =>
   a.addEventListener('click', () => document.getElementById('mmenu').classList.add('hidden'))
 );
 
-/* ═════════════════════════════════════════════
-   TYPING EFFECT
-═════════════════════════════════════════════ */
-let pi=0, ci=0, del=false;
-const tel = document.getElementById('ttext');
-const SPEED=78, PAUSE=2200;
-
-function typeLoop() {
-  const w = phrases[pi];
-  if (!del) {
-    tel.textContent = w.slice(0, ++ci);
-    if (ci === w.length) { del=true; setTimeout(typeLoop,PAUSE); return; }
-  } else {
-    tel.textContent = w.slice(0, --ci);
-    if (ci===0) { del=false; pi=(pi+1)%phrases.length; }
-  }
-  setTimeout(typeLoop, del ? SPEED*.45 : SPEED);
-}
-typeLoop();
 
 /* ═════════════════════════════════════════════
    REVEAL ON SCROLL — cinematic fade
