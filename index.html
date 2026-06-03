@@ -441,6 +441,13 @@ html.light-mode #mmenu { background: rgba(245,247,250,.95); }
 @media(max-width:900px){ .projects-grid{ grid-template-columns:repeat(2,1fr) } }
 @media(max-width:560px){ .projects-grid{ grid-template-columns:1fr } }
 
+  .pcard-link::after {
+  content: '';
+  position: absolute;
+  inset: 0; /* Espande l'elemento su tutti e 4 i lati: top, left, right, bottom a 0 */
+  z-index: 10;
+}
+  
 .pcard {
   background: var(--card);
   padding: 1.75rem;
@@ -705,13 +712,13 @@ footer p {
     <p class="sec-label reveal" data-it="02 — Progetti" data-en="02 — Projects">02 — Progetti</p>
     <h2 class="sec-title reveal" style="transition-delay:.05s" data-it="Cose che ho costruito" data-en="Things I've built">Cose che ho costruito</h2>
 
-    <a href="https://github.com/mirconegri/laundrybot" target="_blank" rel="noopener" class="pcard">
+   <div class="pcard"> 
   <div class="pcard-emoji">🤖</div>
   <p class="pcard-stack">Python · Telegram API</p>
   <p class="pcard-name">LaundryBot</p>
-  <p class="pcard-desc" data-it="...">...</p>
-  <span class="pcard-link"><i class="fa-brands fa-github"></i> github</span>
-</a>
+  <p class="pcard-desc">...</p>
+  <a href="..." class="pcard-link"><i class="fa-brands fa-github"></i> github</a>
+</div>
 
       <div class="pcard">
         <div class="pcard-emoji">🎬</div>
