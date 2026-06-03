@@ -74,11 +74,7 @@ body {
   height: 100%;
   z-index: 0;
 
-  filter:
-    saturate(220%)
-    contrast(130%)
-    brightness(140%);
-}
+  filter: saturate(220%) contrast(130%) brightness(140%) blur(90px);
 
 /* ════════════════════════════════════════════════
    MOUSE LIGHT ORB
@@ -1039,11 +1035,8 @@ footer p {
 
     /* blend mode for nebula depth */
     ctx.globalCompositeOperation = 'screen';
-    ctx.filter = 'blur(90px)';
-
     blobs.forEach(b => drawBlob(b, t));
 
-    ctx.filter = 'none';
     ctx.globalCompositeOperation = 'source-over';
 
     /* Dark vignette to keep content readable */
