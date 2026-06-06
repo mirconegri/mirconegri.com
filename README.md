@@ -37,7 +37,7 @@ No heavy frameworks or build tools. Just a single `index.html` file, deployed in
 
 
 
-[mirconegri.com/](https://mirconegri.com/)
+[mirconegri.com/](https://github.com/mirconegri/mirconegri.com/tree/main)
 
 ```
 └── index.html       → The entire website (single file)
