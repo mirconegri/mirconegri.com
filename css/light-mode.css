@@ -1,0 +1,48 @@
+/* ════════════════════════════════════════════════
+   LIGHT MODE OVERRIDES
+════════════════════════════════════════════════ */
+html.light-mode .hero-name span {
+  background: linear-gradient(135deg, #1A1530 0%, #4f46e5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+html.light-mode .pcard:hover  { background: #EFEDF8 }
+html.light-mode .vcard:hover  { background: #EFEDF8 }
+
+html.light-mode .chip {
+  background: rgba(100,80,180,0.05);
+  border-color: rgba(100,80,180,0.18);
+}
+html.light-mode .chip:hover {
+  background: rgba(100,80,180,0.12);
+  border-color: rgba(100,80,180,0.38);
+  color: #3D3460;
+}
+html.light-mode .cert-item {
+  background: rgba(100,80,180,0.04);
+  border-color: rgba(100,80,180,0.12);
+}
+html.light-mode .cert-item:hover {
+  background: rgba(100,80,180,0.09);
+  border-color: rgba(100,80,180,0.28);
+}
+html.light-mode .status-row {
+  background: rgba(100,80,180,0.06);
+  border-color: rgba(100,80,180,0.18);
+}
+html.light-mode .soc:hover {
+  background: rgba(100,80,180,0.10);
+  border-color: rgba(100,80,180,0.35);
+}
+html.light-mode #nav    { background: rgba(240,238,248,.82) }
+html.light-mode #mmenu  { background: rgba(240,238,248,.97) }
+html.light-mode .btn-primary { background: #1A1530; color: #F0EEF8 }
+html.light-mode .btn-ghost   { border-color: rgba(100,80,180,0.28); color: #3D3460 }
+html.light-mode .btn-ghost:hover {
+  border-color: rgba(100,80,180,0.50);
+  background: rgba(100,80,180,0.08);
+  color: #1A1530;
+}
+html.light-mode .tl-item::before { background: #E8E5F4 }
+html.light-mode footer           { border-top-color: rgba(100,80,180,0.15) }

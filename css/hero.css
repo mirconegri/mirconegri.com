@@ -1,0 +1,70 @@
+/* ════════════════════════════════════════════════
+   HERO
+════════════════════════════════════════════════ */
+#hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 8rem 1.5rem 5rem;
+  position: relative; z-index: 2;
+  max-width: 1080px; margin: 0 auto;
+}
+
+.hero-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .68rem; color: var(--t3);
+  letter-spacing: .15em; text-transform: uppercase; margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: .6rem;
+}
+.hero-label::before {
+  content: ''; display: inline-block; width: 20px; height: 1px; background: var(--t3);
+}
+
+.hero-name {
+  font-size: clamp(3.5rem, 10vw, 8rem);
+  font-weight: 700; letter-spacing: -.04em; line-height: .95;
+  color: var(--t1); margin-bottom: 1.5rem;
+}
+.hero-name span {
+  background: linear-gradient(135deg, #F5F7FA 0%, rgba(245,247,250,.65) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+.hero-ctas { display: flex; flex-wrap: wrap; gap: .75rem; margin-bottom: 3.5rem }
+
+/* ════════════════════════════════════════════════
+   BUTTONS
+════════════════════════════════════════════════ */
+.btn-primary {
+  display: inline-flex; align-items: center; gap: .45rem;
+  padding: .65rem 1.35rem; background: var(--t1); color: var(--bg);
+  font-size: .82rem; font-weight: 600; border-radius: 8px;
+  text-decoration: none; letter-spacing: -.01em; border: none; cursor: pointer;
+  transition: opacity .2s, transform .2s var(--ease), box-shadow .2s;
+}
+.btn-primary:hover { opacity: .9; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,0,0,.12) }
+
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: .45rem;
+  padding: .65rem 1.35rem; background: transparent; color: var(--t2);
+  font-size: .82rem; font-weight: 500; border-radius: 8px;
+  text-decoration: none; letter-spacing: -.01em; border: 1px solid var(--border); cursor: pointer;
+  transition: color .2s, border-color .2s, transform .2s var(--ease), background .2s;
+}
+.btn-ghost:hover {
+  color: var(--t1); border-color: var(--border-hov);
+  background: rgba(124,58,237,.06); transform: translateY(-1px);
+}
+
+/* ════════════════════════════════════════════════
+   3D CONTAINER
+════════════════════════════════════════════════ */
+#hero-3d {
+  position: absolute; top: 0; right: 0;
+  width: 50%; height: 100%; z-index: 0; pointer-events: none;
+  display: flex; align-items: center; justify-content: center;
+}
+#hero .hero-label,
+#hero .hero-name,
+#hero .hero-ctas { position: relative; z-index: 2 }
+
+@media(max-width:768px) { #hero-3d { width: 100%; opacity: 0.15 } }

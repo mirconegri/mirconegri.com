@@ -1,0 +1,88 @@
+/* ════════════════════════════════════════════════
+   SCROLL PROGRESS
+════════════════════════════════════════════════ */
+#prog {
+  position: fixed; top: 0; left: 0; height: 1px;
+  background: linear-gradient(90deg, var(--accent-a), var(--accent-c));
+  z-index: 500; width: 0;
+  box-shadow: 0 0 8px rgba(124,58,237,.6);
+}
+
+/* ════════════════════════════════════════════════
+   AURORA CANVAS
+════════════════════════════════════════════════ */
+#aurora-canvas {
+  position: fixed; inset: 0;
+  width: 100%; height: 100%; z-index: 0;
+  filter: saturate(220%) contrast(130%) brightness(140%) blur(90px);
+}
+
+/* ════════════════════════════════════════════════
+   MOUSE ORB
+════════════════════════════════════════════════ */
+#mouse-orb {
+  position: fixed; width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(124,58,237,.25) 0%, rgba(6,182,212,.15) 40%, transparent 70%);
+  pointer-events: none; z-index: 1;
+  transform: translate(-50%,-50%);
+  will-change: left, top;
+  animation: orbMorph 8s ease-in-out infinite both alternate,
+             orbColors 10s linear infinite;
+}
+@keyframes orbMorph {
+  0%   { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50% }
+  34%  { border-radius: 70% 30% 50% 50% / 30% 30% 70% 70% }
+  67%  { border-radius: 100% 60% 60% 100% / 100% 100% 60% 60% }
+  100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50% }
+}
+@keyframes orbColors {
+  0%   { filter: hue-rotate(0deg) }
+  100% { filter: hue-rotate(360deg) }
+}
+
+/* ════════════════════════════════════════════════
+   SECTIONS
+════════════════════════════════════════════════ */
+.sec {
+  position: relative; z-index: 2;
+  max-width: 1080px; margin: 0 auto;
+  padding: 7rem 1.5rem;
+}
+@media(max-width:640px){ .sec { padding: 4.5rem 1.25rem } }
+
+.sec-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .65rem; letter-spacing: .18em;
+  color: var(--t3); text-transform: uppercase; margin-bottom: .5rem;
+}
+.sec-title {
+  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  font-weight: 700; letter-spacing: -.03em;
+  color: var(--t1); margin-bottom: 3rem; line-height: 1.15;
+}
+
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border) 30%, var(--border) 70%, transparent);
+  position: relative; z-index: 2;
+  max-width: 1080px; margin: 0 auto;
+}
+
+/* ════════════════════════════════════════════════
+   REVEAL ANIMATION
+════════════════════════════════════════════════ */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity .8s var(--ease), transform .8s var(--ease) }
+.reveal.vis { opacity: 1; transform: translateY(0) }
+
+/* ════════════════════════════════════════════════
+   FOOTER
+════════════════════════════════════════════════ */
+footer {
+  position: relative; z-index: 2;
+  border-top: 1px solid var(--border);
+  padding: 1.75rem 1.5rem; text-align: center;
+}
+footer p {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .6rem; color: var(--t3); letter-spacing: .04em;
+}

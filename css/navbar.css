@@ -1,0 +1,62 @@
+/* ════════════════════════════════════════════════
+   NAVBAR
+════════════════════════════════════════════════ */
+#nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  background: rgba(7,7,10,.75);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--border);
+  transition: transform .4s var(--ease), border-color .3s, background-color .4s;
+}
+#nav.hide     { transform: translateY(-100%) }
+#nav.scrolled { border-bottom-color: rgba(124,58,237,.15) }
+
+.nav-inner {
+  max-width: 1080px; margin: 0 auto; padding: 1.4rem 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo {
+  font-size: 1.15rem; font-weight: 700; color: var(--t1);
+  letter-spacing: -.01em; text-decoration: none; transition: opacity .2s;
+}
+.nav-logo:hover { opacity: .7 }
+
+.nav-right  { display: flex; align-items: center; gap: 2.5rem }
+.nav-links  { display: flex; align-items: center; gap: 2.5rem }
+.nav-a {
+  font-size: 1rem; font-weight: 500; color: var(--t3);
+  text-decoration: none; transition: color .2s; letter-spacing: -.005em;
+}
+.nav-a:hover { color: var(--t1) }
+
+.nav-actions { display: flex; align-items: center; gap: 1.25rem }
+.nav-action-btn {
+  background: none; border: none; color: var(--t3); font-size: 1rem;
+  cursor: pointer; padding: .25rem; transition: color .2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.nav-action-btn:hover { color: var(--t1) }
+#langBtn { font-family: 'JetBrains Mono', monospace; font-size: .85rem; font-weight: 600 }
+
+#mbtn {
+  display: none; background: none; border: none; color: var(--t3);
+  font-size: 1rem; cursor: pointer; padding: .25rem; transition: color .2s;
+}
+#mbtn:hover { color: var(--t1) }
+
+@media(max-width:768px) {
+  .nav-links { display: none }
+  #mbtn { display: block }
+  .nav-right { gap: 1.25rem }
+}
+
+#mmenu {
+  border-top: 1px solid var(--border);
+  background: rgba(7,7,10,.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+#mmenu.hidden { display: none }
+#mmenu ul { padding: .75rem 1.5rem 1rem; display: flex; flex-direction: column; gap: .5rem }
+#mmenu .nav-a { display: block; padding: .5rem 0 }
