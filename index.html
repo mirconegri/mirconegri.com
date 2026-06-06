@@ -40,23 +40,73 @@
 }
 
 html.light-mode {
-  --bg:        #F5F7FA;
-  --surf:      #E4E7EB;
-  --card:      #FFFFFF;
-  --border:    rgba(0,0,0,0.08);
-  --border-hov:rgba(0,0,0,0.16);
-  --t1:        #07070A;
-  --t2:        #3A4150;
-  --t3:        #6B7280;
+  --bg:        #F0EEF8;
+  --surf:      #E8E5F4;
+  --card:      #FAFAFE;
+  --border:    rgba(100,80,180,0.12);
+  --border-hov:rgba(100,80,180,0.28);
+  --t1:        #1A1530;
+  --t2:        #3D3460;
+  --t3:        #7B72A8;
 }
 html.light-mode .hero-name span {
-  background: linear-gradient(135deg, #07070A 0%, rgba(7,7,10,.65) 100%);
+  background: linear-gradient(135deg, #1A1530 0%, #4f46e5 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-html.light-mode .pcard:hover { background: #f9fafb }
-html.light-mode .vcard:hover { background: #f9fafb }
+html.light-mode .pcard:hover { background: #EFEDF8 }
+html.light-mode .vcard:hover { background: #EFEDF8 }
+
+/* Light mode card & chip overrides */
+html.light-mode .chip {
+  background: rgba(100,80,180,0.05);
+  border-color: rgba(100,80,180,0.18);
+}
+html.light-mode .chip:hover {
+  background: rgba(100,80,180,0.12);
+  border-color: rgba(100,80,180,0.38);
+  color: #3D3460;
+}
+html.light-mode .cert-item {
+  background: rgba(100,80,180,0.04);
+  border-color: rgba(100,80,180,0.12);
+}
+html.light-mode .cert-item:hover {
+  background: rgba(100,80,180,0.09);
+  border-color: rgba(100,80,180,0.28);
+}
+html.light-mode .status-row {
+  background: rgba(100,80,180,0.06);
+  border-color: rgba(100,80,180,0.18);
+}
+html.light-mode .soc:hover {
+  background: rgba(100,80,180,0.10);
+  border-color: rgba(100,80,180,0.35);
+}
+html.light-mode #nav {
+  background: rgba(240,238,248,.82);
+}
+html.light-mode #mmenu { background: rgba(240,238,248,.97); }
+html.light-mode .btn-primary {
+  background: #1A1530;
+  color: #F0EEF8;
+}
+html.light-mode .btn-ghost {
+  border-color: rgba(100,80,180,0.28);
+  color: #3D3460;
+}
+html.light-mode .btn-ghost:hover {
+  border-color: rgba(100,80,180,0.50);
+  background: rgba(100,80,180,0.08);
+  color: #1A1530;
+}
+html.light-mode .tl-item::before {
+  background: #E8E5F4;
+}
+html.light-mode footer {
+  border-top-color: rgba(100,80,180,0.15);
+}
 
 /* ════════════════════════════════════════════════
    RESET
@@ -922,10 +972,10 @@ footer p {
 
   const blobs = [
     { x:.15, y:.25, r:.95, colorA:'#c0305a', colorB:'#b84000', speed:.00108, phase:0,   drift:.00072 },
-    { x:.80, y:.20, r:.90, colorA:'#8a7a00', colorB:'#1a7a30', speed:.00078, phase:2.1, drift:.00054 },
-    { x:.50, y:.70, r:1.05,colorA:'#0044bb', colorB:'#5500bb', speed:.00090, phase:4.3, drift:.00066 },
-    { x:.85, y:.75, r:.85, colorA:'#aa0077', colorB:'#990020', speed:.00060, phase:1.2, drift:.00048 },
-    { x:.20, y:.75, r:.80, colorA:'#007a66', colorB:'#004499', speed:.00120, phase:3.5, drift:.00084 },
+    { x:.80, y:.20, r:.90, colorA:'#5a3aed', colorB:'#3a20c0', speed:.00078, phase:2.1, drift:.00054 },
+    { x:.50, y:.70, r:1.05,colorA:'#2244cc', colorB:'#5500bb', speed:.00090, phase:4.3, drift:.00066 },
+    { x:.85, y:.75, r:.85, colorA:'#aa0077', colorB:'#7700bb', speed:.00060, phase:1.2, drift:.00048 },
+    { x:.20, y:.75, r:.80, colorA:'#0055aa', colorB:'#3300cc', speed:.00120, phase:3.5, drift:.00084 },
   ];
 
   function hexToRgb(hex) {
@@ -945,10 +995,17 @@ footer p {
     const g  = Math.round(lerp(cA[1],cB[1],mix));
     const b  = Math.round(lerp(cA[2],cB[2],mix));
     const grad = ctx.createRadialGradient(px*W, py*H, 0, px*W, py*H, rad);
-    grad.addColorStop(0,   `rgba(${r},${g},${b},0.35)`);
-    grad.addColorStop(0.35,`rgba(${r},${g},${b},0.18)`);
-    grad.addColorStop(0.7, `rgba(${r},${g},${b},0.08)`);
-    grad.addColorStop(1,   `rgba(${r},${g},${b},0)`);
+    if (isLight) {
+      grad.addColorStop(0,   `rgba(${r},${g},${b},0.55)`);
+      grad.addColorStop(0.35,`rgba(${r},${g},${b},0.30)`);
+      grad.addColorStop(0.7, `rgba(${r},${g},${b},0.12)`);
+      grad.addColorStop(1,   `rgba(${r},${g},${b},0)`);
+    } else {
+      grad.addColorStop(0,   `rgba(${r},${g},${b},0.35)`);
+      grad.addColorStop(0.35,`rgba(${r},${g},${b},0.18)`);
+      grad.addColorStop(0.7, `rgba(${r},${g},${b},0.08)`);
+      grad.addColorStop(1,   `rgba(${r},${g},${b},0)`);
+    }
     ctx.fillStyle = grad;
     ctx.beginPath();
     ctx.arc(px*W, py*H, rad, 0, Math.PI*2);
@@ -958,13 +1015,22 @@ footer p {
   function frame(ts) {
     ctx.clearRect(0, 0, W, H);
     const isLight = document.documentElement.classList.contains('light-mode');
-    ctx.globalCompositeOperation = isLight ? 'multiply' : 'screen';
+
+    if (isLight) {
+      // Fill a solid light base so 'multiply' blending has something to work with
+      ctx.fillStyle = '#F0EEF8';
+      ctx.fillRect(0, 0, W, H);
+      ctx.globalCompositeOperation = 'multiply';
+    } else {
+      ctx.globalCompositeOperation = 'screen';
+    }
+
     blobs.forEach(b => drawBlob(b, ts, isLight));
     ctx.globalCompositeOperation = 'source-over';
     const vig = ctx.createRadialGradient(W/2,H/2,H*.1,W/2,H/2,H*.9);
     if (isLight) {
-      vig.addColorStop(0, 'rgba(245,247,250,0)');
-      vig.addColorStop(1, 'rgba(245,247,250,0.6)');
+      vig.addColorStop(0, 'rgba(240,238,248,0)');
+      vig.addColorStop(1, 'rgba(220,216,240,0.55)');
     } else {
       vig.addColorStop(0, 'rgba(7,7,10,0)');
       vig.addColorStop(1, 'rgba(7,7,10,0.35)');
