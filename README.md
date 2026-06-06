@@ -71,7 +71,7 @@ Every commit to `main` triggers an automatic deploy in ~30 seconds.
 No installation or build step needed. Just clone and open:
 
 ```bash
-git clone [https://github.com/mirconegri/mirconegri.com.git](https://github.com/mirconegri/mirconegri.com.git)
+git clone https://github.com/mirconegri/mirconegri.com.git
 cd mirconegri.com
 open index.html   # or double-click the file
 
