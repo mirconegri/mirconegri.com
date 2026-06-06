@@ -9,14 +9,14 @@ No heavy frameworks or build tools. Just a single `index.html` file, deployed in
 
 ## 📸 Preview & Sections
 
-| Section | Description |
-|:--|:--|
-| **Hero** | 3D interactive wireframe icosahedron with animated typography. |
-| **About** | Personal bio, academic status, and technical skills. |
-| **Projects** | Grid of personal projects featuring 3D hover tilt effects. |
-| **Education** | Academic timeline and certifications. |
-| **Volunteer** | Real-world community impact and associations. |
-| **Contact** | Direct links to socials and email. |
+| Section | Preview | Description |
+|:--|:--:|:--|
+| **Hero** | ![Hero Preview](assets/hero-section.png) | 3D interactive wireframe icosahedron with animated typography. |
+| **About** | ![About Preview](assets/about-section.png) | Personal bio, academic status, and technical skills. |
+| **Projects** | ![Projects Preview](assets/projects-section.png) | Grid of personal projects featuring 3D hover tilt effects. |
+| **Education** | ![Education Preview](assets/education-section.png) | Academic timeline and certifications. |
+| **Volunteer** | ![Volunteer Preview](assets/volunteer-section.png) | Real-world community impact and associations. |
+| **Contact** | ![Contact Preview](assets/contact-section.png) | Direct links to socials and email. |
 
 ---
 
