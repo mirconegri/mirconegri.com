@@ -1,6 +1,3 @@
-Here is the updated `README.md` reflecting the massive visual and structural changes in your new code. It highlights the new 3D elements, the Aurora canvas, the Light/Dark mode, and the bilingual system, while maintaining the clean, professional structure of your original file.
-
-```markdown
 # 🌐 mirconegri.com
 
 [![Language](https://img.shields.io/badge/Language-HTML%20%2F%20CSS%20%2F%20JS-orange?style=for-the-badge)](https://developer.mozilla.org/en-US/docs/Web/HTML) [![Library](https://img.shields.io/badge/Library-Three.js-black?style=for-the-badge&logo=three.js)](https://threejs.org/) [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE) [![Deploy](https://img.shields.io/badge/Deploy-Cloudflare%20Pages-F38020?style=for-the-badge&logo=cloudflare&logoColor=white)](https://pages.cloudflare.com/)
