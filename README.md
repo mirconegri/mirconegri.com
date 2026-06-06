@@ -39,10 +39,20 @@ No heavy frameworks or build tools. Just a single `index.html` file, deployed in
 [mirconegri.com/](https://github.com/mirconegri/mirconegri.com/tree/main)
 
 ```
-└── index.html       → The entire website (single file)
-└── README.md        → This file
-└── LICENSE          → MIT License
 
+├── index.html
+├── css/
+│   ├── tokens.css
+│   ├── light-mode.css
+│   ├── layout.css
+│   ├── navbar.css
+│   ├── hero.css
+│   └── sections.css
+└── js/
+    ├── aurora.js
+    ├── threejs-hero.js
+    ├── orb.js
+    └── ui.js
 ```
 
 ---
