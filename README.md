@@ -111,7 +111,3 @@ This project is licensed under the MIT License - see the [LICENSE](https://www.g
 
 
 © 2026 Mirco Negri
-
-```
-
-```
