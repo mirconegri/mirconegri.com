@@ -50,7 +50,7 @@ No heavy frameworks or build tools. Just a single `index.html` file, deployed in
 
 ## 🚀 Live Site
 
-👉 [mirconegri.com](https://mirconegri.com)
+👉 [mirconegri.com](https://github.com/mirconegri.com)
 
 Deployed via **Cloudflare Pages** — connected to this GitHub repo.  
 Every commit to `main` triggers an automatic deploy in ~30 seconds.
