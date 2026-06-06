@@ -16,7 +16,6 @@ No heavy frameworks or build tools. Just a single `index.html` file, deployed in
 | **Projects** | ![Projects Preview](assets/projects-section.png) | Grid of personal projects featuring 3D hover tilt effects. |
 | **Education** | ![Education Preview](assets/education-section.png) | Academic timeline and certifications. |
 | **Volunteer** | ![Volunteer Preview](assets/volunteer-section.png) | Real-world community impact and associations. |
-| **Contact** | ![Contact Preview](assets/contact-section.png) | Direct links to socials and email. |
 
 ---
 
