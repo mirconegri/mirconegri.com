@@ -36,9 +36,10 @@ No heavy frameworks or build tools. Just a single `index.html` file, deployed in
 ## 📂 Repository structure
 
 
-```
 
 [mirconegri.com/](https://mirconegri.com/)
+
+```
 └── index.html       → The entire website (single file)
 └── README.md        → This file
 └── LICENSE          → MIT License
