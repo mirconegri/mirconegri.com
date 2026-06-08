@@ -11,12 +11,15 @@
   renderer.setSize(container.clientWidth, container.clientHeight);
   container.appendChild(renderer.domElement);
 
+  // Ho ridotto il raggio da 2 a 1.6 per farlo respirare di più
   const shape = new THREE.Mesh(
-    new THREE.IcosahedronGeometry(2, 1),
+    new THREE.IcosahedronGeometry(1.6, 1),
     new THREE.MeshBasicMaterial({ color: 0x8B93A3, wireframe: true, transparent: true, opacity: 0.35 })
   );
   scene.add(shape);
-  camera.position.z = 5;
+  
+  // Ho allontanato la camera (da 5 a 6.5) per far entrare tutta la figura
+  camera.position.z = 6.5;
 
   let meshMouseX = 0, meshMouseY = 0;
   let meshTargetX = 0, meshTargetY = 0;
