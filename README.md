@@ -41,6 +41,7 @@ No heavy frameworks or build tools. Just a single `index.html` file, deployed in
 ```
 
 ├── index.html
+├── privacy.html
 ├── css/
 │   ├── tokens.css
 │   ├── light-mode.css
