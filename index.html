@@ -294,17 +294,54 @@
 
 <!-- CONTACT -->
 <section id="contact">
-  <div class="sec" style="max-width:560px;text-align:center;padding-bottom:4rem">
-    <p class="sec-label reveal" style="justify-content:center;display:block" data-it="05 — Contatti" data-en="05 — Contact">05 — Contatti</p>
-    <div class="reveal" style="transition-delay:.15s">
-      <a href="mailto:mirconegri06@gmail.com" class="btn-primary" style="display:inline-flex;justify-content:center">
-        <i class="fa-solid fa-envelope" style="font-size:.65rem"></i> mirconegri06@gmail.com
-      </a>
-    </div>
-    <div class="social-row reveal" style="transition-delay:.2s">
-      <a href="https://github.com/mirconegri"      target="_blank" rel="noopener" class="soc" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
-      <a href="https://linkedin.com/in/mirconegri" target="_blank" rel="noopener" class="soc" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-      <a href="https://t.me/mirco_ne"              target="_blank" rel="noopener" class="soc" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
+  <div class="sec">
+    <p class="sec-label reveal" data-it="05 — Contatti" data-en="05 — Contact">05 — Contatti</p>
+    <h2 class="sec-title reveal" style="transition-delay:.05s" data-it="Mettiamoci in contatto" data-en="Get in touch">Mettiamoci in contatto</h2>
+
+    <div class="contact-grid reveal" style="transition-delay:.1s">
+      
+      <div class="contact-info">
+        <a href="mailto:mirconegri06@gmail.com" class="contact-mail">
+          <i class="fa-solid fa-envelope"></i> mirconegri06@gmail.com
+        </a>
+        <p class="contact-desc" 
+           data-it="Se hai una proposta di progetto, una domanda o vuoi semplicemente fare due chiacchiere su AI e sviluppo, non esitare a scrivermi." 
+           data-en="If you have a project proposal, a question, or just want to chat about AI and development, don't hesitate to write to me.">
+          Se hai una proposta di progetto, una domanda o vuoi semplicemente fare due chiacchiere su AI e sviluppo, non esitare a scrivermi.
+        </p>
+        <div class="social-row" style="justify-content: flex-start; margin-top: 0;">
+          <a href="https://github.com/mirconegri" target="_blank" rel="noopener" class="soc" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+          <a href="https://linkedin.com/in/mirconegri" target="_blank" rel="noopener" class="soc" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="https://t.me/mirco_ne" target="_blank" rel="noopener" class="soc" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
+        </div>
+      </div>
+
+      <div class="pcard contact-form-wrapper">
+        <form id="contact-form" class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+          <input type="text" name="name" placeholder="Il tuo Nome" data-ph-it="Il tuo Nome" data-ph-en="Your Name" required />
+          <input type="email" name="email" placeholder="La tua Email" data-ph-it="La tua Email" data-ph-en="Your Email" required />
+          <textarea name="message" rows="4" placeholder="Il tuo Messaggio" data-ph-it="Il tuo Messaggio" data-ph-en="Your Message" required></textarea>
+
+          <div class="cf-turnstile-mock">
+            <i class="fa-brands fa-cloudflare" style="color: #F38020;"></i>
+            <span data-it="Verifica Cloudflare" data-en="Cloudflare Verification">Verifica Cloudflare</span>
+          </div>
+
+          <label class="privacy-check">
+            <input type="checkbox" required />
+            <span data-it="Ho letto e accetto la <a href='#'>Privacy Policy</a>. *" data-en="I have read and accept the <a href='#'>Privacy Policy</a>. *">
+              Ho letto e accetto la <a href="#">Privacy Policy</a>. *
+            </span>
+          </label>
+
+          <button type="submit" class="btn-primary w-full" 
+                  data-it="<i class='fa-solid fa-paper-plane'></i> Invia Messaggio" 
+                  data-en="<i class='fa-solid fa-paper-plane'></i> Send Message">
+            <i class="fa-solid fa-paper-plane"></i> Invia Messaggio
+          </button>
+        </form>
+      </div>
+
     </div>
   </div>
 </section>
