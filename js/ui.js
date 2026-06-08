@@ -64,6 +64,26 @@ const revObs = new IntersectionObserver(entries => {
 document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
 document.querySelectorAll('#hero .reveal').forEach(el => el.classList.add('vis'));
 
+/* ── Copy Email to Clipboard ── */
+const copyBtn = document.getElementById('copy-email-btn');
+const copyToast = document.getElementById('copy-toast');
+
+if (copyBtn) {
+  copyBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText('mirconegri06@gmail.com').then(() => {
+      // Testo bilingue in base allo stato attuale
+      copyToast.textContent = currentLang === 'it' ? 'Copiato!' : 'Copied!';
+      copyToast.classList.add('success');
+      
+      // Dopo 2 secondi, resetta tutto
+      setTimeout(() => {
+        copyToast.classList.remove('success');
+        copyToast.textContent = currentLang === 'it' ? 'Copia' : 'Copy';
+      }, 2000);
+    });
+  });
+}
+
 /* ── Card 3D tilt ── */
 if (window.matchMedia('(hover:hover)').matches) {
   document.querySelectorAll('.pcard:not(.pcard-ghost), .vcard, .cert-item').forEach(card => {
