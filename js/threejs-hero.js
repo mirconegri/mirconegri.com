@@ -13,7 +13,7 @@
 
   // RAGGIO RIDOTTO DA 2 a 1.2: ora la figura ha sempre un margine enorme
   const shape = new THREE.Mesh(
-    new THREE.IcosahedronGeometry(1.2, 1),
+    new THREE.IcosahedronGeometry(2, 1),
     new THREE.MeshBasicMaterial({ color: 0x8B93A3, wireframe: true, transparent: true, opacity: 0.35 })
   );
   scene.add(shape);
