@@ -46,3 +46,20 @@ html.light-mode .btn-ghost:hover {
 }
 html.light-mode .tl-item::before { background: #E8E5F4 }
 html.light-mode footer           { border-top-color: rgba(100,80,180,0.15) }
+
+/* CONTACT FORM */
+html.light-mode .contact-form input,
+html.light-mode .contact-form textarea {
+  background: rgba(100,80,180,0.04);
+  border-color: rgba(100,80,180,0.15);
+}
+html.light-mode .contact-form input:focus,
+html.light-mode .contact-form textarea:focus {
+  background: rgba(100,80,180,0.08);
+  border-color: var(--accent-b);
+  box-shadow: 0 0 0 3px rgba(79,70,229,.15);
+}
+html.light-mode .cf-turnstile-mock {
+  background: rgba(100,80,180,0.03);
+  border-color: rgba(100,80,180,0.20);
+}
