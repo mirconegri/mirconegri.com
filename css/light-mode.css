@@ -328,7 +328,9 @@ html.light-mode #prog {
    16. WIREFRAME 3D HERO — adattato al chiaro
    ──────────────────────────────────────────────── */
 html.light-mode #hero-3d {
-  opacity: 0.12;
+  opacity: 0.7; /* Riportiamo l'opacità a un livello visibile (prima era 0.12) */
+  mix-blend-mode: multiply; /* Fonde le linee rendendole più scure e definite sul bianco */
+  filter: contrast(150%) brightness(80%); /* Scurisce ulteriormente il colore base dell'icosaedro */
 }
 
 /* ────────────────────────────────────────────────
