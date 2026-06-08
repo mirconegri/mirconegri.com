@@ -147,8 +147,6 @@
   display: inline-flex; align-items: center; gap: .75rem;
   font-size: 1.1rem; font-weight: 600; color: var(--t1);
   text-decoration: none; margin-bottom: 1.5rem; transition: color .2s;
-  
-  /* Reset stile bottone (per il "Copia") */
   background: none; border: none; font-family: inherit; cursor: pointer; padding: 0;
 }
 .contact-mail:hover { color: var(--accent-a); }
@@ -174,7 +172,7 @@
   margin-bottom: 2rem; letter-spacing: -.01em;
 }
 
-/* Icone Social in Risalto */
+/* Icone Social Grandi e Centrate */
 .contact-social {
   display: flex;
   justify-content: flex-start;
@@ -182,6 +180,9 @@
   margin-top: 1.5rem;
 }
 .contact-info .soc {
+  display: inline-flex;    /* Rende l'elemento un box flessibile */
+  align-items: center;     /* Centra l'icona verticalmente */
+  justify-content: center;  /* Centra l'icona orizzontalmente */
   width: 46px; 
   height: 46px;
   font-size: 1.3rem;
@@ -190,6 +191,7 @@
   border: 1px solid rgba(124, 58, 237, 0.3);
   border-radius: 12px;
   transition: background .2s, color .2s, transform .2s, box-shadow .2s;
+  text-decoration: none;
 }
 .contact-info .soc:hover {
   background: var(--accent-a);
@@ -200,8 +202,8 @@
 
 /* ── Form Destra ── */
 .contact-form-wrapper { cursor: default; }
-.contact-form-wrapper:hover { background: var(--card); } /* Disabilita l'hover scuro dei progetti */
-.contact-form-wrapper::before { display: none; } /* Rimuove il glow radiale interno */
+.contact-form-wrapper:hover { background: var(--card); }
+.contact-form-wrapper::before { display: none; }
 
 .contact-form { display: flex; flex-direction: column; gap: 1rem; }
 
@@ -236,20 +238,25 @@
   border-radius: 8px; color: var(--t3); font-size: .8rem;
 }
 
-/* Checkbox Privacy (Fix larghezza) */
-.contact-form input[type="checkbox"] {
-  width: auto; /* Annulla il 100% ereditato dagli input generali */
-  margin-top: 0.15rem;
-  cursor: pointer;
-  accent-color: var(--accent-a);
-}
-
+/* Checkbox Privacy (Allineamento orizzontale fisso) */
 .privacy-check {
-  display: flex; align-items: flex-start; gap: .6rem;
-  font-size: .75rem; color: var(--t3); cursor: pointer; margin-top: .25rem;
+  display: flex; 
+  align-items: center; /* Mette checkbox e scritte sulla stessa linea */
+  gap: .6rem;
+  font-size: .75rem; 
+  color: var(--t3); 
+  cursor: pointer; 
+  margin-top: .25rem;
+}
+.privacy-check input[type="checkbox"] {
+  width: auto !important;  /* Forza l'annullamento del 100% degli input testuali */
+  height: auto;
+  margin: 0;
+  cursor: pointer; 
+  accent-color: var(--accent-a);
 }
 .privacy-check a { color: var(--accent-a); text-decoration: none; }
 .privacy-check a:hover { text-decoration: underline; }
 
-/* Pulsante 100% larghezza */
+/* Pulsante Invia */
 .w-full { width: 100%; justify-content: center; padding: .85rem; margin-top: .5rem; }
