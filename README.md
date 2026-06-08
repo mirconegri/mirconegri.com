@@ -11,7 +11,7 @@ No heavy frameworks or build tools. Just a single `index.html` file, deployed in
 
 | Section | Preview | Description |
 |:--|:--:|:--|
-| **Hero** | ![Hero Preview](assets/hero-section.png) | 3D interactive wireframe icosahedron with animated typography. |
+| **Hero** | ![Hero Preview](assets/hero-section.gif) | 3D interactive wireframe icosahedron with animated typography. |
 | **About** | ![About Preview](assets/about-section.png) | Personal bio, academic status, and technical skills. |
 | **Projects** | ![Projects Preview](assets/projects-section.png) | Grid of personal projects featuring 3D hover tilt effects. |
 | **Education** | ![Education Preview](assets/education-section.png) | Academic timeline and certifications. |
