@@ -13,10 +13,11 @@
   <link rel="stylesheet" href="css/tokens.css" />
   <link rel="stylesheet" href="css/light-mode.css" />
   <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/navbar.css" />
   
   <style>
     /* Stili minimi specifici per la pagina testuale */
-    .text-page { max-width: 800px; margin: 8rem auto 4rem; padding: 0 1.5rem; }
+    .text-page { max-width: 800px; margin: 8rem auto 4rem; padding: 0 1.5rem; position: relative; z-index: 2; }
     .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--accent-a); text-decoration: none; font-weight: 500; margin-bottom: 2rem; transition: color 0.2s; }
     .back-btn:hover { color: var(--accent-c); }
     .policy-content h1 { font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--t1); letter-spacing: -0.03em; }
@@ -31,50 +32,119 @@
 </head>
 <body>
 
-  <div style="position:fixed; inset:0; background:radial-gradient(circle at top right, rgba(124,58,237,0.05), transparent 50%); z-index:-1"></div>
+  <div id="prog"></div>
+  <div id="mouse-orb"></div>
+  <div style="position:fixed; inset:0; background:radial-gradient(circle at top right, rgba(124,58,237,0.05), transparent 50%); z-index:0"></div>
+
+  <nav id="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Mirco Negri</a>
+      <div class="nav-right">
+        <ul class="nav-links">
+          <li><a href="index.html#about" class="nav-a">About</a></li>
+          <li><a href="index.html#projects" class="nav-a">Projects</a></li>
+          <li><a href="index.html#education" class="nav-a">Education</a></li>
+          <li><a href="index.html#volunteer" class="nav-a">Volunteer</a></li>
+          <li><a href="index.html#contact" class="nav-a">Contact</a></li>
+        </ul>
+        <div class="nav-actions">
+          <button id="langBtn" class="nav-action-btn" aria-label="Cambia Lingua">IT</button>
+          <button id="themeBtn" class="nav-action-btn" aria-label="Cambia Tema"><i class="fa-solid fa-sun"></i></button>
+          <button id="mbtn" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+        </div>
+      </div>
+    </div>
+    <div id="mmenu" class="hidden">
+      <ul>
+        <li><a href="index.html#about" class="nav-a">About</a></li>
+        <li><a href="index.html#projects" class="nav-a">Projects</a></li>
+        <li><a href="index.html#education" class="nav-a">Education</a></li>
+        <li><a href="index.html#volunteer" class="nav-a">Volunteer</a></li>
+        <li><a href="index.html#contact" class="nav-a">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
 
   <div class="text-page">
-    <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Torna alla Home</a>
+    <a href="index.html" class="back-btn" 
+       data-it="<i class='fa-solid fa-arrow-left'></i> Torna alla Home" 
+       data-en="<i class='fa-solid fa-arrow-left'></i> Back to Home">
+      <i class="fa-solid fa-arrow-left"></i> Torna alla Home
+    </a>
     
     <div class="policy-content">
       <h1>Privacy Policy</h1>
-      <span class="last-updated">Ultimo aggiornamento: Giugno 2026</span>
+      <span class="last-updated" 
+            data-it="Ultimo aggiornamento: Giugno 2026" 
+            data-en="Last updated: June 2026">
+        Ultimo aggiornamento: Giugno 2026
+      </span>
 
-      <p>Questa pagina descrive le modalità di gestione del sito <strong>mirconegri.com</strong> in riferimento al trattamento dei dati personali degli utenti che lo consultano e che interagiscono con il modulo di contatto. L'informativa è resa nel rispetto del GDPR (Regolamento UE 2016/679).</p>
+      <p data-it="Questa pagina descrive le modalità di gestione del sito <strong>mirconegri.com</strong> in riferimento al trattamento dei dati personali degli utenti che lo consultano e che interagiscono con il modulo di contatto. L'informativa è resa nel rispetto del GDPR (Regolamento UE 2016/679)." 
+         data-en="This page describes how the <strong>mirconegri.com</strong> website is managed regarding the processing of personal data of users who consult it and interact with the contact form. This privacy policy is provided in compliance with the GDPR (EU Regulation 2016/679).">
+        Questa pagina descrive le modalità di gestione del sito <strong>mirconegri.com</strong> in riferimento al trattamento dei dati personali degli utenti che lo consultano e che interagiscono con il modulo di contatto. L'informativa è resa nel rispetto del GDPR (Regolamento UE 2016/679).
+      </p>
 
-      <h2>1. Titolare del Trattamento</h2>
-      <p>Il titolare del trattamento dei dati è <strong>Mirco Negri</strong>.<br>
-      Per qualsiasi domanda o richiesta relativa alla privacy, puoi contattarmi direttamente all'indirizzo email: <a href="mailto:mirconegri06@gmail.com">mirconegri06@gmail.com</a>.</p>
+      <h2 data-it="1. Titolare del Trattamento" data-en="1. Data Controller">1. Titolare del Trattamento</h2>
+      <p data-it="Il titolare del trattamento dei dati è <strong>Mirco Negri</strong>.<br>Per qualsiasi domanda o richiesta relativa alla privacy, puoi contattarmi direttamente all'indirizzo email: <a href='mailto:mirconegri06@gmail.com'>mirconegri06@gmail.com</a>." 
+         data-en="The data controller is <strong>Mirco Negri</strong>.<br>For any questions or privacy-related requests, you can contact me directly at: <a href='mailto:mirconegri06@gmail.com'>mirconegri06@gmail.com</a>.">
+        Il titolare del trattamento dei dati è <strong>Mirco Negri</strong>.<br>
+        Per qualsiasi domanda o richiesta relativa alla privacy, puoi contattarmi direttamente all'indirizzo email: <a href="mailto:mirconegri06@gmail.com">mirconegri06@gmail.com</a>.
+      </p>
 
-      <h2>2. Quali dati raccolgo e perché</h2>
-      <p>Quando utilizzi il modulo di contatto presente sul sito, ti viene richiesto di inserire:</p>
+      <h2 data-it="2. Quali dati raccolgo e perché" data-en="2. What data I collect and why">2. Quali dati raccolgo e perché</h2>
+      <p data-it="Quando utilizzi il modulo di contatto presente sul sito, ti viene richiesto di inserire:" 
+         data-en="When you use the contact form on the site, you are asked to provide:">
+        Quando utilizzi il modulo di contatto presente sul sito, ti viene richiesto di inserire:
+      </p>
       <ul>
-        <li><strong>Nome:</strong> per sapere a chi mi sto rivolgendo.</li>
-        <li><strong>Indirizzo Email:</strong> per poterti rispondere.</li>
-        <li><strong>Messaggio:</strong> il contenuto della tua richiesta.</li>
+        <li data-it="<strong>Nome:</strong> per sapere a chi mi sto rivolgendo." data-en="<strong>Name:</strong> to know who I am speaking to."><strong>Nome:</strong> per sapere a chi mi sto rivolgendo.</li>
+        <li data-it="<strong>Indirizzo Email:</strong> per poterti rispondere." data-en="<strong>Email Address:</strong> to be able to reply to you."><strong>Indirizzo Email:</strong> per poterti rispondere.</li>
+        <li data-it="<strong>Messaggio:</strong> il contenuto della tua richiesta." data-en="<strong>Message:</strong> the content of your request."><strong>Messaggio:</strong> il contenuto della tua richiesta.</li>
       </ul>
-      <p>Questi dati vengono raccolti <strong>esclusivamente</strong> con la finalità di ricevere la tua richiesta e poterti fornire una risposta. Non utilizzo i tuoi dati per newsletter, marketing o profilazione, e non li vendo a terzi.</p>
+      <p data-it="Questi dati vengono raccolti <strong>esclusivamente</strong> con la finalità di ricevere la tua richiesta e poterti fornire una risposta. Non utilizzo i tuoi dati per newsletter, marketing o profilazione, e non li vendo a terzi." 
+         data-en="This data is collected <strong>exclusively</strong> for the purpose of receiving your request and providing a response. I do not use your data for newsletters, marketing, or profiling, and I do not sell it to third parties.">
+        Questi dati vengono raccolti <strong>esclusivamente</strong> con la finalità di ricevere la tua richiesta e poterti fornire una risposta. Non utilizzo i tuoi dati per newsletter, marketing o profilazione, e non li vendo a terzi.
+      </p>
 
-      <h2>3. Servizi di Terze Parti (Formspree)</h2>
-      <p>Il sito è un contenitore statico e non possiede un database proprietario. Per gestire l'invio delle email tramite il modulo di contatto, mi affido a un servizio di terze parti chiamato <strong>Formspree</strong>.</p>
-      <p>Quando clicchi su "Invia Messaggio", i dati che hai inserito vengono processati in modo sicuro dai server di Formspree, che si occupano di inoltrarli alla mia casella di posta elettronica personale. Per maggiori informazioni su come Formspree gestisce i dati, ti invito a consultare la loro <a href="https://formspree.io/legal/privacy-policy" target="_blank" rel="noopener">Privacy Policy ufficiale</a>.</p>
+      <h2 data-it="3. Servizi di Terze Parti (Formspree)" data-en="3. Third-Party Services (Formspree)">3. Servizi di Terze Parti (Formspree)</h2>
+      <p data-it="Il sito è un contenitore statico e non possiede un database proprietario. Per gestire l'invio delle email tramite il modulo di contatto, mi affido a un servizio di terze parti chiamato <strong>Formspree</strong>." 
+         data-en="The site is a static container and does not have a proprietary database. To manage the sending of emails via the contact form, I rely on a third-party service called <strong>Formspree</strong>.">
+        Il sito è un contenitore statico e non possiede un database proprietario. Per gestire l'invio delle email tramite il modulo di contatto, mi affido a un servizio di terze parti chiamato <strong>Formspree</strong>.
+      </p>
+      <p data-it="Quando clicchi su &quot;Invia Messaggio&quot;, i dati che hai inserito vengono processati in modo sicuro dai server di Formspree, che si occupano di inoltrarli alla mia casella di posta elettronica personale. Per maggiori informazioni su come Formspree gestisce i dati, ti invito a consultare la loro <a href='https://formspree.io/legal/privacy-policy' target='_blank' rel='noopener'>Privacy Policy ufficiale</a>." 
+         data-en="When you click &quot;Send Message&quot;, the data you entered is securely processed by Formspree's servers, which forward it to my personal email inbox. For more information on how Formspree handles data, please consult their <a href='https://formspree.io/legal/privacy-policy' target='_blank' rel='noopener'>official Privacy Policy</a>.">
+        Quando clicchi su "Invia Messaggio", i dati che hai inserito vengono processati in modo sicuro dai server di Formspree, che si occupano di inoltrarli alla mia casella di posta elettronica personale. Per maggiori informazioni su come Formspree gestisce i dati, ti invito a consultare la loro <a href="https://formspree.io/legal/privacy-policy" target="_blank" rel="noopener">Privacy Policy ufficiale</a>.
+      </p>
 
-      <h2>4. Conservazione dei Dati</h2>
-      <p>I messaggi ricevuti (e i dati in essi contenuti) verranno conservati nella mia casella di posta personale per il tempo strettamente necessario a gestire la conversazione o adempiere ad eventuali obblighi di legge. Una volta esaurita la finalità del contatto, le email non più rilevanti verranno eliminate regolarmente.</p>
+      <h2 data-it="4. Conservazione dei Dati" data-en="4. Data Retention">4. Conservazione dei Dati</h2>
+      <p data-it="I messaggi ricevuti (e i dati in essi contenuti) verranno conservati nella mia casella di posta personale per il tempo strettamente necessario a gestire la conversazione o adempiere ad eventuali obblighi di legge. Una volta esaurita la finalità del contatto, le email non più rilevanti verranno eliminate regolarmente." 
+         data-en="Received messages (and the data contained therein) will be kept in my personal inbox for the time strictly necessary to manage the conversation or fulfill any legal obligations. Once the purpose of the contact is exhausted, emails that are no longer relevant will be regularly deleted.">
+        I messaggi ricevuti (e i dati in essi contenuti) verranno conservati nella mia casella di posta personale per il tempo strettamente necessario a gestire la conversazione o adempiere ad eventuali obblighi di legge. Una volta esaurita la finalità del contatto, le email non più rilevanti verranno eliminate regolarmente.
+      </p>
 
-      <h2>5. I tuoi Diritti (GDPR)</h2>
-      <p>In conformità al GDPR, hai in ogni momento il diritto di:</p>
+      <h2 data-it="5. I tuoi Diritti (GDPR)" data-en="5. Your Rights (GDPR)">5. I tuoi Diritti (GDPR)</h2>
+      <p data-it="In conformità al GDPR, hai in ogni momento il diritto di:" 
+         data-en="In accordance with the GDPR, you have the right at any time to:">
+        In conformità al GDPR, hai in ogni momento il diritto di:
+      </p>
       <ul>
-        <li>Richiedere l'accesso ai tuoi dati personali.</li>
-        <li>Richiedere la rettifica o la cancellazione degli stessi (diritto all'oblio).</li>
-        <li>Opporti al loro trattamento.</li>
+        <li data-it="Richiedere l'accesso ai tuoi dati personali." data-en="Request access to your personal data.">Richiedere l'accesso ai tuoi dati personali.</li>
+        <li data-it="Richiedere la rettifica o la cancellazione degli stessi (diritto all'oblio)." data-en="Request their rectification or deletion (right to be forgotten).">Richiedere la rettifica o la cancellazione degli stessi (diritto all'oblio).</li>
+        <li data-it="Opporti al loro trattamento." data-en="Object to their processing.">Opporti al loro trattamento.</li>
       </ul>
-      <p>Per esercitare questi diritti, ti basta inviare una semplice email a <a href="mailto:mirconegri06@gmail.com">mirconegri06@gmail.com</a> e provvederò immediatamente a soddisfare la tua richiesta.</p>
+      <p data-it="Per esercitare questi diritti, ti basta inviare una semplice email a <a href='mailto:mirconegri06@gmail.com'>mirconegri06@gmail.com</a> e provvederò immediatamente a soddisfare la tua richiesta." 
+         data-en="To exercise these rights, simply send an email to <a href='mailto:mirconegri06@gmail.com'>mirconegri06@gmail.com</a> and I will immediately process your request.">
+        Per esercitare questi diritti, ti basta inviare una semplice email a <a href="mailto:mirconegri06@gmail.com">mirconegri06@gmail.com</a> e provvederò immediatamente a soddisfare la tua richiesta.
+      </p>
 
     </div>
   </div>
 
   <footer><p>© 2026 Mirco Negri</p></footer>
+
+  <script src="js/orb.js"></script>
+  <script src="js/ui.js"></script>
 
 </body>
 </html>
