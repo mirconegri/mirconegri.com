@@ -11,9 +11,9 @@
   renderer.setSize(container.clientWidth, container.clientHeight);
   container.appendChild(renderer.domElement);
 
-  // RAGGIO RIDOTTO DA 2 a 1.5: ora la figura ha sempre un margine enorme
+  // RAGGIO RIDOTTO DA 2 a 1.4: ora la figura ha sempre un margine enorme
   const shape = new THREE.Mesh(
-    new THREE.IcosahedronGeometry(1.5, 1),
+    new THREE.IcosahedronGeometry(1.4, 1),
     new THREE.MeshBasicMaterial({ color: 0x8B93A3, wireframe: true, transparent: true, opacity: 0.35 })
   );
   scene.add(shape);
