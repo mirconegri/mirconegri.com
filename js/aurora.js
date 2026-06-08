@@ -27,7 +27,10 @@
                       + Math.cos(time * blob.drift + blob.phase * 1.3)  * 0.10;
     const py = blob.y + Math.cos(time * blob.speed + blob.phase * 1000) * 0.14
                       + Math.sin(time * blob.drift + blob.phase * 0.7 + 2) * 0.08;
-    const rad = blob.r * (isLight ? 1.8 : 1.0) * Math.min(W,H) * (1 + 0.05 * Math.sin(time * 0.0007 + blob.phase));
+
+    /* In light mode: blob più piccoli, più lenti, meno invasivi */
+    const sizeMultiplier = isLight ? 1.1 : 1.0;
+    const rad = blob.r * sizeMultiplier * Math.min(W,H) * (1 + 0.05 * Math.sin(time * 0.0007 + blob.phase));
     const mix = (Math.sin(time * 0.0004 + blob.phase) + 1) / 2;
     const cA  = hexToRgb(blob.colorA), cB = hexToRgb(blob.colorB);
     const r   = Math.round(lerp(cA[0],cB[0],mix));
@@ -35,10 +38,12 @@
     const b   = Math.round(lerp(cA[2],cB[2],mix));
 
     const grad = ctx.createRadialGradient(px*W, py*H, 0, px*W, py*H, rad);
+
     if (isLight) {
-      grad.addColorStop(0,    `rgba(${r},${g},${b},0.55)`);
-      grad.addColorStop(0.35, `rgba(${r},${g},${b},0.30)`);
-      grad.addColorStop(0.7,  `rgba(${r},${g},${b},0.12)`);
+      /* Light mode: opacità molto ridotta — lascia che il CSS filter faccia il lavoro */
+      grad.addColorStop(0,    `rgba(${r},${g},${b},0.50)`);
+      grad.addColorStop(0.35, `rgba(${r},${g},${b},0.25)`);
+      grad.addColorStop(0.7,  `rgba(${r},${g},${b},0.08)`);
       grad.addColorStop(1,    `rgba(${r},${g},${b},0)`);
     } else {
       grad.addColorStop(0,    `rgba(${r},${g},${b},0.35)`);
@@ -46,6 +51,7 @@
       grad.addColorStop(0.7,  `rgba(${r},${g},${b},0.08)`);
       grad.addColorStop(1,    `rgba(${r},${g},${b},0)`);
     }
+
     ctx.fillStyle = grad;
     ctx.beginPath();
     ctx.arc(px*W, py*H, rad, 0, Math.PI*2);
@@ -55,26 +61,35 @@
   function frame(ts) {
     ctx.clearRect(0, 0, W, H);
     const isLight = document.documentElement.classList.contains('light-mode');
+
     if (isLight) {
-      ctx.fillStyle = '#F0EEF8';
+      /* Background base pulito — leggero tono freddo-neutro */
+      ctx.fillStyle = '#F8F8FB';
       ctx.fillRect(0, 0, W, H);
+      /* multiply = i blob si moltiplicano sul bianco, saturano meno, restano eleganti */
       ctx.globalCompositeOperation = 'multiply';
     } else {
       ctx.globalCompositeOperation = 'screen';
     }
+
     blobs.forEach(b => drawBlob(b, ts, isLight));
     ctx.globalCompositeOperation = 'source-over';
-    const vig = ctx.createRadialGradient(W/2,H/2,H*.1,W/2,H/2,H*.9);
+
+    /* Vignette — in light mode più leggera, warm-neutral */
+    const vig = ctx.createRadialGradient(W/2, H/2, H*.15, W/2, H/2, H*.95);
     if (isLight) {
-      vig.addColorStop(0, 'rgba(240,238,248,0)');
-      vig.addColorStop(1, 'rgba(220,216,240,0.55)');
+      vig.addColorStop(0, 'rgba(248,248,251,0)');
+      vig.addColorStop(0.7, 'rgba(241,242,247,0.20)');
+      vig.addColorStop(1, 'rgba(228,229,240,0.40)');
     } else {
       vig.addColorStop(0, 'rgba(7,7,10,0)');
       vig.addColorStop(1, 'rgba(7,7,10,0.35)');
     }
     ctx.fillStyle = vig;
     ctx.fillRect(0, 0, W, H);
+
     requestAnimationFrame(frame);
   }
+
   requestAnimationFrame(frame);
 })();
