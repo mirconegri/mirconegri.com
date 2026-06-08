@@ -7,7 +7,7 @@
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border-bottom: 1px solid var(--border);
-  transition: transform .4s var(--ease), border-color .3s, background-color .4s;
+  transition: transform .4s var(--ease), border-color .3s, background-color .4s, box-shadow .3s;
 }
 #nav.hide     { transform: translateY(-100%) }
 #nav.scrolled { border-bottom-color: rgba(124,58,237,.15) }
@@ -21,7 +21,6 @@
   letter-spacing: -.01em; text-decoration: none; transition: opacity .2s;
 }
 .nav-logo:hover { opacity: .7 }
-
 .nav-right  { display: flex; align-items: center; gap: 2.5rem }
 .nav-links  { display: flex; align-items: center; gap: 2.5rem }
 .nav-a {
@@ -29,7 +28,6 @@
   text-decoration: none; transition: color .2s; letter-spacing: -.005em;
 }
 .nav-a:hover { color: var(--t1) }
-
 .nav-actions { display: flex; align-items: center; gap: 1.25rem }
 .nav-action-btn {
   background: none; border: none; color: var(--t3); font-size: 1rem;
@@ -38,19 +36,16 @@
 }
 .nav-action-btn:hover { color: var(--t1) }
 #langBtn { font-family: 'JetBrains Mono', monospace; font-size: .85rem; font-weight: 600 }
-
 #mbtn {
   display: none; background: none; border: none; color: var(--t3);
   font-size: 1rem; cursor: pointer; padding: .25rem; transition: color .2s;
 }
 #mbtn:hover { color: var(--t1) }
-
 @media(max-width:768px) {
   .nav-links { display: none }
   #mbtn { display: block }
   .nav-right { gap: 1.25rem }
 }
-
 #mmenu {
   border-top: 1px solid var(--border);
   background: rgba(7,7,10,.95);
