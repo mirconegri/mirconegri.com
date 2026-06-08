@@ -35,8 +35,15 @@ let currentLang = 'it';
 document.getElementById('langBtn').addEventListener('click', () => {
   currentLang = currentLang === 'it' ? 'en' : 'it';
   document.getElementById('langBtn').textContent = currentLang.toUpperCase();
+  
+  // Cambia il testo normale
   document.querySelectorAll('[data-it]').forEach(el => {
     el.innerHTML = el.getAttribute('data-' + currentLang);
+  });
+  
+  // Cambia i placeholder degli input nel form
+  document.querySelectorAll('[data-ph-it]').forEach(el => {
+    el.placeholder = el.getAttribute('data-ph-' + currentLang);
   });
 });
 
