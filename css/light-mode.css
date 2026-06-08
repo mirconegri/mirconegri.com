@@ -1,65 +1,372 @@
 /* ════════════════════════════════════════════════
-   LIGHT MODE OVERRIDES
+   LIGHT MODE — Overrides Premium
+   Design system: Linear / Vercel / Stripe / Arc
 ════════════════════════════════════════════════ */
+
+/* ────────────────────────────────────────────────
+   1. CANVAS & AURORA — ridotta, elegante
+   ──────────────────────────────────────────────── */
+html.light-mode #aurora-canvas {
+  filter: saturate(60%) contrast(85%) brightness(115%) blur(110px);
+  opacity: 0.45;
+}
+
+html.light-mode #mouse-orb {
+  background: radial-gradient(
+    circle,
+    rgba(79,70,229,.07)  0%,
+    rgba(124,58,237,.04) 40%,
+    transparent          70%
+  );
+  opacity: 0.6;
+}
+
+/* ────────────────────────────────────────────────
+   2. SCROLL PROGRESS BAR
+   ──────────────────────────────────────────────── */
+html.light-mode #prog {
+  background: linear-gradient(90deg, #4F46E5, #7c3aed);
+  box-shadow: 0 0 6px rgba(79,70,229,.35);
+}
+
+/* ────────────────────────────────────────────────
+   3. NAVBAR — vetro satinato premium
+   ──────────────────────────────────────────────── */
+html.light-mode #nav {
+  background: rgba(248,248,251,.82);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border-bottom: 1px solid rgba(15,23,42,.06);
+  box-shadow: 0 1px 0 rgba(15,23,42,.05);
+}
+
+html.light-mode #nav.scrolled {
+  background: rgba(248,248,251,.92);
+  border-bottom-color: rgba(79,70,229,.10);
+  box-shadow: 0 1px 12px rgba(15,23,42,.06), 0 1px 0 rgba(15,23,42,.05);
+}
+
+html.light-mode #mmenu {
+  background: rgba(248,248,251,.97);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-top: 1px solid rgba(15,23,42,.06);
+}
+
+/* ────────────────────────────────────────────────
+   4. HERO — tipografia premium con gerarchia forte
+   ──────────────────────────────────────────────── */
 html.light-mode .hero-name span {
-  background: linear-gradient(135deg, #1A1530 0%, #4f46e5 100%);
+  background: linear-gradient(
+    135deg,
+    #0F172A   0%,
+    #1E293B  30%,
+    #4F46E5  60%,
+    #7c3aed 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  filter: none;
 }
-html.light-mode .pcard:hover  { background: #EFEDF8 }
-html.light-mode .vcard:hover  { background: #EFEDF8 }
 
-html.light-mode .chip {
-  background: rgba(100,80,180,0.05);
-  border-color: rgba(100,80,180,0.18);
+html.light-mode .hero-label {
+  color: var(--t3);
+  letter-spacing: .18em;
 }
-html.light-mode .chip:hover {
-  background: rgba(100,80,180,0.12);
-  border-color: rgba(100,80,180,0.38);
-  color: #3D3460;
+
+html.light-mode .hero-label::before {
+  background: linear-gradient(90deg, transparent, var(--accent-b));
+  opacity: 0.5;
 }
-html.light-mode .cert-item {
-  background: rgba(100,80,180,0.04);
-  border-color: rgba(100,80,180,0.12);
+
+/* ────────────────────────────────────────────────
+   5. BUTTONS — ridisegnati per il tema chiaro
+   ──────────────────────────────────────────────── */
+html.light-mode .btn-primary {
+  background: #0F172A;
+  color: #F8F8FB;
+  box-shadow: 0 1px 3px rgba(15,23,42,.15), 0 0 0 1px rgba(15,23,42,.08);
 }
-html.light-mode .cert-item:hover {
-  background: rgba(100,80,180,0.09);
-  border-color: rgba(100,80,180,0.28);
+html.light-mode .btn-primary:hover {
+  background: #1E293B;
+  opacity: 1;
+  box-shadow: 0 4px 12px rgba(15,23,42,.18), 0 0 0 1px rgba(15,23,42,.10);
 }
-html.light-mode .status-row {
-  background: rgba(100,80,180,0.06);
-  border-color: rgba(100,80,180,0.18);
+
+html.light-mode .btn-ghost {
+  border-color: rgba(15,23,42,.15);
+  color: var(--t2);
+  background: rgba(255,255,255,.7);
 }
-html.light-mode .soc:hover {
-  background: rgba(100,80,180,0.10);
-  border-color: rgba(100,80,180,0.35);
-}
-html.light-mode #nav    { background: rgba(240,238,248,.82) }
-html.light-mode #mmenu  { background: rgba(240,238,248,.97) }
-html.light-mode .btn-primary { background: #1A1530; color: #F0EEF8 }
-html.light-mode .btn-ghost   { border-color: rgba(100,80,180,0.28); color: #3D3460 }
 html.light-mode .btn-ghost:hover {
-  border-color: rgba(100,80,180,0.50);
-  background: rgba(100,80,180,0.08);
-  color: #1A1530;
+  border-color: rgba(79,70,229,.35);
+  background: rgba(79,70,229,.04);
+  color: var(--t1);
+  box-shadow: 0 2px 8px rgba(79,70,229,.08);
 }
-html.light-mode .tl-item::before { background: #E8E5F4 }
-html.light-mode footer           { border-top-color: rgba(100,80,180,0.15) }
 
-/* CONTACT FORM */
+/* ────────────────────────────────────────────────
+   6. SECTION HEADERS
+   ──────────────────────────────────────────────── */
+html.light-mode .sec-label {
+  color: var(--accent-b);
+  opacity: 0.75;
+}
+
+html.light-mode .sec-title {
+  color: var(--t1);
+}
+
+/* ────────────────────────────────────────────────
+   7. DIVIDER
+   ──────────────────────────────────────────────── */
+html.light-mode .divider {
+  background: linear-gradient(90deg, transparent, rgba(15,23,42,.07) 30%, rgba(15,23,42,.07) 70%, transparent);
+}
+
+/* ────────────────────────────────────────────────
+   8. PROJECT CARDS — floating, depth, premium
+   ──────────────────────────────────────────────── */
+html.light-mode .projects-grid {
+  background: transparent;
+  border: none;
+  gap: 12px;
+}
+
+html.light-mode .pcard {
+  background: var(--card);
+  border: 1px solid rgba(15,23,42,.07);
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  transition:
+    box-shadow .3s var(--ease),
+    transform .3s var(--ease),
+    border-color .3s var(--ease);
+}
+
+html.light-mode .pcard:hover {
+  background: var(--card);
+  border-color: rgba(79,70,229,.15);
+  box-shadow: var(--card-shadow-hover);
+  transform: translateY(-2px);
+}
+
+html.light-mode .pcard::before {
+  background: radial-gradient(circle at 50% 0%, rgba(79,70,229,.05) 0%, transparent 70%);
+}
+
+html.light-mode .pcard:hover::before { opacity: 1 }
+
+html.light-mode .pcard-ghost {
+  background: var(--surf);
+  border: 1px dashed rgba(15,23,42,.12);
+  border-radius: 12px;
+  box-shadow: none;
+}
+html.light-mode .pcard-ghost:hover {
+  background: rgba(79,70,229,.04);
+  border-color: rgba(79,70,229,.25);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ────────────────────────────────────────────────
+   9. VOLUNTEER CARDS — medesimo sistema floating
+   ──────────────────────────────────────────────── */
+html.light-mode .vol-grid {
+  background: transparent;
+  border: none;
+  gap: 12px;
+}
+
+html.light-mode .vcard {
+  background: var(--card);
+  border: 1px solid rgba(15,23,42,.07);
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  transition:
+    box-shadow .3s var(--ease),
+    transform .3s var(--ease),
+    border-color .3s var(--ease);
+}
+
+html.light-mode .vcard:hover {
+  background: var(--card);
+  border-color: rgba(79,70,229,.15);
+  box-shadow: var(--card-shadow-hover);
+  transform: translateY(-2px);
+}
+
+/* ────────────────────────────────────────────────
+   10. ABOUT — chips, status
+   ──────────────────────────────────────────────── */
+html.light-mode .chip {
+  background: var(--surf);
+  border-color: rgba(15,23,42,.09);
+  color: var(--t2);
+}
+
+html.light-mode .chip:hover {
+  background: rgba(79,70,229,.06);
+  border-color: rgba(79,70,229,.22);
+  color: var(--t1);
+}
+
+html.light-mode .status-row {
+  background: rgba(255,255,255,.8);
+  border-color: rgba(15,23,42,.09);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ────────────────────────────────────────────────
+   11. EDUCATION — timeline e cert cards
+   ──────────────────────────────────────────────── */
+html.light-mode .timeline::before {
+  background: linear-gradient(180deg, rgba(79,70,229,.4) 0%, rgba(79,70,229,.04) 100%);
+}
+
+html.light-mode .tl-item::before {
+  background: var(--card);
+  border-color: rgba(79,70,229,.4);
+  box-shadow: 0 0 8px rgba(79,70,229,.15), 0 0 0 3px rgba(79,70,229,.06);
+}
+
+html.light-mode .cert-item {
+  background: var(--card);
+  border-color: rgba(15,23,42,.07);
+  box-shadow: var(--card-shadow);
+}
+
+html.light-mode .cert-item:hover {
+  background: var(--card);
+  border-color: rgba(79,70,229,.18);
+  box-shadow: var(--card-shadow-hover);
+  transform: translateY(-1px);
+}
+
+/* ────────────────────────────────────────────────
+   12. CONTACT — form e social
+   ──────────────────────────────────────────────── */
+html.light-mode .contact-form-wrapper.pcard {
+  background: var(--card);
+  border: 1px solid rgba(15,23,42,.07);
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+}
+
 html.light-mode .contact-form input,
 html.light-mode .contact-form textarea {
-  background: rgba(100,80,180,0.04);
-  border-color: rgba(100,80,180,0.15);
+  background: var(--surf);
+  border-color: rgba(15,23,42,.09);
+  color: var(--t1);
 }
+
+html.light-mode .contact-form input::placeholder,
+html.light-mode .contact-form textarea::placeholder {
+  color: var(--t3);
+}
+
 html.light-mode .contact-form input:focus,
 html.light-mode .contact-form textarea:focus {
-  background: rgba(100,80,180,0.08);
+  background: #fff;
   border-color: var(--accent-b);
-  box-shadow: 0 0 0 3px rgba(79,70,229,.15);
+  box-shadow: 0 0 0 3px rgba(79,70,229,.10);
 }
+
 html.light-mode .cf-turnstile-mock {
-  background: rgba(100,80,180,0.03);
-  border-color: rgba(100,80,180,0.20);
+  background: var(--surf);
+  border-color: rgba(15,23,42,.10);
+}
+
+html.light-mode .contact-mail {
+  color: var(--t1);
+}
+html.light-mode .contact-mail:hover {
+  color: var(--accent-b);
+}
+
+html.light-mode .contact-info .soc {
+  background: var(--surf);
+  border-color: rgba(15,23,42,.09);
+  color: var(--t2);
+  box-shadow: var(--shadow-sm);
+}
+html.light-mode .contact-info .soc:hover {
+  background: var(--accent-b);
+  border-color: var(--accent-b);
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(79,70,229,.22);
+  transform: translateY(-2px);
+}
+
+/* ────────────────────────────────────────────────
+   13. FOOTER
+   ──────────────────────────────────────────────── */
+html.light-mode footer {
+  border-top-color: rgba(15,23,42,.07);
+}
+
+html.light-mode footer p {
+  color: var(--t3);
+}
+
+/* ────────────────────────────────────────────────
+   14. REVEAL — transizioni più morbide in light
+   ──────────────────────────────────────────────── */
+html.light-mode .reveal {
+  transition: opacity 1s var(--ease), transform 1s var(--ease);
+}
+
+/* ────────────────────────────────────────────────
+   15. SCROLL PROGRESS BAR
+   ──────────────────────────────────────────────── */
+html.light-mode #prog {
+  box-shadow: 0 0 5px rgba(79,70,229,.3);
+}
+
+/* ────────────────────────────────────────────────
+   16. WIREFRAME 3D HERO — adattato al chiaro
+   ──────────────────────────────────────────────── */
+html.light-mode #hero-3d {
+  opacity: 0.12;
+}
+
+/* ────────────────────────────────────────────────
+   17. COPY TOAST
+   ──────────────────────────────────────────────── */
+html.light-mode .copy-toast {
+  background: var(--surf);
+  color: var(--t2);
+  border: 1px solid rgba(15,23,42,.09);
+}
+
+html.light-mode .copy-toast.success {
+  background: #16a34a;
+  color: #fff;
+  border-color: transparent;
+}
+
+/* ────────────────────────────────────────────────
+   18. ABOUT BIO — link e strong
+   ──────────────────────────────────────────────── */
+html.light-mode .about-bio strong {
+  color: var(--t1);
+  font-weight: 600;
+}
+
+/* ────────────────────────────────────────────────
+   19. SKILL GROUP LABEL
+   ──────────────────────────────────────────────── */
+html.light-mode .skill-group-label {
+  color: var(--t3);
+}
+
+/* ────────────────────────────────────────────────
+   20. MOBILE MENU
+   ──────────────────────────────────────────────── */
+html.light-mode #mmenu .nav-a {
+  color: var(--t2);
+}
+html.light-mode #mmenu .nav-a:hover {
+  color: var(--t1);
 }
