@@ -1,13 +1,44 @@
 /* ════════════════════════════════════════════════
+   HERO
+════════════════════════════════════════════════ */
+#hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 8rem 1.5rem 5rem;
+  position: relative; z-index: 2;
+  max-width: 1080px; margin: 0 auto;
+}
+
+.hero-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .68rem; color: var(--t3);
+  letter-spacing: .15em; text-transform: uppercase; margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: .6rem;
+}
+.hero-label::before {
+  content: ''; display: inline-block; width: 20px; height: 1px; background: var(--t3);
+}
+
+.hero-name {
+  font-size: clamp(3.5rem, 10vw, 8rem);
+  font-weight: 700; letter-spacing: -.04em; line-height: .95;
+  color: var(--t1); margin-bottom: 1.5rem;
+}
+.hero-name span {
+  background: linear-gradient(135deg, #F5F7FA 0%, rgba(245,247,250,.65) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+/* ════════════════════════════════════════════════
    HERO CTAS (Call To Actions)
 ════════════════════════════════════════════════ */
 .hero-ctas { 
   display: inline-flex; 
   flex-direction: column; 
-  align-items: center; /* Centra il bottone del CV rispetto ai due sopra */
+  align-items: center; 
   gap: 1.25rem; 
   margin-bottom: 3.5rem;
-  align-self: flex-start; /* Assicura che l'intero blocco resti allineato a sinistra con il nome */
+  align-self: flex-start;
 }
 
 .hero-cta-row { 
@@ -15,16 +46,6 @@
   flex-wrap: wrap; 
   gap: .75rem; 
   justify-content: center; 
-}
-
-/* Stile leggermente ridotto per non rubare la scena ai bottoni principali */
-.btn-cv {
-  font-size: .75rem;
-  padding: .5rem 1.1rem;
-  border-style: dashed;
-}
-.btn-cv:hover {
-  border-style: solid;
 }
 
 /* ════════════════════════════════════════════════
@@ -49,6 +70,15 @@
 .btn-ghost:hover {
   color: var(--t1); border-color: var(--border-hov);
   background: rgba(124,58,237,.06); transform: translateY(-1px);
+}
+
+.btn-cv {
+  font-size: .75rem;
+  padding: .5rem 1.1rem;
+  border-style: dashed;
+}
+.btn-cv:hover {
+  border-style: solid;
 }
 
 /* ════════════════════════════════════════════════
