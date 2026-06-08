@@ -11,15 +11,18 @@
   renderer.setSize(container.clientWidth, container.clientHeight);
   container.appendChild(renderer.domElement);
 
-  // Ho ridotto il raggio da 2 a 1.6 per farlo respirare di più
   const shape = new THREE.Mesh(
     new THREE.IcosahedronGeometry(1.6, 1),
     new THREE.MeshBasicMaterial({ color: 0x8B93A3, wireframe: true, transparent: true, opacity: 0.35 })
   );
   scene.add(shape);
-  
-  // Ho allontanato la camera (da 5 a 6.5) per far entrare tutta la figura
-  camera.position.z = 6.5;
+
+  // Allontana la telecamera dinamicamente se lo schermo è molto "schiacciato" (ultrawide)
+  function updateCameraZ() {
+    const aspect = container.clientWidth / container.clientHeight;
+    camera.position.z = aspect > 2 ? 7.5 : 6.5;
+  }
+  updateCameraZ();
 
   let meshMouseX = 0, meshMouseY = 0;
   let meshTargetX = 0, meshTargetY = 0;
@@ -46,5 +49,6 @@
     camera.aspect = container.clientWidth / container.clientHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(container.clientWidth, container.clientHeight);
+    updateCameraZ(); // Ricalcola la distanza al resize
   });
 })();
