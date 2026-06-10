@@ -123,7 +123,7 @@
     }
   }
 
-   function drawArcs() {
+  function drawArcs() {
     // Il nostro hub è il primo elemento dell'array (Castelmassa)
     const home = project(PLACES[0].lon, PLACES[0].lat);
     
@@ -141,29 +141,13 @@
       ctx.moveTo(home[0], home[1]);
       ctx.quadraticCurveTo(mx, my, b[0], b[1]);
       
-      // Usa un colore tenue per le linee (le facciamo un po' trasparenti per non affollare la mappa)
+      // Usa un colore tenue per le linee
       ctx.strokeStyle = 'rgba(79,70,229,.12)';
       ctx.lineWidth = 0.8;
       ctx.setLineDash([3, 6]);
       ctx.stroke();
       ctx.restore();
     });
-  }
-
-    // Connessione tra le tue basi (Castelmassa -> Melara -> Trento)
-    const castelmassa = project(11.3149, 45.0223);
-    const trento = project(11.1212, 46.0664);
-
-    ctx.save();
-    ctx.beginPath();
-    ctx.moveTo(castelmassa[0], castelmassa[1]); 
-    ctx.lineTo(melara[0], melara[1]); 
-    ctx.lineTo(trento[0], trento[1]);
-    ctx.strokeStyle = 'rgba(124,58,237,.25)';
-    ctx.lineWidth = 0.8;
-    ctx.setLineDash([2,4]);
-    ctx.stroke();
-    ctx.restore();
   }
 
   function drawPin(p, idx) {
