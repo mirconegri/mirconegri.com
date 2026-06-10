@@ -25,10 +25,19 @@
 
   /* ── Pins ── */
   const PLACES = [
-    { lon: 10.2118, lat: 45.5416, label: 'Brescia',  sublabel: 'Home · Scout',   color: '#7c3aed', glow: 'rgba(124,58,237,.6)' },
-    { lon: 11.1212, lat: 46.0664, label: 'Trento',   sublabel: 'CS @ UniTrento', color: '#7c3aed', glow: 'rgba(124,58,237,.6)' },
-    { lon: -6.2603, lat: 53.3498, label: 'Dublino',  sublabel: '...',             color: '#06b6d4', glow: 'rgba(6,182,212,.55)' },
-    { lon: 26.1025, lat: 44.4268, label: 'Bucarest', sublabel: '...',             color: '#06b6d4', glow: 'rgba(6,182,212,.55)' },
+    // Basi / Studio / Casa (Viola)
+    { lon: 11.3149, lat: 45.0223, label: 'Castelmassa', sublabel: 'Dove sono cresciuto',    color: '#7c3aed', glow: 'rgba(124,58,237,.6)' },
+    { lon: 11.1998, lat: 45.0642, label: 'Melara',      sublabel: 'Scout',                  color: '#7c3aed', glow: 'rgba(124,58,237,.6)' },
+    { lon: 11.1212, lat: 46.0664, label: 'Trento',      sublabel: 'CS @ UniTrento',         color: '#7c3aed', glow: 'rgba(124,58,237,.6)' },
+
+    // Esperienze / Viaggi (Ciano)
+    { lon: 2.1686,  lat: 41.3874, label: 'Barcellona',  sublabel: 'Gita di quinta 2024',    color: '#06b6d4', glow: 'rgba(6,182,212,.55)' },
+    { lon: -6.2603, lat: 53.3498, label: 'Dublino',     sublabel: 'EF Experience 2024',     color: '#06b6d4', glow: 'rgba(6,182,212,.55)' },
+    { lon: 18.4131, lat: 43.8563, label: 'Sarajevo',    sublabel: 'Volontariato AGESCI 24', color: '#06b6d4', glow: 'rgba(6,182,212,.55)' },
+    { lon: 26.1025, lat: 44.4268, label: 'Bucarest',    sublabel: 'Viaggio 2025',           color: '#06b6d4', glow: 'rgba(6,182,212,.55)' },
+    { lon: 19.0402, lat: 47.4979, label: 'Budapest',    sublabel: 'Viaggio 2025',           color: '#06b6d4', glow: 'rgba(6,182,212,.55)' },
+    { lon: 4.9041,  lat: 52.3676, label: 'Amsterdam',   sublabel: 'Viaggio 2026',           color: '#06b6d4', glow: 'rgba(6,182,212,.55)' },
+    { lon: 10.3951, lat: 63.4305, label: 'Trondheim',   sublabel: 'Erasmus 2027',           color: '#06b6d4', glow: 'rgba(6,182,212,.55)' }
   ];
 
   let hovered = -1;
@@ -104,13 +113,26 @@
   }
 
   function drawArcs() {
-    const brescia = project(10.2118, 45.5416);
-    [[-6.2603, 53.3498], [26.1025, 44.4268]].forEach(([lon, lat]) => {
+    const melara = project(11.1998, 45.0642);
+    
+    // Linee tratteggiate verso le esperienze
+    const trips = [
+      [2.1686, 41.3874],   // Barcellona
+      [-6.2603, 53.3498],  // Dublino
+      [18.4131, 43.8563],  // Sarajevo
+      [26.1025, 44.4268],  // Bucarest
+      [19.0402, 47.4979],  // Budapest
+      [4.9041, 52.3676],   // Amsterdam
+      [10.3951, 63.4305]   // Trondheim
+    ];
+
+    trips.forEach(([lon, lat]) => {
       const b = project(lon, lat);
       ctx.save();
       ctx.beginPath();
-      const mx = (brescia[0]+b[0])/2, my = (brescia[1]+b[1])/2 - 28;
-      ctx.moveTo(brescia[0], brescia[1]);
+      // Curvatura della linea
+      const mx = (melara[0]+b[0])/2, my = (melara[1]+b[1])/2 - 28;
+      ctx.moveTo(melara[0], melara[1]);
       ctx.quadraticCurveTo(mx, my, b[0], b[1]);
       ctx.strokeStyle = 'rgba(79,70,229,.15)';
       ctx.lineWidth = 0.8;
@@ -118,10 +140,16 @@
       ctx.stroke();
       ctx.restore();
     });
+
+    // Connessione tra le tue basi (Castelmassa -> Melara -> Trento)
+    const castelmassa = project(11.3149, 45.0223);
     const trento = project(11.1212, 46.0664);
+
     ctx.save();
     ctx.beginPath();
-    ctx.moveTo(brescia[0], brescia[1]); ctx.lineTo(trento[0], trento[1]);
+    ctx.moveTo(castelmassa[0], castelmassa[1]); 
+    ctx.lineTo(melara[0], melara[1]); 
+    ctx.lineTo(trento[0], trento[1]);
     ctx.strokeStyle = 'rgba(124,58,237,.25)';
     ctx.lineWidth = 0.8;
     ctx.setLineDash([2,4]);
