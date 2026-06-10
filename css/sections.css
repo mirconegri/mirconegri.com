@@ -134,51 +134,28 @@
 /* ════════════════════════════════════════════════
    EXPERIENCE MAP
 ════════════════════════════════════════════════ */
-#exp-map {
+.exp-map-wrap {
+  position: relative;
   width: 100%; height: 420px;
   border-radius: var(--r);
   border: 1px solid var(--border);
   overflow: hidden;
-  position: relative; z-index: 2;
+  background: #050507;
 }
+#exp-map-canvas { width: 100%; height: 100%; display: block; }
 
-/* Override Leaflet per il tema */
-.leaflet-container {
-  background: var(--surf);
-  font-family: 'Inter', sans-serif;
+.map-legend {
+  position: absolute; bottom: 1rem; right: 1rem;
+  display: flex; flex-direction: column; gap: .4rem;
 }
-.leaflet-tile-pane { filter: grayscale(40%) brightness(0.9) }
-html.light-mode .leaflet-tile-pane { filter: grayscale(20%) brightness(1.0) }
-
-/* Popup personalizzato */
-.leaflet-popup-content-wrapper {
-  background: var(--card) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 10px !important;
-  box-shadow: 0 8px 32px rgba(0,0,0,.25) !important;
-  padding: 0 !important;
-}
-.leaflet-popup-content {
-  margin: 0 !important;
-  padding: 1rem 1.25rem !important;
-}
-.leaflet-popup-tip-container { display: none }
-.leaflet-popup-close-button { color: var(--t3) !important; font-size: 1rem !important; top: 8px !important; right: 10px !important; }
-html.light-mode .leaflet-popup-content-wrapper {
-  box-shadow: 0 8px 32px rgba(15,23,42,.12) !important;
-}
-
-.map-popup-label {
+.map-legend-item {
+  display: flex; align-items: center; gap: .5rem;
   font-family: 'JetBrains Mono', monospace;
-  font-size: .6rem; letter-spacing: .12em; text-transform: uppercase;
-  color: var(--accent-b); margin-bottom: .25rem;
+  font-size: .6rem; color: var(--t3); letter-spacing: .06em;
 }
-.map-popup-title {
-  font-size: .9rem; font-weight: 600; color: var(--t1);
-  letter-spacing: -.01em; margin-bottom: .3rem;
-}
-.map-popup-desc {
-  font-size: .78rem; color: var(--t2); line-height: 1.6;
+.map-legend-dot {
+  width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+  box-shadow: 0 0 6px currentColor;
 }
 
 /* ════════════════════════════════════════════════
