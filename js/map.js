@@ -34,8 +34,7 @@
     { lon: 10.3951, lat: 63.4305, label: 'Trondheim',    sublabel: 'Erasmus 2027',               color: '#8b5cf6', glow: 'rgba(139,92,246,.6)' },
 
     // --- SCOUT (Green) ---
-    { lon: 10.2118, lat: 45.5416, label: 'Brescia',      sublabel: 'Scout group',                color: '#10b981', glow: 'rgba(16,185,129,.6)' },
-    { lon: -6.3298, lat: 53.0083, label: 'Wicklow Way',  sublabel: 'Scout hiking route 2023',    color: '#10b981', glow: 'rgba(16,185,129,.6)' },
+    { lon: -6.3298, lat: 52.8500, label: 'Wicklow Way',  sublabel: 'Scout hiking route 2023',    color: '#10b981', glow: 'rgba(16,185,129,.6)' },
     { lon: 18.4131, lat: 43.8563, label: 'Sarajevo',     sublabel: 'Scout volunteer route 2024', color: '#10b981', glow: 'rgba(16,185,129,.6)' },
     { lon: 8.1500,  lat: 48.3000, label: 'Black Forest', sublabel: 'Scout hiking route 2025',    color: '#10b981', glow: 'rgba(16,185,129,.6)' },
     { lon: 13.6066, lat: 43.4393, label: 'Loreto',       sublabel: 'Scout volunteer route 2026', color: '#10b981', glow: 'rgba(16,185,129,.6)' },
