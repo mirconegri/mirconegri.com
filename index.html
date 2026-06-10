@@ -351,10 +351,22 @@
     <p class="sec-label reveal" data-it="06 — Luoghi" data-en="06 — Places">06 — Luoghi</p>
     <h2 class="sec-title reveal" style="transition-delay:.05s"
         data-it="Dove sono stato" data-en="Where I've been">Dove sono stato</h2>
-    <div id="exp-map" class="reveal" style="transition-delay:.1s"></div>
+    <div class="exp-map-wrap reveal" style="transition-delay:.1s">
+      <canvas id="exp-map-canvas"></canvas>
+      <div class="map-legend">
+        <div class="map-legend-item">
+          <span class="map-legend-dot" style="background:#7c3aed"></span>
+          <span data-it="casa / studio" data-en="home / studies">casa / studio</span>
+        </div>
+        <div class="map-legend-item">
+          <span class="map-legend-dot" style="background:#06b6d4"></span>
+          <span data-it="esperienze" data-en="experiences">esperienze</span>
+        </div>
+      </div>
+    </div>
   </div>
-</section>
-
+</section>  
+  
 <div class="divider"></div>
 
 <!-- CHANGELOG -->
