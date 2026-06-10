@@ -123,7 +123,7 @@
     }
   }
 
- function drawArcs() {
+   function drawArcs() {
     // Il nostro hub è il primo elemento dell'array (Castelmassa)
     const home = project(PLACES[0].lon, PLACES[0].lat);
     
@@ -149,21 +149,6 @@
       ctx.restore();
     });
   }
-
-    trips.forEach(([lon, lat]) => {
-      const b = project(lon, lat);
-      ctx.save();
-      ctx.beginPath();
-      // Curvatura della linea
-      const mx = (melara[0]+b[0])/2, my = (melara[1]+b[1])/2 - 28;
-      ctx.moveTo(melara[0], melara[1]);
-      ctx.quadraticCurveTo(mx, my, b[0], b[1]);
-      ctx.strokeStyle = 'rgba(79,70,229,.15)';
-      ctx.lineWidth = 0.8;
-      ctx.setLineDash([3,6]);
-      ctx.stroke();
-      ctx.restore();
-    });
 
     // Connessione tra le tue basi (Castelmassa -> Melara -> Trento)
     const castelmassa = project(11.3149, 45.0223);
