@@ -372,3 +372,11 @@ html.light-mode #mmenu .nav-a {
 html.light-mode #mmenu .nav-a:hover {
   color: var(--t1);
 }
+
+/* ────────────────────────────────────────────────
+   21. EXPERIENCE MAP
+   ──────────────────────────────────────────────── */
+html.light-mode #exp-map {
+  border-color: rgba(15,23,42,.08);
+  box-shadow: var(--card-shadow);
+}
