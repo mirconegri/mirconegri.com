@@ -25,40 +25,41 @@
 
   /* ── Pins ── */
   const PLACES = [
-    // --- HOME (Red) ---
-    { lon: 11.3149, lat: 45.0223, label: 'Castelmassa',  sublabel: 'Hometown',                   color: '#f43f5e', glow: 'rgba(244,63,94,.6)' },
-
-    // --- STUDIES (Purple) ---
-    { lon: 11.1212, lat: 46.0664, label: 'Trento',       sublabel: 'CS @ UniTrento',             color: '#8b5cf6', glow: 'rgba(139,92,246,.6)' },
-    { lon: -6.2603, lat: 53.7200, label: 'Dublin',       sublabel: 'EF Experience 2024',         color: '#8b5cf6', glow: 'rgba(139,92,246,.6)' },
-    { lon: 10.3951, lat: 63.4305, label: 'Trondheim',    sublabel: 'Erasmus 2027',               color: '#8b5cf6', glow: 'rgba(139,92,246,.6)' },
-
-    // --- SCOUT (Green) ---
-    { lon: -6.3298, lat: 52.8500, label: 'Wicklow Way',  sublabel: 'Scout hiking route 2023',    color: '#10b981', glow: 'rgba(16,185,129,.6)' },
-    { lon: 18.4131, lat: 43.8563, label: 'Sarajevo',     sublabel: 'Scout volunteer route 2024', color: '#10b981', glow: 'rgba(16,185,129,.6)' },
-    { lon: 18.6735, lat: 44.5329, label: 'Tuzla',        sublabel: 'Scout volunteer route 2024', color: '#10b981', glow: 'rgba(16,185,129,.6)' },
-    { lon: 8.1500,  lat: 48.3000, label: 'Black Forest', sublabel: 'Scout hiking route 2025',    color: '#10b981', glow: 'rgba(16,185,129,.6)' },
-    { lon: 7.8490,  lat: 47.9959, label: 'Freiburg',     sublabel: 'Scout hiking route 2025',    color: '#10b981', glow: 'rgba(16,185,129,.6)' },
-    { lon: 13.6066, lat: 43.4393, label: 'Loreto',       sublabel: 'Scout volunteer route 2026', color: '#10b981', glow: 'rgba(16,185,129,.6)' },
-    { lon: 9.7280,  lat: 44.1270, label: 'Cinque Terre', sublabel: 'Scout hiking route 2022',    color: '#10b981', glow: 'rgba(16,185,129,.6)' },
-    { lon: 11.0400, lat: 45.8904, label: 'Rovereto',     sublabel: 'Scout hiking route 2023',    color: '#10b981', glow: 'rgba(16,185,129,.6)' },
-    { lon: 9.8714,  lat: 46.1708, label: 'Sondrio',      sublabel: 'Scout hiking route 2025',    color: '#10b981', glow: 'rgba(16,185,129,.6)' },
-
-    // --- TRIPS (Cyan) ---
+    // 1. SCHOOL TRIPS (Sullo sfondo / Livello più basso)
     { lon: 13.3615, lat: 38.1157, label: 'Palermo',      sublabel: 'School trip 2023',           color: '#06b6d4', glow: 'rgba(6,182,212,.55)' },
     { lon: 7.6869,  lat: 45.0703, label: 'Torino',       sublabel: 'School trip 2024',           color: '#06b6d4', glow: 'rgba(6,182,212,.55)' },
     { lon: 2.1686,  lat: 41.3874, label: 'Barcelona',    sublabel: 'School trip 2024',           color: '#06b6d4', glow: 'rgba(6,182,212,.55)' },
+    { lon: 11.2558, lat: 43.7696, label: 'Firenze',      sublabel: 'School trip 2024',           color: '#06b6d4', glow: 'rgba(6,182,212,.55)' },
+
+    // 2. TRIPS
     { lon: -5.9301, lat: 54.5973, label: 'Belfast',      sublabel: 'Trip 2024',                  color: '#06b6d4', glow: 'rgba(6,182,212,.55)' },
+    { lon: 9.1900,  lat: 45.4642, label: 'Milano',       sublabel: 'Trip 2024',                  color: '#06b6d4', glow: 'rgba(6,182,212,.55)' },
     { lon: 12.4964, lat: 41.9028, label: 'Rome',         sublabel: 'Trip 2025',                  color: '#06b6d4', glow: 'rgba(6,182,212,.55)' },
     { lon: 26.1025, lat: 44.4268, label: 'Bucharest',    sublabel: 'Trip 2025',                  color: '#06b6d4', glow: 'rgba(6,182,212,.55)' },
     { lon: 25.5910, lat: 45.6580, label: 'Brasov',       sublabel: 'Trip 2025',                  color: '#06b6d4', glow: 'rgba(6,182,212,.55)' },
     { lon: 19.0402, lat: 47.4979, label: 'Budapest',     sublabel: 'Trip 2025',                  color: '#06b6d4', glow: 'rgba(6,182,212,.55)' },
-    { lon: 4.9041,  lat: 52.3676, label: 'Amsterdam',    sublabel: 'Trip 2026',                  color: '#06b6d4', glow: 'rgba(6,182,212,.55)' },
-    { lon: 9.1900,  lat: 45.4642, label: 'Milano',       sublabel: 'Trip 2024',                  color: '#06b6d4', glow: 'rgba(6,182,212,.55)' },
-    { lon: 11.2558, lat: 43.7696, label: 'Firenze',      sublabel: 'School trip 2024',           color: '#06b6d4', glow: 'rgba(6,182,212,.55)' },
-    { lon: 11.3548, lat: 46.4983, label: 'Bolzano',      sublabel: 'Trip 2026',                  color: '#06b6d4', glow: 'rgba(6,182,212,.55)' },
     { lon: 12.3155, lat: 45.4408, label: 'Venezia',      sublabel: 'Trip 2025',                  color: '#06b6d4', glow: 'rgba(6,182,212,.55)' },
-    { lon: 11.3426, lat: 44.4949, label: 'Bologna',      sublabel: 'Trip 2025',                  color: '#06b6d4', glow: 'rgba(6,182,212,.55)' }
+    { lon: 11.3426, lat: 44.4949, label: 'Bologna',      sublabel: 'Trip 2025',                  color: '#06b6d4', glow: 'rgba(6,182,212,.55)' },
+    { lon: 4.9041,  lat: 52.3676, label: 'Amsterdam',    sublabel: 'Trip 2026',                  color: '#06b6d4', glow: 'rgba(6,182,212,.55)' },
+    { lon: 11.3548, lat: 46.4983, label: 'Bolzano',      sublabel: 'Trip 2026',                  color: '#06b6d4', glow: 'rgba(6,182,212,.55)' },
+
+    // 3. SCOUT
+    { lon: 9.7280,  lat: 44.1270, label: 'Cinque Terre', sublabel: 'Scout hiking route 2022',    color: '#10b981', glow: 'rgba(16,185,129,.6)' },
+    { lon: -6.3298, lat: 52.8500, label: 'Wicklow Way',  sublabel: 'Scout hiking route 2023',    color: '#10b981', glow: 'rgba(16,185,129,.6)' },
+    { lon: 11.0400, lat: 45.8904, label: 'Rovereto',     sublabel: 'Scout hiking route 2023',    color: '#10b981', glow: 'rgba(16,185,129,.6)' },
+    { lon: 18.4131, lat: 43.8563, label: 'Sarajevo',     sublabel: 'Scout volunteer route 2024', color: '#10b981', glow: 'rgba(16,185,129,.6)' },
+    { lon: 18.6735, lat: 44.5329, label: 'Tuzla',        sublabel: 'Scout volunteer route 2024', color: '#10b981', glow: 'rgba(16,185,129,.6)' },
+    { lon: 8.1500,  lat: 48.3000, label: 'Black Forest', sublabel: 'Scout hiking route 2025',    color: '#10b981', glow: 'rgba(16,185,129,.6)' },
+    { lon: 9.8714,  lat: 46.1708, label: 'Sondrio',      sublabel: 'Scout hiking route 2025',    color: '#10b981', glow: 'rgba(16,185,129,.6)' },
+    { lon: 13.6066, lat: 43.4393, label: 'Loreto',       sublabel: 'Scout volunteer route 2026', color: '#10b981', glow: 'rgba(16,185,129,.6)' },
+
+    // 4. HOMETOWN
+    { lon: 11.3149, lat: 45.0223, label: 'Castelmassa',  sublabel: 'Hometown',                   color: '#f43f5e', glow: 'rgba(244,63,94,.6)' },
+
+    // 5. STUDIES (In primissimo piano / Disegnati per ultimi)
+    { lon: 11.1212, lat: 46.0664, label: 'Trento',       sublabel: 'CS @ UniTrento',             color: '#8b5cf6', glow: 'rgba(139,92,246,.6)' },
+    { lon: -6.2603, lat: 53.7200, label: 'Dublin',       sublabel: 'EF Experience 2024',         color: '#8b5cf6', glow: 'rgba(139,92,246,.6)' },
+    { lon: 10.3951, lat: 63.4305, label: 'Trondheim',    sublabel: 'Erasmus 2027',               color: '#8b5cf6', glow: 'rgba(139,92,246,.6)' }
   ];
    
   let hovered = -1;
@@ -134,12 +135,13 @@
   }
 
   function drawArcs() {
-    // Il nostro hub è il primo elemento dell'array (Castelmassa)
-    const home = project(PLACES[0].lon, PLACES[0].lat);
+    // Cerchiamo Castelmassa dinamicamente per non dipendere dall'ordine dell'array
+    const homeObj = PLACES.find(p => p.label === 'Castelmassa');
+    const home = project(homeObj.lon, homeObj.lat);
     
     // Disegna archi verso tutte le altre mete
-    PLACES.forEach((p, i) => {
-      if (i === 0) return; // Salta Castelmassa stessa
+    PLACES.forEach((p) => {
+      if (p.label === 'Castelmassa') return; // Salta Castelmassa stessa
       
       const b = project(p.lon, p.lat);
       ctx.save();
