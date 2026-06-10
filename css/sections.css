@@ -182,80 +182,58 @@ html.light-mode .leaflet-popup-content-wrapper {
 }
 
 /* ════════════════════════════════════════════════
-   CHANGELOG — stile Linear
+   CHANGELOG
 ════════════════════════════════════════════════ */
-.changelog-list {
-  display: flex; flex-direction: column;
-  max-width: 560px;
-}
+.changelog-list { display: flex; flex-direction: column; max-width: 520px; }
 
 .cl-item {
   display: grid;
-  grid-template-columns: 3.5rem 1px 1fr;
-  gap: 0 1.25rem;
+  grid-template-columns: 3.5rem 20px 1fr;
+  gap: 0 1.1rem;
   align-items: flex-start;
   position: relative;
 }
-
-/* Linea verticale continua tra i dot */
 .cl-item:not(:last-child)::after {
   content: '';
   position: absolute;
-  left: calc(3.5rem + 1.25rem - 0.5px);  /* centro del dot */
-  top: 20px;
-  bottom: -4px;
-  width: 1px;
-  background: linear-gradient(180deg, var(--border-hov), var(--border));
+  left: calc(3.5rem + 1.1rem + 9px);
+  top: 20px; bottom: -4px; width: 1px;
+  background: linear-gradient(180deg, rgba(79,70,229,.3), rgba(79,70,229,.05));
 }
-
 .cl-version {
   font-family: 'JetBrains Mono', monospace;
-  font-size: .7rem; font-weight: 500;
-  color: var(--accent-b);
-  letter-spacing: .04em;
-  padding-top: .1rem;
-  text-align: right;
+  font-size: .68rem; font-weight: 500;
+  color: var(--accent-b); letter-spacing: .04em;
+  padding-top: .12rem; text-align: right; white-space: nowrap;
 }
-
-.cl-dot {
-  width: 1px;
-  background: transparent;
-  position: relative;
-}
-.cl-dot::before {
+.cl-dot-col { position: relative; display: flex; justify-content: center; }
+.cl-dot-col::before {
   content: '';
-  position: absolute;
-  top: 6px; left: 50%;
-  transform: translateX(-50%);
-  width: 7px; height: 7px; border-radius: 50%;
+  position: absolute; top: 6px;
+  width: 8px; height: 8px; border-radius: 50%;
   background: var(--surf);
   border: 1.5px solid var(--accent-b);
-  box-shadow: 0 0 6px rgba(79,70,229,.3);
+  box-shadow: 0 0 7px rgba(79,70,229,.4);
 }
-
-.cl-body {
-  display: flex; align-items: baseline; gap: .75rem;
-  padding: .05rem 0 1.75rem;
-}
-
-.cl-title {
-  font-size: .88rem; font-weight: 500;
-  color: var(--t1); letter-spacing: -.01em;
-}
-
-.cl-date {
+.cl-body { display: flex; flex-direction: column; gap: .2rem; padding: 0 0 1.75rem; }
+.cl-title { font-size: .875rem; font-weight: 500; color: var(--t1); letter-spacing: -.01em; }
+.cl-meta { display: flex; align-items: center; gap: .55rem; }
+.cl-date { font-family: 'JetBrains Mono', monospace; font-size: .6rem; color: var(--t3); letter-spacing: .04em; }
+.cl-badge {
   font-family: 'JetBrains Mono', monospace;
-  font-size: .62rem; color: var(--t3);
-  letter-spacing: .04em; white-space: nowrap;
+  font-size: .55rem; letter-spacing: .08em; text-transform: uppercase;
+  padding: .1rem .45rem; border-radius: 4px;
 }
+.badge-new    { background: rgba(79,70,229,.12);  color: var(--accent-b); border: 1px solid rgba(79,70,229,.22); }
+.badge-design { background: rgba(124,58,237,.1);  color: var(--accent-a); border: 1px solid rgba(124,58,237,.2); }
+.badge-fix    { background: rgba(6,182,212,.09);  color: var(--accent-c); border: 1px solid rgba(6,182,212,.18); }
 
-/* Voci più vecchie: leggermente affievolite */
 .cl-item--old .cl-version,
-.cl-item--old .cl-title { opacity: .55 }
-.cl-item--old .cl-dot::before {
-  border-color: var(--border-hov);
-  box-shadow: none;
-}
+.cl-item--old .cl-title { opacity: .4; }
+.cl-item--old .cl-dot-col::before { border-color: var(--border-hov); box-shadow: none; background: var(--bg); }
+.cl-item--faded .cl-version,
+.cl-item--faded .cl-title { opacity: .65; }
+.cl-item--faded .cl-dot-col::before { border-color: rgba(79,70,229,.4); box-shadow: 0 0 5px rgba(79,70,229,.2); }
 
 /* ════════════════════════════════════════════════
    CONTACT
