@@ -25,10 +25,33 @@
   <link rel="stylesheet" href="css/hero.css" />
   <link rel="stylesheet" href="css/sections.css" />
 
+  <!-- ▼ NEW: extras (grain + intro + palette) -->
+  <link rel="stylesheet" href="css/extras.css" />
+
+  <!-- ▼ NEW: hide intro overlay immediately on repeat visits (runs before body renders) -->
+  <script>
+    if (sessionStorage.getItem('mn_seen'))
+      document.documentElement.classList.add('intro-seen');
+  </script>
+  <!-- Fallback: hide overlay when JS is disabled so content is accessible -->
+  <noscript><style>#intro-overlay { display: none; }</style></noscript>
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
-  
 </head>
 <body>
+
+<!-- ▼ NEW: INTRO OVERLAY — animated on first visit, removed after -->
+<div id="intro-overlay">
+  <div class="intro-inner">
+    <p class="intro-site-label">mirconegri.com</p>
+    <div class="intro-name" id="intro-name"></div>
+    <div class="intro-bar-wrap">
+      <div class="intro-bar" id="intro-bar"></div>
+    </div>
+    <p class="intro-status" id="intro-status">Initializing...</p>
+  </div>
+  <button id="intro-skip">Skip →</button>
+</div>
 
 <div id="prog"></div>
 <div id="mouse-orb"></div>
@@ -47,6 +70,8 @@
         <li><a href="#contact"   class="nav-a">Contact</a></li>
       </ul>
       <div class="nav-actions">
+        <!-- ▼ NEW: Command Palette trigger -->
+        <button id="paletteBtn" class="nav-action-btn" aria-label="Command Palette">⌘K</button>
         <button id="langBtn"  class="nav-action-btn" aria-label="Cambia Lingua">IT</button>
         <button id="themeBtn" class="nav-action-btn" aria-label="Cambia Tema"><i class="fa-solid fa-sun"></i></button>
         <button id="mbtn"     aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
@@ -140,11 +165,11 @@
         </div>
       </div>
       
-    </div> </div>
+    </div>
+  </div>
 </section>
 
 <div class="divider"></div>
-
 
 <!-- PROJECTS -->
 <section id="projects">
@@ -360,7 +385,7 @@
 <!-- MAP -->
 <section id="map-section">
   <div class="sec">
-    <p class="sec-label reveal" data-it="05 — Luoghi" data-en="05 — Places">05 — Luoghi</p>
+    <p class="sec-label reveal" data-it="06 — Luoghi" data-en="06 — Places">06 — Luoghi</p>
     <h2 class="sec-title reveal" style="transition-delay:.05s"
         data-it="Dove sono stato" data-en="Where I've been">Dove sono stato</h2>
     <div class="exp-map-wrap reveal" style="transition-delay:.1s">
@@ -385,20 +410,32 @@
       </div>
     </div>
   </div>
-</section>  
-  
+</section>
+
 <div class="divider"></div>
 
 <!-- CHANGELOG -->
 <section id="changelog">
   <div class="sec">
-    <p class="sec-label reveal" data-it="06 — Changelog" data-en="06 — Changelog">06 — Changelog</p>
+    <p class="sec-label reveal" data-it="07 — Changelog" data-en="07 — Changelog">07 — Changelog</p>
     <h2 class="sec-title reveal" style="transition-delay:.05s"
         data-it="Questo sito nel tempo" data-en="This site over time">Questo sito nel tempo</h2>
 
     <div class="changelog-list reveal" style="transition-delay:.1s">
 
       <div class="cl-item">
+        <span class="cl-version">v3.4</span>
+        <span class="cl-dot-col"></span>
+        <div class="cl-body">
+          <span class="cl-title" data-it="Film grain + Intro screen + Command palette ⌘K" data-en="Film grain + Intro screen + Command palette ⌘K">Film grain + Intro screen + Command palette ⌘K</span>
+          <div class="cl-meta">
+            <span class="cl-date">Giu 2026</span>
+            <span class="cl-badge badge-new">new</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cl-item cl-item--faded">
         <span class="cl-version">v3.3</span>
         <span class="cl-dot-col"></span>
         <div class="cl-body">
@@ -410,7 +447,7 @@
         </div>
       </div>
 
-      <div class="cl-item">
+      <div class="cl-item cl-item--faded">
         <span class="cl-version">v3.2</span>
         <span class="cl-dot-col"></span>
         <div class="cl-body">
@@ -422,7 +459,7 @@
         </div>
       </div>
 
-      <div class="cl-item cl-item--faded">
+      <div class="cl-item cl-item--old">
         <span class="cl-version">v3.1</span>
         <span class="cl-dot-col"></span>
         <div class="cl-body">
@@ -434,7 +471,7 @@
         </div>
       </div>
 
-      <div class="cl-item cl-item--faded">
+      <div class="cl-item cl-item--old">
         <span class="cl-version">v3.0</span>
         <span class="cl-dot-col"></span>
         <div class="cl-body">
@@ -466,14 +503,14 @@
 
     </div>
   </div>
-</section>  
-  
+</section>
+
 <div class="divider"></div>
 
 <!-- CONTACT -->
 <section id="contact">
   <div class="sec">
-    <p class="sec-label reveal" data-it="07 — Contatti" data-en="07 — Contact">07 — Contatti</p>
+    <p class="sec-label reveal" data-it="05 — Contatti" data-en="05 — Contact">05 — Contatti</p>
     <h2 class="sec-title reveal" style="transition-delay:.05s" data-it="Mettiamoci in contatto" data-en="Get in touch">Mettiamoci in contatto</h2>
 
     <div class="contact-grid reveal" style="transition-delay:.1s">
@@ -490,7 +527,9 @@
           <a href="https://t.me/mirco_ne" target="_blank" rel="noopener" class="soc" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
           <a href="https://mail.google.com/mail/?view=cm&fs=1&to=mirconegri06@gmail.com" target="_blank" rel="noopener" class="soc" aria-label="Invia con Gmail Web"><i class="fa-solid fa-envelope"></i></a>
         </div>
-      </div> <div class="pcard contact-form-wrapper">
+      </div>
+
+      <div class="pcard contact-form-wrapper">
         <form id="contact-form" class="contact-form" action="https://formspree.io/f/xpqedpyo" method="POST">
           <input type="text" name="name" placeholder="Il tuo Nome" data-ph-it="Il tuo Nome" data-ph-en="Your Name" required />
           <input type="email" name="email" placeholder="La tua Email" data-ph-it="La tua Email" data-ph-en="Your Email" required />
@@ -514,14 +553,21 @@
             <i class="fa-solid fa-paper-plane"></i> Invia Messaggio
           </button>
         </form>
-      </div> </div> </div> </section>
+      </div>
+    </div>
+  </div>
+</section>
 
-<footer><p>© 2026 Mirco Negri</p></footer>
+<footer><p>© 2026 Mirco Negri · <span style="opacity:.45">⌘K per navigare</span></p></footer>
 
+<!-- Scripts — intro first so the overlay drives teardown timing -->
+<script src="js/intro.js"></script>
 <script src="js/aurora.js"></script>
 <script src="js/threejs-hero.js"></script>
 <script src="js/orb.js"></script>
 <script src="js/ui.js"></script>
 <script src="js/map.js"></script>
+<script src="js/grain.js"></script>
+<script src="js/palette.js"></script>
 </body>
 </html>
