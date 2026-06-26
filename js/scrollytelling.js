@@ -302,7 +302,7 @@
      Aggiunta CDN per OrbitControls (in <head>):
        <script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
   ══════════════════════════════════════════════ */
-  const DEBUG_MODE = false;
+  const DEBUG_MODE = true;
 
   if (DEBUG_MODE) {
     /* Traiettoria della curva (linea rossa) */
