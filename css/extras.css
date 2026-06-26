@@ -308,7 +308,7 @@ html.light-mode #grain {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.6rem;
   letter-spacing: 0.04em;
-  color: rgba(139, 147, 163, 0.45);
+  color: var(--t1);
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 5px;
