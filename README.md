@@ -13,7 +13,7 @@ No heavy frameworks or build tools. Just a single `index.html` file, deployed in
 
 | Section | 🌑 Dark | ☀️ Light |
 |:--|:--:|:--:|
-| **Hero** | ![Hero Dark](assets/hero.png) | ![Hero Light](assets/hero_white.png) |
+| **Hero** | ![Hero Dark](assets/hero.gif) | ![Hero Light](assets/hero_white.png) |
 | **Projects** | ![Projects Dark](assets/projects.png) | ![Projects Light](assets/projects_white.png) |
 | **Education** | ![Education Dark](assets/education.png) | ![Education Light](assets/education_white.png) |
 | **Volunteering** | ![Volunteering Dark](assets/volunteering.png) | ![Volunteering Light](assets/volunteering_white.png) |
