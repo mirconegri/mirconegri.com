@@ -20,7 +20,7 @@ No heavy frameworks or build tools. Just a single `index.html` file, deployed in
 | **Places** | ![Places Dark](assets/places.png) | ![Places Light](assets/places_white.png) |
 | **Contact** | ![Contact Dark](assets/contact.png) | ![Contact Light](assets/contact_white.png) |
 | **Changelog** | ![Changelog Dark](assets/changelog.png) | ![Changelog Light](assets/changelog_white.png) |
-| **About** | *(screenshot missing)* | ![About Light](assets/about_white.png) |
+| **About** | ![About Dark](assets/about.png) | ![About Light](assets/about_white.png) |
 | **Privacy** | ![Privacy Dark](assets/privacy.png) | ![Privacy Light](assets/privacy_white.png) |
 
 ---
