@@ -7,15 +7,21 @@ No heavy frameworks or build tools. Just a single `index.html` file, deployed in
 
 ---
 
-## 📸 Preview & Sections
+## 📸 Preview
 
-| Section | Preview | Description |
-|:--|:--:|:--|
-| **Hero** | ![Hero Preview](assets/hero-section.gif) | 3D interactive wireframe icosahedron with animated typography. |
-| **About** | ![About Preview](assets/about-section.png) | Personal bio, academic status, and technical skills. |
-| **Projects** | ![Projects Preview](assets/projects-section.png) | Grid of personal projects featuring 3D hover tilt effects. |
-| **Education** | ![Education Preview](assets/education-section.png) | Academic timeline and certifications. |
-| **Volunteer** | ![Volunteer Preview](assets/volunteer-section.png) | Real-world community impact and associations. |
+> Toggle between 🌑 dark and ☀️ light mode — screenshots for both themes below.
+
+| Section | 🌑 Dark | ☀️ Light |
+|:--|:--:|:--:|
+| **Hero** | ![Hero Dark](assets/hero.png) | ![Hero Light](assets/hero_white.png) |
+| **Projects** | ![Projects Dark](assets/projects.png) | ![Projects Light](assets/projects_white.png) |
+| **Education** | ![Education Dark](assets/education.png) | ![Education Light](assets/education_white.png) |
+| **Volunteering** | ![Volunteering Dark](assets/volunteering.png) | ![Volunteering Light](assets/volunteering_white.png) |
+| **Places** | ![Places Dark](assets/places.png) | ![Places Light](assets/places_white.png) |
+| **Contact** | ![Contact Dark](assets/contact.png) | ![Contact Light](assets/contact_white.png) |
+| **Changelog** | ![Changelog Dark](assets/changelog.png) | ![Changelog Light](assets/changelog_white.png) |
+| **About** | *(screenshot missing)* | ![About Light](assets/about_white.png) |
+| **Privacy** | ![Privacy Dark](assets/privacy.png) | ![Privacy Light](assets/privacy_white.png) |
 
 ---
 
