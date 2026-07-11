@@ -1,11 +1,13 @@
 # 🌐 mirconegri.com
 
-[![Language](https://img.shields.io/badge/Language-HTML%20%2F%20CSS%20%2F%20JS-orange?style=for-the-badge)](https://developer.mozilla.org/en-US/docs/Web/HTML)
-[![Library](https://img.shields.io/badge/Library-Three.js-black?style=for-the-badge&logo=three.js)](https://threejs.org/)
-[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+[![Language](https://img.shields.io/badge/Stack-HTML%20%2F%20CSS%20%2F%20JS-orange?style=for-the-badge)](https://developer.mozilla.org/en-US/docs/Web/HTML)
+[![Three.js](https://img.shields.io/badge/Library-Three.js-black?style=for-the-badge&logo=three.js)](https://threejs.org/)
 [![Deploy](https://img.shields.io/badge/Deploy-Cloudflare%20Pages-F38020?style=for-the-badge&logo=cloudflare&logoColor=white)](https://pages.cloudflare.com/)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-My personal portfolio website — a modern, bilingual, interactive experience built with HTML, CSS, JavaScript, and Three.js. No heavy frameworks or build tools, deployed instantly via **Cloudflare Pages**.
+A modern, bilingual, interactive personal portfolio — built entirely with HTML, CSS, and vanilla JavaScript, with no framework, no build step, and no bundler.
+
+The deliberate constraint of zero dependencies forced every interactive feature — the 3D hero, the aurora background, the command palette, the world map, the film grain overlay — to be implemented from first principles. The result is a site that loads in under a second, scores well on Lighthouse, and has no supply-chain risk from third-party packages.
 
 ## Table of Contents
 
@@ -13,6 +15,7 @@ My personal portfolio website — a modern, bilingual, interactive experience bu
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Design Tokens](#design-tokens)
+- [Design Decisions](#design-decisions)
 - [Project Structure](#project-structure)
 - [Getting Started](#getting-started)
 - [Usage](#usage)
@@ -22,9 +25,7 @@ My personal portfolio website — a modern, bilingual, interactive experience bu
 
 ## Preview
 
-> Toggle between 🌑 dark and ☀️ light mode — screenshots for both themes below.
-
-| Section | 🌑 Dark | ☀️ Light |
+| Section | Dark | Light |
 |:--|:--:|:--:|
 | **Hero** | ![Hero Dark](assets/hero.gif) | ![Hero Light](assets/hero_white.png) |
 | **Projects** | ![Projects Dark](assets/projects.png) | ![Projects Light](assets/projects_white.png) |
@@ -38,44 +39,58 @@ My personal portfolio website — a modern, bilingual, interactive experience bu
 
 ## Features
 
-- 🌓 **Light / Dark Mode** — fluid transition between a deep dark theme and a crisp light theme
-- 🌍 **Bilingual Out-of-the-Box** — seamless toggle between Italian (IT) and English (EN) without page reloads, driven by `data-it` / `data-en` attributes
-- 🌌 **Aurora Canvas Background** — real-time 2D canvas animation with drifting, morphing color blobs that react to the active theme via composite operations
-- 🧊 **3D Wireframe Hero** — interactive rotating icosahedron built with Three.js that tracks mouse movement
-- 🖱️ **Morphing Mouse Orb** — a custom cursor-tracking orb that smoothly morphs its border-radius and hue
-- 🎴 **3D Tilt Cards** — vanilla JS perspective calculation that tilts project and volunteer cards based on mouse coordinates
-- 📜 **Scroll Interactions** — animated top progress bar, scroll-reveal animations, and a dynamic navbar that hides on downward scroll
-- 🎞️ **Film Grain Overlay** — animated SVG-noise texture layered over the whole page via `js/grain.js`, purely CSS/SVG-driven with zero canvas cost
-- ⌛ **Intro Screen** — animated first-visit loading overlay with a typing effect, skippable, shown once per browser session via `sessionStorage`
-- ⌘K **Command Palette** — fuzzy-searchable navigation and quick actions (jump to section, toggle theme/language, copy email, open project links)
-- 🗺️ **Interactive Experience Map** — custom Canvas 2D world map (Natural Earth-derived borders) with hoverable countries and pinned locations (home, studies, trips, scout routes)
-- 📱 **Fully Responsive** — custom mobile menu and fluid CSS grid/clamp typography for all screen sizes
-- 📄 **Privacy Policy Pages** — `privacy.html` for the site itself and `lifeos-privacy.html` for the companion LifeOS mobile app, both bilingual
-- ✉️ **Contact Form** — submits via Formspree, with a Cloudflare Turnstile-styled placeholder and a required privacy-policy consent checkbox
-- 📋 **Copy Email to Clipboard** — one-click email copy with a bilingual success toast
+- Light and dark mode with fluid transition, persisted via `localStorage`
+- Bilingual (Italian / English) toggle without page reload — driven by `data-it` / `data-en` attributes on every text node, with no separate page or route per language
+- Aurora canvas background — real-time 2D canvas animation with drifting color blobs that adapt to the active theme via composite blend modes
+- 3D wireframe icosahedron in the hero section built with Three.js, tracking mouse movement
+- Morphing cursor orb — a custom element that follows the pointer and continuously morphs its border-radius and hue
+- 3D tilt cards — vanilla JS perspective transforms on project and volunteer cards based on mouse coordinates
+- Scroll-reveal animations via Intersection Observers, animated top progress bar, and a navbar that hides on downward scroll
+- Film grain overlay — SVG noise texture animated purely in CSS, zero canvas cost
+- Intro screen — animated first-visit overlay with a typing effect, shown once per session via `sessionStorage`, skippable
+- Command palette (⌘K) — fuzzy-searchable navigation and quick actions: jump to section, toggle theme or language, copy email, open project links
+- Interactive world map — custom Canvas 2D implementation with Natural Earth-derived borders, hoverable countries, and pinned locations (home, university, trips, scout routes)
+- Fully responsive — custom mobile menu, fluid CSS grid, and `clamp()`-based typography
+- Contact form via Formspree with a required privacy-policy consent checkbox
+- Privacy policy pages for both the site (`privacy.html`) and the companion LifeOS app (`lifeos-privacy.html`), both bilingual
 
-> **Work in progress:** the repository includes `js/scrollytelling.js` (a Three.js + GSAP ScrollTrigger fly-through sequence with a `DEBUG_MODE` waypoint editor), but this script is **not currently loaded** by `index.html` and requires a `house.glb` model plus GSAP/ScrollTrigger/GLTFLoader CDN scripts that aren't wired in yet. Treat it as an unfinished feature rather than active functionality.
+> **Work in progress:** `js/scrollytelling.js` implements a Three.js + GSAP ScrollTrigger fly-through sequence with a `DEBUG_MODE` waypoint editor. This script is not currently loaded by `index.html` and depends on `house.glb` plus GSAP/ScrollTrigger/GLTFLoader CDN scripts that are not yet wired in. It is an unfinished feature, not active functionality.
 
 ## Tech Stack
 
-- **Markup/Styling:** HTML5 (semantic structure with `data-it` / `data-en` localization attributes), CSS3 (custom properties / design tokens, grid/flexbox, responsive design)
-- **Scripting:** Vanilla JavaScript — Intersection Observers, canvas rendering, state management, no build step
-- **3D:** [Three.js](https://threejs.org/) r128 (CDN) + `OrbitControls` (loaded but only used by the inactive `scrollytelling.js`)
-- **Canvas API:** aurora background blending, custom experience map rendering
-- **Icons:** Font Awesome 6.5.0 (CDN)
-- **Typography:** self-hosted Inter + JetBrains Mono (`@font-face` via `css/fonts.css`) — migrated away from Google Fonts specifically to avoid transmitting visitor IP addresses to Google, per the site's own Privacy Policy
-- **Forms:** [Formspree](https://formspree.io/) (contact form backend, no custom server)
-- **Hosting/CDN:** Cloudflare Pages
+- **Markup:** HTML5 with `data-it` / `data-en` localization attributes
+- **Styling:** CSS3 — custom properties, grid, flexbox, `clamp()`, responsive breakpoints
+- **Scripting:** Vanilla JavaScript — Intersection Observers, Canvas 2D, Web Animations API, `sessionStorage`, `localStorage`
+- **3D:** Three.js r128 via CDN
+- **Icons:** Font Awesome 6.5.0 via CDN
+- **Typography:** Self-hosted Inter and JetBrains Mono via `@font-face` — migrated from Google Fonts to avoid transmitting visitor IP addresses to Google's servers, as noted in the site's own Privacy Policy
+- **Forms:** Formspree (contact form backend — no custom server required)
+- **Hosting:** Cloudflare Pages — every push to `main` triggers a deploy in approximately 30 seconds
 
-> `index.html` also loads the Leaflet CSS stylesheet from CDN, but no Leaflet JS or `L.map()` calls are present anywhere in the codebase — the experience map is a fully custom Canvas 2D implementation. This CSS import appears to be an unused leftover.
+> `index.html` loads the Leaflet CSS stylesheet from CDN, but no Leaflet JS is present and no `L.map()` calls exist anywhere in the codebase. The world map is a fully custom Canvas 2D implementation. This CSS import is an unused leftover and can be removed.
 
 ## Design Tokens
 
-Defined in `css/tokens.css`:
+Defined in `css/tokens.css` and consumed as CSS custom properties throughout:
 
-- **Dark Theme:** Base `#07070A` · Surface `#0D0D12` · Text `#F5F7FA`
-- **Light Theme:** Base `#F8F8FB` · Surface `#F1F2F7` · Text `#0F172A`
-- **Accent Colors:** Purple `#7c3aed` · Indigo `#4f46e5` · Cyan `#06b6d4`
+| Token | Dark | Light |
+|---|---|---|
+| Base background | `#07070A` | `#F8F8FB` |
+| Surface | `#0D0D12` | `#F1F2F7` |
+| Primary text | `#F5F7FA` | `#0F172A` |
+| Accent — purple | `#7c3aed` | `#7c3aed` |
+| Accent — indigo | `#4f46e5` | `#4f46e5` |
+| Accent — cyan | `#06b6d4` | `#06b6d4` |
+
+## Design Decisions
+
+**Why no framework or bundler?** A portfolio site is a document with progressive enhancement, not an application. Adding React or Vue would mean shipping a runtime, a virtual DOM, and a hydration cost for what is ultimately a set of static sections. Vanilla JS with Intersection Observers and CSS custom properties achieves everything the design requires with a fraction of the payload and zero build-time complexity.
+
+**Why self-host fonts?** Google Fonts embeds a tracking pixel that transmits the visitor's IP address to Google's servers on every page load. For a site that includes its own Privacy Policy and explicitly describes its data handling, using Google Fonts would be a direct contradiction. Self-hosting via `@font-face` adds two HTTP requests (woff2 files, cached after first load) with no privacy tradeoff.
+
+**Why Cloudflare Pages over GitHub Pages?** Cloudflare Pages provides an automatic global CDN, edge caching, and HTTPS with no configuration — the same outcome as GitHub Pages but with better latency internationally, which matters for a portfolio viewed by recruiters across different regions.
+
+**Why a custom Canvas 2D world map instead of Leaflet?** Leaflet is a feature-rich mapping library designed for interactive GIS applications with tile layers, zoom controls, and marker clusters. The use case here is a decorative, non-navigable map showing a handful of personal pins. Loading Leaflet (plus a tile provider) for this would be roughly 200 KB of JavaScript and thousands of tile requests for a purely aesthetic element. The custom Canvas implementation does the same visual job in under 150 lines of code and zero network requests beyond the GeoJSON border data.
 
 ## Project Structure
 
@@ -83,87 +98,97 @@ Defined in `css/tokens.css`:
 mirconegri.com/
 ├── index.html
 ├── privacy.html                  # Privacy policy for this site
-├── lifeos-privacy.html           # Privacy policy for the companion LifeOS app
+├── lifeos-privacy.html           # Privacy policy for the LifeOS companion app
 ├── LICENSE
 ├── css/
-│   ├── tokens.css                # Design tokens, dark/light theme variables, reset
+│   ├── tokens.css                # Design tokens, theme variables, reset
 │   ├── light-mode.css            # Light theme overrides
-│   ├── layout.css                # Scroll progress, aurora canvas, sections, footer
+│   ├── layout.css                # Scroll progress bar, aurora canvas, sections, footer
 │   ├── navbar.css                # Fixed navbar and mobile menu
 │   ├── hero.css                  # Hero section and CTA buttons
-│   ├── sections.css              # About/Projects/Education/Volunteer/Map/Changelog/Contact
+│   ├── sections.css              # All content sections
 │   ├── fonts.css                 # Self-hosted @font-face declarations
-│   └── extras.css                # Film grain, intro screen, command palette styles
+│   └── extras.css                # Film grain, intro screen, command palette
 ├── js/
 │   ├── aurora.js                 # Animated gradient blob background
-│   ├── threejs-hero.js           # 3D wireframe icosahedron in the hero
+│   ├── threejs-hero.js           # 3D wireframe icosahedron
 │   ├── orb.js                    # Cursor-following morphing orb
-│   ├── ui.js                     # Navbar, theme/language toggle, reveal, card tilt
+│   ├── ui.js                     # Navbar, theme/language toggle, scroll reveal, card tilt
 │   ├── intro.js                  # First-visit intro overlay
-│   ├── grain.js                  # Injects the film grain overlay element
-│   ├── map.js                    # Canvas 2D experience map with pins and country hover
-│   ├── palette.js                # ⌘K command palette
-│   └── scrollytelling.js         # Unused — see Features note above
+│   ├── grain.js                  # Film grain overlay injection
+│   ├── map.js                    # Custom Canvas 2D world map
+│   ├── palette.js                # Command palette
+│   └── scrollytelling.js         # Not loaded — see Features note above
 ├── fonts/
-│   ├── inter/                    # Referenced by fonts.css (woff2 files)
-│   └── jetbrains-mono/           # Referenced by fonts.css (woff2 files)
+│   ├── inter/                    # woff2 files referenced by fonts.css
+│   └── jetbrains-mono/           # woff2 files referenced by fonts.css
 └── assets/
-    ├── CV_Mirco_Negri.pdf        # Referenced by the hero "Download CV" button
+    ├── CV_Mirco_Negri.pdf        # Linked by the hero "Download CV" button
     ├── lifeos-icon.png           # Referenced by lifeos-privacy.html
-    └── ...                       # Preview screenshots/GIFs referenced above
+    └── ...                       # Preview screenshots and GIFs used in this README
 ```
 
 ## Getting Started
 
 ### Prerequisites
 
-- Any modern web browser
-- *(Optional)* A local web server if you want to avoid any `file://`-related restrictions in your browser — not strictly required, as this site uses no microphone/camera APIs
+- Any modern browser
+- A local HTTP server is optional but recommended to avoid any `file://` protocol restrictions
 
 ### Installation
-
-No `npm install` or build process required.
 
 ```bash
 git clone https://github.com/mirconegri/mirconegri.com.git
 cd mirconegri.com
-open index.html   # or double-click the file
+open index.html
 ```
+
+Or serve locally:
+
+```bash
+python3 -m http.server 8000
+# then open http://localhost:8000
+```
+
+No build step, no `npm install`, no compilation.
 
 ## Usage
 
-- **Live site:** [mirconegri.com](https://mirconegri.com)
-- **Locally:** open `index.html` directly, or serve the folder with any static file server (e.g. `python3 -m http.server 8000`) and visit `http://localhost:8000`
+- **Live:** [mirconegri.com](https://mirconegri.com)
+- **Local:** open `index.html` directly or via a local server as shown above
 
-Deployed via **Cloudflare Pages**, connected to this GitHub repository — every commit to `main` triggers an automatic deploy in roughly 30 seconds.
+Deployed via Cloudflare Pages connected to this repository. Every push to `main` triggers an automatic deploy.
 
 ## Configuration and Environment
 
-This is a fully static site — no `.env` file or build-time environment variables are used. The only external integration point is the contact form:
+No `.env` file and no build-time environment variables. The only runtime integration points are:
 
 | Item | Location | Notes |
 |---|---|---|
-| Formspree endpoint | `index.html`, `<form action="https://formspree.io/f/xpqedpyo">` | Tied to the author's Formspree account — replace with your own endpoint ID to reuse this form |
-| CV file | `assets/CV_Mirco_Negri.pdf` | Referenced by the hero "Download CV" button; provide your own file at this path |
+| Formspree endpoint | `index.html` — `<form action="https://formspree.io/f/xpqedpyo">` | Tied to the author's Formspree account — replace the endpoint ID to reuse the form |
+| CV file | `assets/CV_Mirco_Negri.pdf` | Linked by the hero "Download CV" button — replace with your own file at this path |
 | LifeOS icon | `assets/lifeos-icon.png` | Referenced by `lifeos-privacy.html` |
 
 ## Contributing
 
-This is a personal portfolio project, but suggestions and bug reports are welcome:
+This is a personal portfolio, but bug reports and suggestions are welcome:
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/your-feature`)
 3. Commit your changes with a clear message
 4. Open a Pull Request
 
-Found a bug or broken link? Open an [Issue](https://github.com/mirconegri/mirconegri.com/issues).
+For broken links or layout issues, open an [Issue](https://github.com/mirconegri/mirconegri.com/issues).
 
-### 👤 Author & Connect
+### Author
 
-**Mirco Negri** — *Computer Science Student @ UniTrento*
+**Mirco Negri** — Computer Science @ UniTrento
+
+[![Portfolio](https://img.shields.io/badge/Portfolio-00599C?style=for-the-badge&logo=globe&logoColor=white)](https://mirconegri.com)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mirconegri)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/mirco-negri-263810225)
+[![Gmail](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:mirconegri06@gmail.com)
 
 ## License
 
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
-<br>
-© 2026 Mirco Negri
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
