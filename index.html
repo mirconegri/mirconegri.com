@@ -28,30 +28,9 @@
   <!-- ▼ NEW: extras (grain + intro + palette) -->
   <link rel="stylesheet" href="css/extras.css" />
 
-  <!-- ▼ NEW: hide intro overlay immediately on repeat visits (runs before body renders) -->
-  <script>
-    if (sessionStorage.getItem('mn_seen'))
-      document.documentElement.classList.add('intro-seen');
-  </script>
-  <!-- Fallback: hide overlay when JS is disabled so content is accessible -->
-  <noscript><style>#intro-overlay { display: none; }</style></noscript>
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
 </head>
 <body>
-
-<!-- ▼ NEW: INTRO OVERLAY — animated on first visit, removed after -->
-<div id="intro-overlay">
-  <div class="intro-inner">
-    <p class="intro-site-label">mirconegri.com</p>
-    <div class="intro-name" id="intro-name"></div>
-    <div class="intro-bar-wrap">
-      <div class="intro-bar" id="intro-bar"></div>
-    </div>
-    <p class="intro-status" id="intro-status">Initializing...</p>
-  </div>
-  <button id="intro-skip">Skip →</button>
-</div>
 
 <div id="prog"></div>
 <div id="mouse-orb"></div>
@@ -584,8 +563,6 @@
 
 <footer><p>© 2026 Mirco Negri · <span style="opacity:.45">⌘K per navigare</span></p></footer>
 
-<!-- Scripts — intro first so the overlay drives teardown timing -->
-<script src="js/intro.js"></script>
 <script src="js/aurora.js"></script>
 <script src="js/threejs-hero.js"></script>
 <script src="js/orb.js"></script>
