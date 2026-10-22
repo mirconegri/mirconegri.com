@@ -10,28 +10,28 @@
 
 Personal website and portfolio of **Mirco Negri** — Computer Science student at the University of Trento.
 
-Designed around the metaphor of **"Section Drawing" (Carotaggio)**: an architectural core sample slicing through coursework, open-source software, digital inclusion teaching, and fourteen years of voluntary scouting service.
+Direct, pragmatic, and built by hand: software built from concrete problems, volunteer service, and wanting to understand how systems actually work under the hood.
 
 ---
 
 ## 🏛️ Architecture & Philosophy
 
-> *"A WebGL core sample, a canvas journey map, and no framework runtime beyond the islands that need one."*
+> *"A kinetic WebGL2 geometric polyhedron, a custom 2D canvas map, and no framework runtime beyond the islands that need one."*
 
 Unlike monolithic single-page applications, **v4.0** is architected around **Progressive Enhancement & Island Architecture**:
 
 - **Static HTML First**: Semantic HTML5 document containing all text and structure. Fast first paint, SEO-ready, and fully legible even if JavaScript is disabled.
 - **Selective React Islands (`data-island`)**: React 19 is isolated strictly to interactive micro-components ([React Bits](https://reactbits.dev/)) such as kinetic rotating titles, numerical stat counters, spring magnetic buttons, and spotlight gradient cards.
-- **Custom WebGL2 Raymarched Core Sample**: A single full-screen quad fragment shader simulating procedural strata layers that rotate with pointer movements and react to the active scroll sheet.
+- **Custom WebGL2 Kinetic Geometry**: A full-screen WebGL2 raymarched faceted polyhedron (crystalline icosahedron with luminous edges and glowing internal core) that reacts smoothly to pointer movement and scroll progress.
 - **Canvas 2D Journey Map**: Interactive geospatial map drawing Natural Earth 50m vector coastlines with custom projected path arcs and responsive tooltips without hefty mapping libraries (like Leaflet or Mapbox).
-- **Motion & Kinetic Scroll**: Butter-smooth inertial scrolling via [Lenis](https://lenis.darkroom.engineering/), orchestrated alongside [GSAP](https://gsap.com/) ScrollTrigger for stratigraphic sheet reveals.
+- **Motion & Kinetic Scroll**: Butter-smooth inertial scrolling via [Lenis](https://lenis.darkroom.engineering/), orchestrated alongside [GSAP](https://gsap.com/) ScrollTrigger for section reveals.
 - **Zero Third-Party Tracking**: All fonts (Instrument Serif, Inter, JetBrains Mono) are self-hosted in WOFF2 format. Zero external analytics or third-party tracking scripts.
 
 ---
 
 ## ✨ Features
 
-- **Sheets System**: Content structured as stratigraphic plates (`00 Ground`, `01 Strata`, `02 Works`, `03 Training`, `04 Service`, `05 Terrain`, `06 Contact`, `07 Revisions`).
+- **Sections Structure**: `00 Home`, `01 Chi sono / About`, `02 Progetti / Works`, `03 Percorso / Path`, `04 Volontariato / Outside`, `05 Mappa / Places`, `06 Contatti / Contact`, `07 Revisioni / Revisions`.
 - **Real-Time Dual Theming**: Dark (`#08090b`) & Light (`#f3f1ec`) with instant pre-paint theme application to avoid flash of unstyled content (FOUC).
 - **Instant Bilingual Switch (IT / EN)**: In-place text swap using `data-en` and `data-it` attributes without reloads or separate routing.
 - **Command Palette (`⌘K` / `Ctrl+K`)**: Keyboard-driven fuzzy-search overlay to quickly jump to sections, filter projects, or copy contact info.
@@ -70,7 +70,7 @@ mirconegri.com/
 │       ├── i18n.ts          # Localization manager (IT/EN)
 │       ├── theme.ts         # Theme persistence and synchronization
 │       ├── motion.ts        # GSAP ScrollTrigger and Lenis smooth scrolling
-│       ├── strata.ts        # Custom WebGL2 raymarched core-sample shader
+│       ├── strata.ts        # Custom WebGL2 raymarched geometric polyhedron shader
 │       ├── terrain.ts       # Canvas 2D journey map renderer
 │       ├── world-geo.ts     # Natural Earth 50m vector polygon coordinates
 │       ├── palette.ts       # Fuzzy search and Command Palette logic

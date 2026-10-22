@@ -20878,104 +20878,182 @@ function wC() {
 }
 //#endregion
 //#region src/lib/strata.ts
-var TC = 28, EC = 32, DC = 1.5, OC = 3.4, kC = 2.95, AC = .62, jC = .08, MC = .34, NC = .1, PC = 3.2, FC = .9, IC = 8, LC = "#version 300 es\nprecision highp float;\n\nvoid main() {\n  vec2 corner = vec2(float((gl_VertexID << 1) & 2), float(gl_VertexID & 2));\n  gl_Position = vec4(corner * 2.0 - 1.0, 0.0, 1.0);\n}\n", RC = `#version 300 es
+var TC = 1.5, EC = 3.2, DC = .12, OC = .45, kC = .25, AC = 3, jC = 8, MC = "#version 300 es\nprecision highp float;\n\nvoid main() {\n  vec2 corner = vec2(float((gl_VertexID << 1) & 2), float(gl_VertexID & 2));\n  gl_Position = vec4(corner * 2.0 - 1.0, 0.0, 1.0);\n}\n", NC = `#version 300 es
 precision highp float;
 
-const float LAYERS = ${TC}.0;
-const vec3 BOX = vec3(1.0, 2.6, 0.5);
-const float FOV = ${AC};
-
 uniform vec2 uResolution;
-uniform vec3 uLayers[${EC}];
 uniform vec3 uInk;
 uniform vec3 uAccent;
+uniform vec3 uAccent2;
 uniform float uOffset;
 uniform float uActive;
 uniform float uYaw;
 uniform float uPitch;
-uniform float uDensity;
+uniform float uTime;
+uniform float uIsDark;
 
 out vec4 fragColor;
 
-float hash(float n) {
-  return fract(sin(n) * 43758.5453123);
+mat2 rot(float a) {
+  float c = cos(a), s = sin(a);
+  return mat2(c, -s, s, c);
+}
+
+// Distance to an icosahedral faceted polyhedron
+float sdPolyhedron(vec3 p, float r) {
+  const float phi = 1.61803398875;
+  const vec3 n1 = normalize(vec3(phi, 1.0, 0.0));
+  const vec3 n2 = normalize(vec3(0.0, phi, 1.0));
+  const vec3 n3 = normalize(vec3(1.0, 0.0, phi));
+  vec3 ap = abs(p);
+  float d = dot(ap, n1);
+  d = max(d, dot(ap, n2));
+  d = max(d, dot(ap, n3));
+  d = max(d, (ap.x + ap.y + ap.z) * 0.57735);
+  return d - r;
+}
+
+// Distance to inner core
+float sdCore(vec3 p, float r) {
+  return length(p) - r;
+}
+
+// Scene SDF
+float map(vec3 p, out float matId, out float edgeDist) {
+  float ico = sdPolyhedron(p, 1.12);
+  float core = sdCore(p, 0.38);
+
+  // Approximate edge distance for wireframe glow
+  const float phi = 1.61803398875;
+  const vec3 n1 = normalize(vec3(phi, 1.0, 0.0));
+  const vec3 n2 = normalize(vec3(0.0, phi, 1.0));
+  const vec3 n3 = normalize(vec3(1.0, 0.0, phi));
+  vec3 ap = abs(p);
+  float d1 = dot(ap, n1);
+  float d2 = dot(ap, n2);
+  float d3 = dot(ap, n3);
+  edgeDist = min(abs(d1 - d2), min(abs(d2 - d3), abs(d3 - d1)));
+
+  if (ico < core) {
+    matId = 1.0;
+    return ico;
+  } else {
+    matId = 2.0;
+    return core;
+  }
+}
+
+vec3 calcNormal(vec3 p) {
+  float dummyMat, dummyEdge;
+  const vec2 e = vec2(0.002, 0.0);
+  return normalize(vec3(
+    map(p + e.xyy, dummyMat, dummyEdge) - map(p - e.xyy, dummyMat, dummyEdge),
+    map(p + e.yxy, dummyMat, dummyEdge) - map(p - e.yxy, dummyMat, dummyEdge),
+    map(p + e.yyx, dummyMat, dummyEdge) - map(p - e.yyx, dummyMat, dummyEdge)
+  ));
 }
 
 void main() {
-  vec2 uv = (gl_FragCoord.xy * 2.0 - uResolution) / uResolution.y;
+  vec2 uv = (gl_FragCoord.xy * 2.0 - uResolution) / min(uResolution.x, uResolution.y);
   float aspect = uResolution.x / uResolution.y;
 
-  vec3 ro = vec3(0.0, 0.0, ${kC});
-  vec3 rd = vec3(uv.x * FOV * aspect, uv.y * FOV, -1.0);
+  vec3 ro = vec3(0.0, 0.0, ${EC});
+  vec3 rd = normalize(vec3(uv, -1.8));
 
-  float cy = cos(uYaw);
-  float sy = sin(uYaw);
-  rd = vec3(rd.x * cy - rd.z * sy, rd.y, rd.x * sy + rd.z * cy);
+  // Kinetic rotation: mouse orientation + idle drift + scroll-driven spin
+  float ry = uYaw + uTime * 0.16 + uOffset * 0.75;
+  float rx = uPitch + sin(uTime * 0.22) * 0.09;
 
-  float cp = cos(uPitch);
-  float sp = sin(uPitch);
-  rd = vec3(rd.x, rd.y * cp - rd.z * sp, rd.y * sp + rd.z * cp);
-  rd = normalize(rd);
+  ro.yz = rot(rx) * ro.yz;
+  rd.yz = rot(rx) * rd.yz;
+  ro.xz = rot(ry) * ro.xz;
+  rd.xz = rot(ry) * rd.xz;
 
-  vec3 near = (-BOX - ro) / rd;
-  vec3 far = (BOX - ro) / rd;
-  vec3 entry = min(near, far);
-  vec3 exit = max(near, far);
+  float t = 0.0;
+  float matId = 0.0;
+  float hitMat = 0.0;
+  float hitEdge = 0.0;
+  float glowCore = 0.0;
+  float glowEdge = 0.0;
 
-  float start = max(max(entry.x, entry.y), entry.z);
-  float end = min(min(exit.x, exit.y), exit.z);
-  if (end < max(start, 0.0)) {
-    fragColor = vec4(0.0);
-    return;
+  for (int i = 0; i < 54; i++) {
+    vec3 p = ro + rd * t;
+    float edgeD;
+    float d = map(p, matId, edgeD);
+
+    // Volumetric glow accumulation
+    float dCenter = length(p) - 0.38;
+    glowCore += 0.008 / (0.04 + dCenter * dCenter);
+    glowEdge += 0.002 / (0.01 + edgeD * edgeD);
+
+    if (d < 0.001) {
+      hitMat = matId;
+      hitEdge = edgeD;
+      break;
+    }
+    t += d * 0.85;
+    if (t > 6.5) break;
   }
 
-  vec3 point = ro + rd * (start > 0.0 ? start : end);
+  vec3 col = vec3(0.0);
 
-  float layer = point.y * uDensity + uOffset;
-  float wobble = sin(point.x * 5.5 + floor(layer) * 1.9) * 0.05
-               + sin(point.x * 12.0 + floor(layer) * 0.7) * 0.022;
-  layer += wobble;
+  if (t < 6.5) {
+    vec3 p = ro + rd * t;
+    vec3 n = calcNormal(p);
+    vec3 v = -rd;
+    float fresnel = pow(clamp(1.0 - dot(n, v), 0.0, 1.0), 2.2);
 
-  float index = floor(layer);
-  vec3 colour = uLayers[int(mod(index, LAYERS))];
+    if (hitMat < 1.5) {
+      // Outer multifaceted polyhedron
+      float wire = 1.0 - smoothstep(0.0, 0.035, hitEdge);
+      vec3 facetEdge = mix(uAccent, uAccent2, 0.5 + 0.5 * sin(p.y * 3.5 + uTime * 0.5));
+      
+      vec3 darkSurface = mix(uInk * 0.06, uAccent * 0.12, fresnel);
+      vec3 lightSurface = mix(vec3(0.92), uAccent * 0.3, fresnel);
+      vec3 baseSurface = mix(lightSurface, darkSurface, uIsDark);
 
-  bool front = entry.z >= entry.x && entry.z >= entry.y;
-  colour *= front ? 1.0 : 0.55;
-  colour *= clamp(1.0 - (length(point - ro) - 2.45) * 0.3, 0.5, 1.0);
+      col = mix(baseSurface, facetEdge, wire * 0.95);
+      col += facetEdge * fresnel * 0.6;
+    } else {
+      // Inner glowing nucleus
+      col = mix(uAccent, uAccent2, 0.6 + 0.4 * sin(uTime * 1.2));
+    }
+  }
 
-  float boundary = 0.5 - abs(fract(layer) - 0.5);
-  float line = 1.0 - smoothstep(0.0, 0.014, boundary);
-  colour = mix(colour, uInk, line * (front ? 0.42 : 0.22));
+  // Add ambient volumetric glow
+  col += uAccent * (glowCore * 0.022);
+  col += mix(uAccent, uAccent2, 0.5) * (glowEdge * 0.012);
 
-  float focus = 1.0 - smoothstep(0.0, 1.4, abs(index - uActive));
-  colour += uAccent * focus * 0.4;
+  // Soft vignette fade at edges
+  vec2 screen = gl_FragCoord.xy / uResolution;
+  float vignette = smoothstep(0.0, 0.12, screen.x) * smoothstep(1.0, 0.88, screen.x) *
+                   smoothstep(0.0, 0.12, screen.y) * smoothstep(1.0, 0.88, screen.y);
 
-  float fade = smoothstep(1.0, 0.5, abs(uv.y)) * smoothstep(aspect, aspect * 0.6, abs(uv.x));
-  float alpha = fade * ${FC};
-
-  fragColor = vec4(colour * alpha, alpha);
+  float alpha = clamp(length(col) * 1.35, 0.0, 0.92) * vignette;
+  fragColor = vec4(col, alpha);
 }
 `;
-function zC(e, t, n) {
+function PC(e, t, n) {
 	let r = e.createShader(t);
-	return r ? (e.shaderSource(r, n), e.compileShader(r), e.getShaderParameter(r, e.COMPILE_STATUS) ? r : (console.error("Strata shader failed to compile", e.getShaderInfoLog(r)), e.deleteShader(r), null)) : null;
+	return r ? (e.shaderSource(r, n), e.compileShader(r), e.getShaderParameter(r, e.COMPILE_STATUS) ? r : (console.error("Polyhedron shader failed to compile", e.getShaderInfoLog(r)), e.deleteShader(r), null)) : null;
 }
-function BC(e) {
-	let t = zC(e, e.VERTEX_SHADER, LC), n = zC(e, e.FRAGMENT_SHADER, RC);
+function FC(e) {
+	let t = PC(e, e.VERTEX_SHADER, MC), n = PC(e, e.FRAGMENT_SHADER, NC);
 	if (!t || !n) return null;
 	let r = e.createProgram();
 	if (!r) return null;
-	if (e.attachShader(r, t), e.attachShader(r, n), e.linkProgram(r), e.deleteShader(t), e.deleteShader(n), !e.getProgramParameter(r, e.LINK_STATUS)) return console.error("Strata program failed to link", e.getProgramInfoLog(r)), e.deleteProgram(r), null;
+	if (e.attachShader(r, t), e.attachShader(r, n), e.linkProgram(r), e.deleteShader(t), e.deleteShader(n), !e.getProgramParameter(r, e.LINK_STATUS)) return console.error("Polyhedron program failed to link", e.getProgramInfoLog(r)), e.deleteProgram(r), null;
 	let i = [
 		"uResolution",
-		"uLayers[0]",
 		"uInk",
 		"uAccent",
+		"uAccent2",
 		"uOffset",
 		"uActive",
 		"uYaw",
 		"uPitch",
-		"uDensity"
+		"uTime",
+		"uIsDark"
 	], a = {};
 	for (let t of i) a[t] = e.getUniformLocation(r, t);
 	return {
@@ -20983,7 +21061,7 @@ function BC(e) {
 		uniforms: a
 	};
 }
-function VC(e) {
+function IC(e) {
 	let t = e.trim(), n = t.match(/^#([0-9a-f]{3})$/i);
 	if (n) return [
 		0,
@@ -21011,77 +21089,51 @@ function VC(e) {
 		0
 	];
 }
-function HC(e, t, n) {
-	let r = iC(n, 0, 1);
-	return [
-		e[0] + (t[0] - e[0]) * r,
-		e[1] + (t[1] - e[1]) * r,
-		e[2] + (t[2] - e[2]) * r
-	];
-}
-function UC(e, t) {
-	let n = VC(e.rock), r = VC(e.deep), i = VC(e.accent), a = VC(e.accent2), o = new Float32Array(t * 3);
-	for (let e = 0; e < t; e += 1) {
-		let s = t <= 1 ? 0 : e / (t - 1), c = .5 + .5 * Math.sin(s * Math.PI * 2.4), [l, u, d] = HC(HC(r, n, .4 + Math.abs(Math.sin(e * 12.9898) * 43758.5453) % 1 * .5), c >= .5 ? i : a, Math.abs(c - .5) * 2 * .3);
-		o[e * 3] = l, o[e * 3 + 1] = u, o[e * 3 + 2] = d;
-	}
-	return o;
-}
-function WC() {
-	let e = getComputedStyle(document.documentElement), t = (t, n) => e.getPropertyValue(t).trim() || n;
-	return {
-		rock: t("--text-3", "#7e838c"),
-		deep: t("--bg-inset", "#050608"),
-		accent: t("--accent", "#ff5a2c"),
-		accent2: t("--accent-2", "#6fd3e0")
-	};
-}
-function GC() {
+function LC() {
 	let e = y("[data-strata]"), t = document.documentElement;
 	if (!e) return;
-	let n = cC(e), r = n ? BC(n) : null;
+	let n = cC(e), r = n ? FC(n) : null;
 	if (!n || !r) {
 		t.classList.remove("strata-live");
 		return;
 	}
 	t.classList.add("strata-live"), n.bindVertexArray(n.createVertexArray()), n.enable(n.BLEND), n.blendFunc(n.ONE, n.ONE_MINUS_SRC_ALPHA), n.useProgram(r.program);
-	let i = sC(), a = fC(), o = OC, s = { data: UC(WC(), TC) }, c = 0, l = 0, u = .5, d = 0, f = 0, p = 0, m = 0, h = 0, g = !document.hidden, _ = !0, v = !0, b = () => {
-		s.data = UC(WC(), TC), n.uniform3fv(r.uniforms["uLayers[0]"] ?? null, s.data);
-		let e = getComputedStyle(document.documentElement);
-		n.uniform3fv(r.uniforms.uInk ?? null, VC(e.getPropertyValue("--line-strong").trim() || "#e9e7e2")), n.uniform3fv(r.uniforms.uAccent ?? null, VC(e.getPropertyValue("--accent").trim() || "#ff5a2c"));
-	}, S = () => {
-		let t = lC(DC), i = Math.max(1, Math.round(e.clientWidth * t)), a = Math.max(1, Math.round(e.clientHeight * t));
+	let i = sC(), a = fC(), o = 0, s = 0, c = 0, l = 0, u = 0, d = 0, f = 0, p = 0, m = !document.hidden, h = !0, g = !0, _ = () => {
+		let e = getComputedStyle(document.documentElement), t = IC(e.getPropertyValue("--line-strong").trim() || "#e9e7e2"), i = IC(e.getPropertyValue("--accent").trim() || "#ff5a2c"), a = IC(e.getPropertyValue("--accent-2").trim() || "#6fd3e0"), o = document.documentElement.dataset.theme === "light" ? 0 : 1;
+		n.uniform3fv(r.uniforms.uInk ?? null, t), n.uniform3fv(r.uniforms.uAccent ?? null, i), n.uniform3fv(r.uniforms.uAccent2 ?? null, a), n.uniform1f(r.uniforms.uIsDark ?? null, o);
+	}, v = () => {
+		let t = lC(TC), i = Math.max(1, Math.round(e.clientWidth * t)), a = Math.max(1, Math.round(e.clientHeight * t));
 		(e.width !== i || e.height !== a) && (e.width = i, e.height = a, n.viewport(0, 0, i, a), n.uniform2f(r.uniforms.uResolution ?? null, i, a));
-	}, C = () => {
-		v && a.length !== 0 && (v = !1, d = dC(uC(a), window.innerHeight / 2));
-	}, w = () => !a.some((e) => {
+	}, b = () => {
+		g && a.length !== 0 && (g = !1, l = dC(uC(a), window.innerHeight / 2));
+	}, S = () => !a.some((e) => {
 		if (e.classList.contains("sheet--opaque")) return !1;
 		let t = e.getBoundingClientRect();
 		return t.top < window.innerHeight && t.bottom > 0;
-	}), T = (e) => {
-		m += e;
-		let t = i ? 0 : f * MC + Math.sin(m * jC) * .06, a = i ? 0 : p * NC, s = d + .5;
-		i ? (c = t, l = a, u = s) : (c = oC(c, t, 3, e), l = oC(l, a, 3, e), u = oC(u, s, PC, e)), n.uniform1f(r.uniforms.uOffset ?? null, u), n.uniform1f(r.uniforms.uActive ?? null, d), n.uniform1f(r.uniforms.uYaw ?? null, c), n.uniform1f(r.uniforms.uPitch ?? null, l), n.uniform1f(r.uniforms.uDensity ?? null, o), n.clearColor(0, 0, 0, 0), n.clear(n.COLOR_BUFFER_BIT), n.drawArrays(n.TRIANGLES, 0, 3);
-	}, E = performance.now(), D = (e) => {
-		let t = Math.min(Math.max((e - E) / 1e3, 0), .05);
-		E = e, h += 1, h % IC === 0 && (_ = !w()), g && _ && (C(), T(t)), requestAnimationFrame(D);
+	}), C = (e) => {
+		f += e;
+		let t = i ? 0 : u * OC + Math.sin(f * DC) * .08, a = i ? 0 : d * kC, p = l * .8;
+		i ? (o = t, s = a, c = p) : (o = oC(o, t, 3, e), s = oC(s, a, 3, e), c = oC(c, p, AC, e)), n.uniform1f(r.uniforms.uOffset ?? null, c), n.uniform1f(r.uniforms.uActive ?? null, l), n.uniform1f(r.uniforms.uYaw ?? null, o), n.uniform1f(r.uniforms.uPitch ?? null, s), n.uniform1f(r.uniforms.uTime ?? null, f), n.clearColor(0, 0, 0, 0), n.clear(n.COLOR_BUFFER_BIT), n.drawArrays(n.TRIANGLES, 0, 3);
+	}, w = performance.now(), T = (e) => {
+		let t = Math.min(Math.max((e - w) / 1e3, 0), .05);
+		w = e, p += 1, p % jC === 0 && (h = !S()), m && h && (b(), C(t)), requestAnimationFrame(T);
 	};
-	b(), S(), T(0), requestAnimationFrame(D), x(window, "resize", () => {
-		S(), T(0);
+	_(), v(), C(0), requestAnimationFrame(T), x(window, "resize", () => {
+		v(), C(0);
 	}), x(document, "scroll", () => {
-		v = !0;
+		g = !0;
 	}, { passive: !0 }), x(document, "visibilitychange", () => {
-		g = !document.hidden;
+		m = !document.hidden;
 	}), x(document, "mn:themechange", () => {
-		b(), T(0);
+		_(), C(0);
 	}), x(window, "pointermove", (e) => {
 		let t = e;
-		f = t.clientX / window.innerWidth * 2 - 1, p = t.clientY / window.innerHeight * 2 - 1;
+		u = t.clientX / window.innerWidth * 2 - 1, d = t.clientY / window.innerHeight * 2 - 1;
 	}, { passive: !0 });
 }
 //#endregion
 //#region src/lib/world-geo.ts
-var KC = {
+var RC = {
 	Jersey: [[
 		[-2.019, 49.231],
 		[-2.236, 49.176],
@@ -24775,12 +24827,12 @@ var KC = {
 		[19.578, 41.788],
 		[19.342, 41.869]
 	]]
-}, qC = -25, JC = 34, YC = 72, XC = {
+}, zC = -25, BC = 34, VC = 72, HC = {
 	top: 22,
 	bottom: 22,
 	left: 14,
 	right: 14
-}, ZC = 2, QC = 3.6, $C = 15, ew = 28, tw = [
+}, UC = 2, WC = 3.6, GC = 15, KC = 28, qC = [
 	{
 		id: "castelmassa",
 		lon: 11.3149,
@@ -24990,13 +25042,13 @@ var KC = {
 		kind: "journey"
 	}
 ];
-function nw(e, t, n, r) {
-	return [XC.left + (e - qC) / 70 * (n - XC.left - XC.right), XC.top + (YC - t) / 38 * (r - XC.top - XC.bottom)];
+function JC(e, t, n, r) {
+	return [HC.left + (e - zC) / 70 * (n - HC.left - HC.right), HC.top + (VC - t) / 38 * (r - HC.top - HC.bottom)];
 }
-function rw(e, t, n, r) {
-	return [qC + (e - XC.left) / (n - XC.left - XC.right) * 70, YC - (t - XC.top) / (r - XC.top - XC.bottom) * 38];
+function YC(e, t, n, r) {
+	return [zC + (e - HC.left) / (n - HC.left - HC.right) * 70, VC - (t - HC.top) / (r - HC.top - HC.bottom) * 38];
 }
-function iw(e) {
+function XC(e) {
 	let t = Infinity, n = Infinity, r = -Infinity, i = -Infinity;
 	for (let a of e) for (let [e, o] of a) e < t && (t = e), o < n && (n = o), e > r && (r = e), o > i && (i = o);
 	return [
@@ -25006,7 +25058,7 @@ function iw(e) {
 		i
 	];
 }
-function aw(e, t, n) {
+function ZC(e, t, n) {
 	let r = !1;
 	for (let i = 0, a = n.length - 1; i < n.length; a = i, i += 1) {
 		let [o, s] = n[i], [c, l] = n[a];
@@ -25014,30 +25066,30 @@ function aw(e, t, n) {
 	}
 	return r;
 }
-function ow(e) {
+function QC(e) {
 	return Object.entries(e).map(([e, t]) => ({
 		name: e,
 		rings: t,
-		bounds: iw(t)
+		bounds: XC(t)
 	}));
 }
-function sw(e, t, n) {
+function $C(e, t, n) {
 	for (let r of e) {
 		let [e, i, a, o] = r.bounds;
 		if (!(t < e || t > a || n < i || n > o)) {
-			for (let e of r.rings) if (aw(t, n, e)) return r.name;
+			for (let e of r.rings) if (ZC(t, n, e)) return r.name;
 		}
 	}
 	return null;
 }
-function cw(e, t, n, r, i, a = $C) {
+function ew(e, t, n, r, i, a = GC) {
 	let o = -1;
 	return e.forEach((e, s) => {
-		let [c, l] = nw(e.lon, e.lat, r, i);
+		let [c, l] = JC(e.lon, e.lat, r, i);
 		Math.hypot(t - c, n - l) <= a && (o = s);
 	}), o;
 }
-function lw() {
+function tw() {
 	let e = getComputedStyle(document.documentElement), t = (t, n) => e.getPropertyValue(t).trim() || n;
 	return {
 		ink: t("--text", "#e9e7e2"),
@@ -25049,29 +25101,29 @@ function lw() {
 		panelLine: t("--line-strong", "rgba(233,231,226,.2)")
 	};
 }
-function uw(e, t) {
+function nw(e, t) {
 	return t === "home" ? e.home : t === "study" ? e.study : e.journey;
 }
-function dw() {
+function rw() {
 	let e = y("[data-terrain]"), t = e ? y("canvas", e) : null, n = t?.getContext("2d");
 	if (!e || !t || !n) return;
-	let r = ow(KC), i = tw.find((e) => e.kind === "home") ?? tw[0], a = n, o = lw(), s = 1, c = 1, l = -1, u = null, d = 0, f = !0, p = () => {
-		let n = lC(ZC);
+	let r = QC(RC), i = qC.find((e) => e.kind === "home") ?? qC[0], a = n, o = tw(), s = 1, c = 1, l = -1, u = null, d = 0, f = !0, p = () => {
+		let n = lC(UC);
 		s = Math.max(1, e.clientWidth), c = Math.max(1, e.clientHeight), t.width = Math.round(s * n), t.height = Math.round(c * n), a.setTransform(n, 0, 0, n, 0, 0), f = !0;
 	}, m = () => {
 		a.save(), a.strokeStyle = o.grid, a.lineWidth = 1;
 		for (let e = -20; e <= 40; e += 10) {
-			let [t] = nw(e, JC, s, c);
+			let [t] = JC(e, BC, s, c);
 			a.beginPath(), a.moveTo(t, 0), a.lineTo(t, c), a.stroke();
 		}
 		for (let e = 35; e <= 70; e += 5) {
-			let [, t] = nw(qC, e, s, c);
+			let [, t] = JC(zC, e, s, c);
 			a.beginPath(), a.moveTo(0, t), a.lineTo(s, t), a.stroke();
 		}
 		a.restore();
 	}, h = (e) => {
 		for (let t of e) a.beginPath(), t.forEach(([e, t], n) => {
-			let [r, i] = nw(e, t, s, c);
+			let [r, i] = JC(e, t, s, c);
 			n === 0 ? a.moveTo(r, i) : a.lineTo(r, i);
 		}), a.closePath(), a.fill(), a.stroke();
 	}, g = () => {
@@ -25080,81 +25132,81 @@ function dw() {
 			a.save(), a.fillStyle = t ? o.home : o.ink, a.strokeStyle = t ? o.home : o.ink, a.globalAlpha = t ? .18 : .05, a.lineWidth = t ? 1 : .6, h(e.rings), a.restore();
 		}
 	}, _ = () => {
-		let [e, t] = nw(i.lon, i.lat, s, c);
-		for (let n of tw) {
+		let [e, t] = JC(i.lon, i.lat, s, c);
+		for (let n of qC) {
 			if (n.id === i.id) continue;
-			let [r, l] = nw(n.lon, n.lat, s, c);
-			a.save(), a.beginPath(), a.moveTo(e, t), a.quadraticCurveTo((e + r) / 2, (t + l) / 2 - ew, r, l), a.strokeStyle = uw(o, n.kind), a.globalAlpha = .24, a.lineWidth = .8, a.setLineDash([3, 6]), a.stroke(), a.restore();
+			let [r, l] = JC(n.lon, n.lat, s, c);
+			a.save(), a.beginPath(), a.moveTo(e, t), a.quadraticCurveTo((e + r) / 2, (t + l) / 2 - KC, r, l), a.strokeStyle = nw(o, n.kind), a.globalAlpha = .24, a.lineWidth = .8, a.setLineDash([3, 6]), a.stroke(), a.restore();
 		}
 	}, v = () => {
 		let e = .5 + .5 * Math.sin(d * .06);
-		tw.forEach((t, n) => {
-			let [r, i] = nw(t.lon, t.lat, s, c), u = n === l, d = uw(o, t.kind);
-			a.save(), u && (a.beginPath(), a.arc(r, i, $C * .7 + e * 4, 0, Math.PI * 2), a.strokeStyle = d, a.globalAlpha = .2 * e, a.lineWidth = 1, a.stroke()), a.shadowColor = d, a.shadowBlur = u ? 16 : 8, a.fillStyle = d, a.beginPath(), a.arc(r, i, u ? 5 : QC, 0, Math.PI * 2), a.fill(), a.restore();
+		qC.forEach((t, n) => {
+			let [r, i] = JC(t.lon, t.lat, s, c), u = n === l, d = nw(o, t.kind);
+			a.save(), u && (a.beginPath(), a.arc(r, i, GC * .7 + e * 4, 0, Math.PI * 2), a.strokeStyle = d, a.globalAlpha = .2 * e, a.lineWidth = 1, a.stroke()), a.shadowColor = d, a.shadowBlur = u ? 16 : 8, a.fillStyle = d, a.beginPath(), a.arc(r, i, u ? 5 : WC, 0, Math.PI * 2), a.fill(), a.restore();
 		});
 	}, b = (e) => {
-		let [t, n] = nw(e.lon, e.lat, s, c);
+		let [t, n] = JC(e.lon, e.lat, s, c);
 		a.save(), a.font = "500 10.5px \"JetBrains Mono\", monospace";
 		let r = a.measureText(e.label);
 		a.font = "400 9.5px \"JetBrains Mono\", monospace";
 		let i = a.measureText(e.note), l = t + 13, u = n - 12;
 		a.fillStyle = o.panel, a.strokeStyle = o.panelLine, a.lineWidth = 1, a.beginPath(), a.roundRect(l - 5, u - 15, Math.max(r.width, i.width) + 20, 34, 2), a.fill(), a.stroke(), a.fillStyle = o.ink, a.font = "500 10.5px \"JetBrains Mono\", monospace", a.fillText(e.label, l, u), a.fillStyle = o.journey, a.font = "400 9.5px \"JetBrains Mono\", monospace", a.fillText(e.note, l, u + 13), a.restore();
 	}, S = () => {
-		a.clearRect(0, 0, s, c), m(), g(), _(), v(), l >= 0 && b(tw[l]);
+		a.clearRect(0, 0, s, c), m(), g(), _(), v(), l >= 0 && b(qC[l]);
 	}, C = () => {
 		f ? (S(), f = !1) : l >= 0 && (d += .6, S()), requestAnimationFrame(C);
 	};
 	x(t, "pointermove", (e) => {
 		let n = e, i = t.getBoundingClientRect(), a = (n.clientX - i.left) * (s / (i.width || s)), o = (n.clientY - i.top) * (c / (i.height || c));
-		l = cw(tw, a, o, s, c);
-		let [d, p] = rw(a, o, s, c);
-		u = l >= 0 ? null : sw(r, d, p), t.style.cursor = l >= 0 || u ? "pointer" : "default", f = !0;
+		l = ew(qC, a, o, s, c);
+		let [d, p] = YC(a, o, s, c);
+		u = l >= 0 ? null : $C(r, d, p), t.style.cursor = l >= 0 || u ? "pointer" : "default", f = !0;
 	}), x(t, "pointerleave", () => {
 		l = -1, u = null, f = !0;
 	}), x(document, "mn:themechange", () => {
-		o = lw(), f = !0;
+		o = tw(), f = !0;
 	}), new ResizeObserver(p).observe(e), p(), document.fonts.ready.then(() => {
 		f = !0;
 	}), requestAnimationFrame(C);
 }
 //#endregion
 //#region src/lib/theme.ts
-var fw = "mn:theme";
-function pw(e) {
+var iw = "mn:theme";
+function aw(e) {
 	return e === "dark" || e === "light";
 }
-function mw(e) {
-	let t = e.getItem(fw);
-	return pw(t) ? t : null;
+function ow(e) {
+	let t = e.getItem(iw);
+	return aw(t) ? t : null;
 }
-function hw(e, t) {
-	return mw(e) ?? (t ? "light" : "dark");
+function sw(e, t) {
+	return ow(e) ?? (t ? "light" : "dark");
 }
-function gw(e) {
+function cw(e) {
 	return e === "dark" ? "light" : "dark";
 }
-function _w(e, t) {
+function lw(e, t) {
 	e.dataset.theme = t;
 	let n = y("meta[name=\"theme-color\"]");
 	n && (n.content = t === "dark" ? "#08090b" : "#f3f1ec");
 }
-function vw() {
-	let e = window.matchMedia("(prefers-color-scheme: light)").matches, t = pw(document.documentElement.dataset.theme) ? document.documentElement.dataset.theme : hw(localStorage, e);
-	_w(document.documentElement, t);
+function uw() {
+	let e = window.matchMedia("(prefers-color-scheme: light)").matches, t = aw(document.documentElement.dataset.theme) ? document.documentElement.dataset.theme : sw(localStorage, e);
+	lw(document.documentElement, t);
 	let n = y("[data-theme-toggle]");
 	if (n) {
-		let e = () => n.setAttribute("aria-label", `Switch to ${gw(document.documentElement.dataset.theme)} theme`);
+		let e = () => n.setAttribute("aria-label", `Switch to ${cw(document.documentElement.dataset.theme)} theme`);
 		e(), x(n, "click", () => {
-			let t = gw(document.documentElement.dataset.theme);
-			localStorage.setItem(fw, t), _w(document.documentElement, t), e(), document.dispatchEvent(new CustomEvent("mn:themechange", { detail: t }));
+			let t = cw(document.documentElement.dataset.theme);
+			localStorage.setItem(iw, t), lw(document.documentElement, t), e(), document.dispatchEvent(new CustomEvent("mn:themechange", { detail: t }));
 		});
 	}
 	return t;
 }
 //#endregion
 //#region src/main.tsx
-function yw() {
-	vw(), HS(), MS(), wC(), FS(), hC(), GC(), dw();
+function dw() {
+	uw(), HS(), MS(), wC(), FS(), hC(), LC(), rw();
 }
-document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", yw, { once: !0 }) : yw();
+document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", dw, { once: !0 }) : dw();
 //#endregion

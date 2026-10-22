@@ -2,19 +2,14 @@ import { on, select } from './dom';
 import { clamp, createWebGL2, damp, pixelRatio, prefersReducedMotion } from './env';
 import { activeSectionIndex, rectsOf, sheets } from './sections';
 
-/** Vertical drill core: one full screen quad, one draw call, no geometry to load. */
+/** Kinetic 3D geometric polyhedron: single full-screen quad raymarcher. */
 
-const LAYER_COUNT = 28;
-const UNIFORM_SLOTS = 32;
 const DPR_CAP = 1.5;
-const LAYER_DENSITY = 3.4;
-const CAMERA_Z = 2.95;
-const FOV = 0.62;
-const IDLE_YAW_SPEED = 0.08;
-const POINTER_YAW = 0.34;
-const POINTER_PITCH = 0.1;
-const OFFSET_SMOOTHING = 3.2;
-const CANVAS_STRENGTH = 0.9;
+const CAMERA_Z = 3.2;
+const IDLE_YAW_SPEED = 0.12;
+const POINTER_YAW = 0.45;
+const POINTER_PITCH = 0.25;
+const OFFSET_SMOOTHING = 3.0;
 const VISIBILITY_INTERVAL = 8;
 
 const VERTEX_SHADER = `#version 300 es
@@ -29,79 +24,156 @@ void main() {
 const FRAGMENT_SHADER = `#version 300 es
 precision highp float;
 
-const float LAYERS = ${LAYER_COUNT}.0;
-const vec3 BOX = vec3(1.0, 2.6, 0.5);
-const float FOV = ${FOV};
-
 uniform vec2 uResolution;
-uniform vec3 uLayers[${UNIFORM_SLOTS}];
 uniform vec3 uInk;
 uniform vec3 uAccent;
+uniform vec3 uAccent2;
 uniform float uOffset;
 uniform float uActive;
 uniform float uYaw;
 uniform float uPitch;
-uniform float uDensity;
+uniform float uTime;
+uniform float uIsDark;
 
 out vec4 fragColor;
 
-float hash(float n) {
-  return fract(sin(n) * 43758.5453123);
+mat2 rot(float a) {
+  float c = cos(a), s = sin(a);
+  return mat2(c, -s, s, c);
+}
+
+// Distance to an icosahedral faceted polyhedron
+float sdPolyhedron(vec3 p, float r) {
+  const float phi = 1.61803398875;
+  const vec3 n1 = normalize(vec3(phi, 1.0, 0.0));
+  const vec3 n2 = normalize(vec3(0.0, phi, 1.0));
+  const vec3 n3 = normalize(vec3(1.0, 0.0, phi));
+  vec3 ap = abs(p);
+  float d = dot(ap, n1);
+  d = max(d, dot(ap, n2));
+  d = max(d, dot(ap, n3));
+  d = max(d, (ap.x + ap.y + ap.z) * 0.57735);
+  return d - r;
+}
+
+// Distance to inner core
+float sdCore(vec3 p, float r) {
+  return length(p) - r;
+}
+
+// Scene SDF
+float map(vec3 p, out float matId, out float edgeDist) {
+  float ico = sdPolyhedron(p, 1.12);
+  float core = sdCore(p, 0.38);
+
+  // Approximate edge distance for wireframe glow
+  const float phi = 1.61803398875;
+  const vec3 n1 = normalize(vec3(phi, 1.0, 0.0));
+  const vec3 n2 = normalize(vec3(0.0, phi, 1.0));
+  const vec3 n3 = normalize(vec3(1.0, 0.0, phi));
+  vec3 ap = abs(p);
+  float d1 = dot(ap, n1);
+  float d2 = dot(ap, n2);
+  float d3 = dot(ap, n3);
+  edgeDist = min(abs(d1 - d2), min(abs(d2 - d3), abs(d3 - d1)));
+
+  if (ico < core) {
+    matId = 1.0;
+    return ico;
+  } else {
+    matId = 2.0;
+    return core;
+  }
+}
+
+vec3 calcNormal(vec3 p) {
+  float dummyMat, dummyEdge;
+  const vec2 e = vec2(0.002, 0.0);
+  return normalize(vec3(
+    map(p + e.xyy, dummyMat, dummyEdge) - map(p - e.xyy, dummyMat, dummyEdge),
+    map(p + e.yxy, dummyMat, dummyEdge) - map(p - e.yxy, dummyMat, dummyEdge),
+    map(p + e.yyx, dummyMat, dummyEdge) - map(p - e.yyx, dummyMat, dummyEdge)
+  ));
 }
 
 void main() {
-  vec2 uv = (gl_FragCoord.xy * 2.0 - uResolution) / uResolution.y;
+  vec2 uv = (gl_FragCoord.xy * 2.0 - uResolution) / min(uResolution.x, uResolution.y);
   float aspect = uResolution.x / uResolution.y;
 
   vec3 ro = vec3(0.0, 0.0, ${CAMERA_Z});
-  vec3 rd = vec3(uv.x * FOV * aspect, uv.y * FOV, -1.0);
+  vec3 rd = normalize(vec3(uv, -1.8));
 
-  float cy = cos(uYaw);
-  float sy = sin(uYaw);
-  rd = vec3(rd.x * cy - rd.z * sy, rd.y, rd.x * sy + rd.z * cy);
+  // Kinetic rotation: mouse orientation + idle drift + scroll-driven spin
+  float ry = uYaw + uTime * 0.16 + uOffset * 0.75;
+  float rx = uPitch + sin(uTime * 0.22) * 0.09;
 
-  float cp = cos(uPitch);
-  float sp = sin(uPitch);
-  rd = vec3(rd.x, rd.y * cp - rd.z * sp, rd.y * sp + rd.z * cp);
-  rd = normalize(rd);
+  ro.yz = rot(rx) * ro.yz;
+  rd.yz = rot(rx) * rd.yz;
+  ro.xz = rot(ry) * ro.xz;
+  rd.xz = rot(ry) * rd.xz;
 
-  vec3 near = (-BOX - ro) / rd;
-  vec3 far = (BOX - ro) / rd;
-  vec3 entry = min(near, far);
-  vec3 exit = max(near, far);
+  float t = 0.0;
+  float matId = 0.0;
+  float hitMat = 0.0;
+  float hitEdge = 0.0;
+  float glowCore = 0.0;
+  float glowEdge = 0.0;
 
-  float start = max(max(entry.x, entry.y), entry.z);
-  float end = min(min(exit.x, exit.y), exit.z);
-  if (end < max(start, 0.0)) {
-    fragColor = vec4(0.0);
-    return;
+  for (int i = 0; i < 54; i++) {
+    vec3 p = ro + rd * t;
+    float edgeD;
+    float d = map(p, matId, edgeD);
+
+    // Volumetric glow accumulation
+    float dCenter = length(p) - 0.38;
+    glowCore += 0.008 / (0.04 + dCenter * dCenter);
+    glowEdge += 0.002 / (0.01 + edgeD * edgeD);
+
+    if (d < 0.001) {
+      hitMat = matId;
+      hitEdge = edgeD;
+      break;
+    }
+    t += d * 0.85;
+    if (t > 6.5) break;
   }
 
-  vec3 point = ro + rd * (start > 0.0 ? start : end);
+  vec3 col = vec3(0.0);
 
-  float layer = point.y * uDensity + uOffset;
-  float wobble = sin(point.x * 5.5 + floor(layer) * 1.9) * 0.05
-               + sin(point.x * 12.0 + floor(layer) * 0.7) * 0.022;
-  layer += wobble;
+  if (t < 6.5) {
+    vec3 p = ro + rd * t;
+    vec3 n = calcNormal(p);
+    vec3 v = -rd;
+    float fresnel = pow(clamp(1.0 - dot(n, v), 0.0, 1.0), 2.2);
 
-  float index = floor(layer);
-  vec3 colour = uLayers[int(mod(index, LAYERS))];
+    if (hitMat < 1.5) {
+      // Outer multifaceted polyhedron
+      float wire = 1.0 - smoothstep(0.0, 0.035, hitEdge);
+      vec3 facetEdge = mix(uAccent, uAccent2, 0.5 + 0.5 * sin(p.y * 3.5 + uTime * 0.5));
+      
+      vec3 darkSurface = mix(uInk * 0.06, uAccent * 0.12, fresnel);
+      vec3 lightSurface = mix(vec3(0.92), uAccent * 0.3, fresnel);
+      vec3 baseSurface = mix(lightSurface, darkSurface, uIsDark);
 
-  bool front = entry.z >= entry.x && entry.z >= entry.y;
-  colour *= front ? 1.0 : 0.55;
-  colour *= clamp(1.0 - (length(point - ro) - 2.45) * 0.3, 0.5, 1.0);
+      col = mix(baseSurface, facetEdge, wire * 0.95);
+      col += facetEdge * fresnel * 0.6;
+    } else {
+      // Inner glowing nucleus
+      col = mix(uAccent, uAccent2, 0.6 + 0.4 * sin(uTime * 1.2));
+    }
+  }
 
-  float boundary = 0.5 - abs(fract(layer) - 0.5);
-  float line = 1.0 - smoothstep(0.0, 0.014, boundary);
-  colour = mix(colour, uInk, line * (front ? 0.42 : 0.22));
+  // Add ambient volumetric glow
+  col += uAccent * (glowCore * 0.022);
+  col += mix(uAccent, uAccent2, 0.5) * (glowEdge * 0.012);
 
-  float focus = 1.0 - smoothstep(0.0, 1.4, abs(index - uActive));
-  colour += uAccent * focus * 0.4;
+  // Soft vignette fade at edges
+  vec2 screen = gl_FragCoord.xy / uResolution;
+  float vignette = smoothstep(0.0, 0.12, screen.x) * smoothstep(1.0, 0.88, screen.x) *
+                   smoothstep(0.0, 0.12, screen.y) * smoothstep(1.0, 0.88, screen.y);
 
-  float fade = smoothstep(1.0, 0.5, abs(uv.y)) * smoothstep(aspect, aspect * 0.6, abs(uv.x));
-  float alpha = fade * ${CANVAS_STRENGTH};
-
-  fragColor = vec4(colour * alpha, alpha);
+  float alpha = clamp(length(col) * 1.35, 0.0, 0.92) * vignette;
+  fragColor = vec4(col, alpha);
 }
 `;
 
@@ -111,7 +183,7 @@ function compile(gl: WebGL2RenderingContext, type: number, source: string): WebG
   gl.shaderSource(shader, source);
   gl.compileShader(shader);
   if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) return shader;
-  console.error('Strata shader failed to compile', gl.getShaderInfoLog(shader));
+  console.error('Polyhedron shader failed to compile', gl.getShaderInfoLog(shader));
   gl.deleteShader(shader);
   return null;
 }
@@ -135,12 +207,23 @@ function buildProgram(gl: WebGL2RenderingContext): Program | null {
   gl.deleteShader(fragment);
 
   if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    console.error('Strata program failed to link', gl.getProgramInfoLog(program));
+    console.error('Polyhedron program failed to link', gl.getProgramInfoLog(program));
     gl.deleteProgram(program);
     return null;
   }
 
-  const names = ['uResolution', 'uLayers[0]', 'uInk', 'uAccent', 'uOffset', 'uActive', 'uYaw', 'uPitch', 'uDensity'];
+  const names = [
+    'uResolution',
+    'uInk',
+    'uAccent',
+    'uAccent2',
+    'uOffset',
+    'uActive',
+    'uYaw',
+    'uPitch',
+    'uTime',
+    'uIsDark',
+  ];
   const uniforms: Record<string, WebGLUniformLocation | null> = {};
   for (const name of names) uniforms[name] = gl.getUniformLocation(program, name);
 
@@ -165,53 +248,6 @@ export function parseColor(value: string): [number, number, number] {
   return [0, 0, 0];
 }
 
-export function mixColor(from: readonly [number, number, number], to: readonly [number, number, number], amount: number): [number, number, number] {
-  const t = clamp(amount, 0, 1);
-  return [from[0] + (to[0] - from[0]) * t, from[1] + (to[1] - from[1]) * t, from[2] + (to[2] - from[2]) * t];
-}
-
-export interface StrataColors {
-  rock: string;
-  deep: string;
-  accent: string;
-  accent2: string;
-}
-
-/** Deterministic banding, so the same theme always draws the same core. */
-export function buildLayerPalette(colors: StrataColors, count: number): Float32Array {
-  const rock = parseColor(colors.rock);
-  const deep = parseColor(colors.deep);
-  const accent = parseColor(colors.accent);
-  const accent2 = parseColor(colors.accent2);
-  const palette = new Float32Array(count * 3);
-
-  for (let index = 0; index < count; index += 1) {
-    const position = count <= 1 ? 0 : index / (count - 1);
-    const wave = 0.5 + 0.5 * Math.sin(position * Math.PI * 2.4);
-    const noise = Math.abs(Math.sin(index * 12.9898) * 43758.5453) % 1;
-    const base = mixColor(deep, rock, 0.4 + noise * 0.5);
-    const tint = wave >= 0.5 ? accent : accent2;
-    const amount = Math.abs(wave - 0.5) * 2 * 0.3;
-    const [r, g, b] = mixColor(base, tint, amount);
-    palette[index * 3] = r;
-    palette[index * 3 + 1] = g;
-    palette[index * 3 + 2] = b;
-  }
-
-  return palette;
-}
-
-function readColors(): StrataColors {
-  const styles = getComputedStyle(document.documentElement);
-  const read = (name: string, fallback: string) => styles.getPropertyValue(name).trim() || fallback;
-  return {
-    rock: read('--text-3', '#7e838c'),
-    deep: read('--bg-inset', '#050608'),
-    accent: read('--accent', '#ff5a2c'),
-    accent2: read('--accent-2', '#6fd3e0'),
-  };
-}
-
 export function initStrata(): void {
   const canvas = select<HTMLCanvasElement>('[data-strata]');
   const root = document.documentElement;
@@ -233,12 +269,10 @@ export function initStrata(): void {
 
   const reduced = prefersReducedMotion();
   const sectionElements = sheets();
-  const density = LAYER_DENSITY;
-  const palette = { data: buildLayerPalette(readColors(), LAYER_COUNT) };
 
   let yaw = 0;
   let pitch = 0;
-  let offset = 0.5;
+  let offset = 0.0;
   let active = 0;
   let pointerX = 0;
   let pointerY = 0;
@@ -248,12 +282,17 @@ export function initStrata(): void {
   let sectionsVisible = true;
   let scrolling = true;
 
-  const uploadPalette = () => {
-    palette.data = buildLayerPalette(readColors(), LAYER_COUNT);
-    gl.uniform3fv(built.uniforms['uLayers[0]'] ?? null, palette.data);
+  const uploadThemeUniforms = () => {
     const styles = getComputedStyle(document.documentElement);
-    gl.uniform3fv(built.uniforms.uInk ?? null, parseColor(styles.getPropertyValue('--line-strong').trim() || '#e9e7e2'));
-    gl.uniform3fv(built.uniforms.uAccent ?? null, parseColor(styles.getPropertyValue('--accent').trim() || '#ff5a2c'));
+    const ink = parseColor(styles.getPropertyValue('--line-strong').trim() || '#e9e7e2');
+    const accent = parseColor(styles.getPropertyValue('--accent').trim() || '#ff5a2c');
+    const accent2 = parseColor(styles.getPropertyValue('--accent-2').trim() || '#6fd3e0');
+    const isDark = document.documentElement.dataset.theme !== 'light' ? 1.0 : 0.0;
+
+    gl.uniform3fv(built.uniforms.uInk ?? null, ink);
+    gl.uniform3fv(built.uniforms.uAccent ?? null, accent);
+    gl.uniform3fv(built.uniforms.uAccent2 ?? null, accent2);
+    gl.uniform1f(built.uniforms.uIsDark ?? null, isDark);
   };
 
   const resize = () => {
@@ -274,7 +313,6 @@ export function initStrata(): void {
     active = index;
   };
 
-  // The core sample only needs frames while a translucent sheet is on screen.
   const coveredByOpaqueSheet = () =>
     !sectionElements.some((element) => {
       if (element.classList.contains('sheet--opaque')) return false;
@@ -284,9 +322,9 @@ export function initStrata(): void {
 
   const render = (delta: number) => {
     elapsed += delta;
-    const targetYaw = reduced ? 0 : pointerX * POINTER_YAW + Math.sin(elapsed * IDLE_YAW_SPEED) * 0.06;
+    const targetYaw = reduced ? 0 : pointerX * POINTER_YAW + Math.sin(elapsed * IDLE_YAW_SPEED) * 0.08;
     const targetPitch = reduced ? 0 : pointerY * POINTER_PITCH;
-    const targetOffset = active + 0.5;
+    const targetOffset = active * 0.8;
 
     if (reduced) {
       yaw = targetYaw;
@@ -302,7 +340,7 @@ export function initStrata(): void {
     gl.uniform1f(built.uniforms.uActive ?? null, active);
     gl.uniform1f(built.uniforms.uYaw ?? null, yaw);
     gl.uniform1f(built.uniforms.uPitch ?? null, pitch);
-    gl.uniform1f(built.uniforms.uDensity ?? null, density);
+    gl.uniform1f(built.uniforms.uTime ?? null, elapsed);
 
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -324,7 +362,7 @@ export function initStrata(): void {
     requestAnimationFrame(loop);
   };
 
-  uploadPalette();
+  uploadThemeUniforms();
   resize();
   render(0);
   requestAnimationFrame(loop);
@@ -340,7 +378,7 @@ export function initStrata(): void {
     viewportVisible = !document.hidden;
   });
   on(document, 'mn:themechange', () => {
-    uploadPalette();
+    uploadThemeUniforms();
     render(0);
   });
   on(window, 'pointermove', (event) => {

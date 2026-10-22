@@ -11,7 +11,7 @@
   padding-block: calc(var(--nav-h) + var(--s-7)) var(--s-7);
 }
 
-/* Scrim keeps the name legible while the core sample breathes in the middle. */
+/* Scrim keeps the name legible while the 3D geometry breathes in the middle. */
 .hero::before {
   content: '';
   position: absolute;
@@ -68,7 +68,7 @@
   transform-origin: left center;
 }
 
-/* the fixed WebGL core sample sits behind every transparent sheet */
+/* the fixed WebGL 3D geometry sits behind every transparent sheet */
 
 .strata-canvas {
   position: fixed;
