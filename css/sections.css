@@ -147,15 +147,16 @@
   width: fit-content;
   max-width: 100%;
   font-size: var(--step-3);
+  color: #df7d60;
   background-image: linear-gradient(
     90deg,
-    rgba(233, 231, 226, 0.35) 0%,
-    rgba(233, 231, 226, 0.35) 35%,
-    rgba(233, 231, 226, 0.72) 44%,
+    #df7d60 0%,
+    #df7d60 35%,
+    #f8a791 43%,
     #ffffff 50%,
-    rgba(233, 231, 226, 0.72) 56%,
-    rgba(233, 231, 226, 0.35) 65%,
-    rgba(233, 231, 226, 0.35) 100%
+    #f8a791 57%,
+    #df7d60 65%,
+    #df7d60 100%
   );
   background-size: 300% 100%;
   background-repeat: repeat-x;
@@ -169,15 +170,16 @@
 
 html[data-theme='light'] .claude-shimmer,
 html[data-theme='light'] .sheet-title {
+  color: #c95436;
   background-image: linear-gradient(
     90deg,
-    rgba(16, 18, 21, 0.35) 0%,
-    rgba(16, 18, 21, 0.35) 35%,
-    rgba(16, 18, 21, 0.72) 44%,
-    #101215 50%,
-    rgba(16, 18, 21, 0.72) 56%,
-    rgba(16, 18, 21, 0.35) 65%,
-    rgba(16, 18, 21, 0.35) 100%
+    #c95436 0%,
+    #c95436 35%,
+    #ea846a 43%,
+    #ffffff 50%,
+    #ea846a 57%,
+    #c95436 65%,
+    #c95436 100%
   );
   background-size: 300% 100%;
   -webkit-background-clip: text;
@@ -190,8 +192,14 @@ html[data-theme='light'] .sheet-title {
   .sheet-title {
     animation: none;
     background-image: none;
-    -webkit-text-fill-color: var(--text);
-    color: var(--text);
+    -webkit-text-fill-color: #df7d60;
+    color: #df7d60;
+  }
+
+  html[data-theme='light'] .claude-shimmer,
+  html[data-theme='light'] .sheet-title {
+    -webkit-text-fill-color: #c95436;
+    color: #c95436;
   }
 }
 
