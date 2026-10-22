@@ -9,7 +9,6 @@ import RotatingText from './react-bits/RotatingText';
 import SplitText from './react-bits/SplitText/SplitText';
 import SpotlightCard from './react-bits/SpotlightCard';
 import ProjectOrbit from './react-bits/ProjectOrbit';
-import CubeMatrix from './react-bits/CubeMatrix';
 
 type Lang = 'en' | 'it';
 type Theme = 'dark' | 'light';
@@ -261,7 +260,6 @@ export function initIslands(): void {
     <ContactCard html={host.innerHTML} className={host.className || 'contact-card'} />
   ));
   mount('[data-island="project-orbit"]', () => <ProjectOrbit />);
-  mount('[data-island="cube-matrix"]', () => <CubeMatrix />);
   mount('[data-island="contact-grid"]', () => (
     <ContactGrid paused={window.matchMedia('(prefers-reduced-motion: reduce)').matches} />
   ));

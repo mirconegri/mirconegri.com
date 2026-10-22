@@ -102,7 +102,7 @@ uniform float u_time;
 uniform float u_isDark;
 
 void main() {    
-    float n = simplex3d(vec3(vUv.xy, u_time * 1.0));
+    float n = simplex3d(vec3(vUv.xy, u_time * 0.25));
     vec3 darkColor = hsl2rgb(vec3(0.0 + n * 0.1, 0.0, 0.03));
     vec3 lightColor = hsl2rgb(vec3(0.0 + n * 0.1, 0.0, 0.95));
     vec3 color = mix(lightColor, darkColor, u_isDark);
@@ -140,8 +140,8 @@ uniform float u_time;
 
 void main() {
     vec3 p = position;
-    p.y += 0.25 * (sin(p.y * 5.0 + u_time) * 0.5 + 0.5);
-    p.z += 0.05 * (sin(p.y * 10.0 + u_time) * 0.5 + 0.5);
+    p.y += 0.15 * (sin(p.y * 2.0 + u_time * 0.3) * 0.5 + 0.5);
+    p.z += 0.03 * (sin(p.y * 3.0 + u_time * 0.25) * 0.5 + 0.5);
     
     vec4 mvPosition = modelViewMatrix * vec4(p, 1.0);
     gl_PointSize = 10.0 * (1.0 / -mvPosition.z);
@@ -246,7 +246,7 @@ float snoise(vec3 v) {
 
 void main() {
     vUv = uv;
-    float noise = snoise(position * u_progress + u_time / 10.0);
+    float noise = snoise(position * u_progress + u_time / 32.0);
     vec3 newPos = position * (noise + 0.7);
     v_color = hsv2rgb(vec3(noise * 0.1 + 0.03, 0.7, 0.7));
     v_normal = normal;
@@ -384,20 +384,20 @@ class THREEScene {
       yoyo: true,
     })
       .to(this.sphereMaterial.uniforms.u_progress, {
-        value: 5,
-        duration: 5,
-        ease: 'power3.inOut',
+        value: 3.5,
+        duration: 16,
+        ease: 'sine.inOut',
       })
       .to(this.sphereMaterial.uniforms.u_progress, {
-        value: 1,
-        duration: 5,
-        ease: 'power3.inOut',
+        value: 0.8,
+        duration: 16,
+        ease: 'sine.inOut',
       });
 
     gsap.to(this.pointsMaterial.uniforms.u_progress, {
       value: 0.4,
-      duration: 5,
-      ease: 'power3.inOut',
+      duration: 8,
+      ease: 'sine.inOut',
     });
   }
 
@@ -409,15 +409,15 @@ class THREEScene {
     this.pointsMaterial.uniforms.u_time.value = elapsedTime;
     this.backgroundMaterial.uniforms.u_time.value = elapsedTime;
 
-    // Orbital spin
-    this.points.rotation.y += 0.005;
+    // Slow serene orbital spin
+    this.points.rotation.y += 0.0008;
 
     if (!this.isReduced) {
-      this.currentYaw += (this.targetYaw - this.currentYaw) * 0.05;
-      this.currentPitch += (this.targetPitch - this.currentPitch) * 0.05;
-      this.sphere.rotation.y = this.currentYaw + elapsedTime * 0.06;
+      this.currentYaw += (this.targetYaw - this.currentYaw) * 0.03;
+      this.currentPitch += (this.targetPitch - this.currentPitch) * 0.03;
+      this.sphere.rotation.y = this.currentYaw + elapsedTime * 0.012;
       this.sphere.rotation.x = this.currentPitch;
-      this.points.rotation.x = this.currentPitch * 0.4;
+      this.points.rotation.x = this.currentPitch * 0.25;
     }
 
     this.camera.lookAt(this.scene.position);

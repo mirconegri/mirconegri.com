@@ -2,117 +2,402 @@ import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { gsap } from 'gsap';
 
-interface ProjectSatellite {
+export interface ProjectSatellite {
   id: string;
+  index: string;
   name: string;
+  emoji: string;
   typeEn: string;
   typeIt: string;
   descEn: string;
   descIt: string;
   meta: string;
   url: string;
-  geometryType: 'sphere' | 'dodeca' | 'octa' | 'box' | 'cone' | 'icosa';
   color: string;
+  shape: 'washing-drum' | 'phone-slab' | 'lightning-octa' | 'lens-ring' | 'folded-sheet' | 'dials-cube' | 'tent-pyramid' | 'film-reel' | 'disco-ball' | 'dice-cube' | 'book-stack' | 'chart-wedge' | 'paper-layers' | 'qr-tile' | 'globe-ring';
 }
 
-const PROJECTS_DATA: ProjectSatellite[] = [
+const ALL_PROJECTS: ProjectSatellite[] = [
   {
     id: 'laundrybot',
+    index: '01',
     name: 'LaundryBot',
-    typeEn: 'Automation & Queue Algorithm',
-    typeIt: 'Automazione & Algoritmo di coda',
-    descEn: 'Replaced the paper washing-machine sheet in my student residence with a fair digital queue.',
-    descIt: 'Ha sostituito il foglio di prenotazione delle lavatrici nello studentato con una coda equa.',
+    emoji: '🧺',
+    typeEn: 'Automation & Fair Queue Algorithm',
+    typeIt: 'Automazione & Algoritmo di coda equa',
+    descEn: 'Telegram bot that replaced the paper washing-machine sheet in my student residence.',
+    descIt: 'Bot Telegram che ha sostituito il foglio delle prenotazioni delle lavatrici nello studentato.',
     meta: 'Python · Telegram API',
     url: 'https://github.com/mirconegri/laundrybot',
-    geometryType: 'sphere',
-    color: 'hsl(28, 85%, 68%)',
+    color: 'hsl(28, 90%, 65%)',
+    shape: 'washing-drum',
   },
   {
     id: 'lifeos',
+    index: '02',
     name: 'LifeOS',
-    typeEn: 'Mobile Operating System',
-    typeIt: 'Sistema operativo mobile',
-    descEn: 'Personal dashboard for Android: finances, exams, habits, and stats. 100% offline.',
+    emoji: '📱',
+    typeEn: 'Offline Mobile Operating System',
+    typeIt: 'Sistema operativo personale Android',
+    descEn: 'Personal dashboard for Android: finances, exams, tasks, habits. Entirely offline, zero account.',
     descIt: 'Dashboard personale per Android: finanze, esami, abitudini e statistiche. Tutto offline.',
-    meta: 'React Native · SQLite',
+    meta: 'React Native · Expo · SQLite',
     url: 'https://github.com/mirconegri/LifeOsApp',
-    geometryType: 'box',
-    color: 'hsl(190, 80%, 65%)',
+    color: 'hsl(192, 85%, 62%)',
+    shape: 'phone-slab',
   },
   {
     id: 'tepo',
+    index: '03',
     name: 'TEPO',
-    typeEn: 'Decision Support System',
-    typeIt: 'Supporto decisionale',
-    descEn: 'Ranks energy-efficiency investments across the buildings of the Municipality of Trento.',
-    descIt: 'Ordina gli investimenti di riqualificazione energetica per il Comune di Trento.',
+    emoji: '⚡',
+    typeEn: 'Energy Decision Support System',
+    typeIt: 'Supporto decisionale riqualificazione energetica',
+    descEn: 'Decision support system that ranks energy-efficiency investments across the buildings of Trento.',
+    descIt: 'Sistema di supporto che ordina gli investimenti di efficienza energetica per il Comune di Trento.',
     meta: 'Python · Optimisation',
     url: 'https://github.com/mirconegri/tepo',
-    geometryType: 'octa',
-    color: 'hsl(140, 70%, 65%)',
+    color: 'hsl(142, 75%, 62%)',
+    shape: 'lightning-octa',
   },
   {
     id: 'quality-inspector',
+    index: '04',
     name: 'Quality Inspector',
-    typeEn: 'Computer Vision & AI',
-    typeIt: 'Visione artificiale & AI',
-    descEn: 'Real-time visual inspection pipeline for mechanical parts with custom YOLO and OpenCV.',
-    descIt: 'Ispezione visiva in tempo reale per componenti meccanici tramite YOLO e OpenCV.',
+    emoji: '👁️',
+    typeEn: 'Computer Vision & Real-Time Inspection',
+    typeIt: 'Visione artificiale per controllo qualità',
+    descEn: 'Real-time visual inspection pipeline for mechanical parts driven by custom YOLO and OpenCV.',
+    descIt: 'Pipeline di ispezione visiva in tempo reale per componenti meccanici tramite YOLO e OpenCV.',
     meta: 'Python · YOLO · OpenCV',
     url: 'https://github.com/mirconegri/DesktopQualityInspector',
-    geometryType: 'dodeca',
-    color: 'hsl(340, 80%, 70%)',
+    color: 'hsl(340, 85%, 68%)',
+    shape: 'lens-ring',
   },
   {
     id: 'receipt-scanner',
+    index: '05',
     name: 'Receipt Scanner',
-    typeEn: 'OCR & Local Database',
-    typeIt: 'OCR & Database locale',
+    emoji: '🧾',
+    typeEn: 'On-Device OCR & Local Filing',
+    typeIt: 'App mobile OCR & Archiviazione locale',
     descEn: 'Privacy-first mobile app that reads paper receipts with on-device OCR into SQLite.',
-    descIt: 'Legge gli scontrini cartacei tramite OCR on-device e li cataloga su SQLite locale.',
+    descIt: 'App mobile privacy-first che legge scontrini con OCR on-device e li archivia in SQLite.',
     meta: 'React Native · ML Kit',
     url: 'https://github.com/mirconegri/receipt-scanner',
-    geometryType: 'cone',
-    color: 'hsl(45, 85%, 65%)',
+    color: 'hsl(48, 90%, 62%)',
+    shape: 'folded-sheet',
   },
   {
     id: 'openrouter-widget',
+    index: '06',
     name: 'OpenRouter Widget',
-    typeEn: 'Android Native Widget',
-    typeIt: 'Widget nativo Android',
-    descEn: 'Nothing OS styled home-screen widget showing live API credit and key usage.',
-    descIt: 'Widget in stile Nothing OS che mostra in tempo reale credito e consumo chiavi API.',
+    emoji: '🎛️',
+    typeEn: 'Nothing OS Native Home Widget',
+    typeIt: 'Widget nativo Android stile Nothing OS',
+    descEn: 'Native Android widget showing live OpenRouter credit balance and API key usage.',
+    descIt: 'Widget Android nativo in stile Nothing OS che mostra in tempo reale credito e chiavi API.',
     meta: 'Kotlin · Android',
     url: 'https://github.com/mirconegri/openrouter-widget',
-    geometryType: 'icosa',
-    color: 'hsl(215, 85%, 70%)',
+    color: 'hsl(215, 88%, 68%)',
+    shape: 'dials-cube',
   },
   {
     id: 'scoutmealplanner',
+    index: '07',
     name: 'ScoutMealPlanner',
-    typeEn: 'Web Tool & Logistics',
-    typeIt: 'Web tool & Logistica',
-    descEn: 'Calculates complete camp menus and shopping lists from attendee headcount and days.',
-    descIt: 'Genera menu e lista della spesa per campi scout in base al numero di partecipanti.',
-    meta: 'TypeScript · Astro',
+    emoji: '⛺',
+    typeEn: 'Camp Logistics & Menu Calculator',
+    typeIt: 'Pianificatore menu & Spesa per campi scout',
+    descEn: 'Builds complete camp menus and matching shopping lists from attendee headcount and days.',
+    descIt: 'Genera menu e lista della spesa per campi scout a partire dal numero di persone e giorni.',
+    meta: 'Python · CLI',
     url: 'https://github.com/mirconegri/scoutmealplanner',
-    geometryType: 'sphere',
-    color: 'hsl(160, 75%, 65%)',
+    color: 'hsl(165, 80%, 60%)',
+    shape: 'tent-pyramid',
+  },
+  {
+    id: 'movierecommender',
+    index: '08',
+    name: 'MovieRecommender',
+    emoji: '🎬',
+    typeEn: 'Desktop Movie Discovery App',
+    typeIt: 'Applicazione desktop raccomandazione film',
+    descEn: 'Desktop application that suggests films from the TMDb catalogue, written in Python with Tkinter.',
+    descIt: 'Applicazione desktop che suggerisce film dal catalogo TMDb, scritta in Python con Tkinter.',
+    meta: 'Python · Tkinter · TMDb',
+    url: 'https://github.com/mirconegri/movierecommender',
+    color: 'hsl(280, 80%, 68%)',
+    shape: 'film-reel',
+  },
+  {
+    id: 'carnival-effects',
+    index: '09',
+    name: 'Carnival Effects',
+    emoji: '🪩',
+    typeEn: 'Audio-Reactive Party Visualizer',
+    typeIt: 'Visualizzatore web audio-reattivo',
+    descEn: 'Audio-reactive web visualiser projected behind a live DJ set at my residence Carnival party.',
+    descIt: 'Visualizzatore web audio-reattivo proiettato dietro un DJ set per la festa di Carnevale.',
+    meta: 'Web Audio · Canvas API',
+    url: 'https://github.com/mirconegri/carnivalvisualeffects',
+    color: 'hsl(315, 90%, 68%)',
+    shape: 'disco-ball',
+  },
+  {
+    id: 'pomodoro-cube',
+    index: '10',
+    name: 'Pomodoro Gravity Cube',
+    emoji: '⏳',
+    typeEn: 'Physical Microcontroller Timer',
+    typeIt: 'Timer fisico a gravità con Arduino',
+    descEn: 'A focus timer you flip like an hourglass, built with Arduino in a hand-cut wooden enclosure.',
+    descIt: 'Un timer di concentrazione che si capovolge come una clessidra, fatto con Arduino in legno.',
+    meta: 'Arduino · C++',
+    url: 'https://github.com/mirconegri/pomodorogravitycube',
+    color: 'hsl(32, 90%, 62%)',
+    shape: 'dice-cube',
+  },
+  {
+    id: 'uni-archive',
+    index: '11',
+    name: 'UniArchive',
+    emoji: '📚',
+    typeEn: 'Open University LaTeX Knowledge Base',
+    typeIt: 'Archivio universitario aperto in LaTeX',
+    descEn: 'Structured, shared university notes in LaTeX. Knowledge should be open and readable.',
+    descIt: 'Appunti universitari strutturati e condivisi in LaTeX per la comunità studentesca.',
+    meta: 'LaTeX · GitHub',
+    url: 'https://github.com/mirconegri/university',
+    color: 'hsl(12, 85%, 65%)',
+    shape: 'book-stack',
+  },
+  {
+    id: 'quant-rotator',
+    index: '12',
+    name: 'Quant-Tech-Rotator',
+    emoji: '📈',
+    typeEn: 'Automated Quantitative Momentum Trading',
+    typeIt: 'Script di trading quantitativo automatizzato',
+    descEn: 'Automated trading script running a cross-sectional momentum strategy on US tech stocks.',
+    descIt: 'Strategia cross-sectional momentum automatizzata sui titoli tech USA tramite API Alpaca.',
+    meta: 'Python · Alpaca API',
+    url: 'https://github.com/mirconegri/Quant-Tech-Rotator',
+    color: 'hsl(110, 75%, 62%)',
+    shape: 'chart-wedge',
+  },
+  {
+    id: 'pdf-merger',
+    index: '13',
+    name: 'PdfMerger',
+    emoji: '📑',
+    typeEn: 'Document Processing Utility',
+    typeIt: 'Utility per unione documenti PDF',
+    descEn: 'Fast and reliable utility that merges multiple PDF documents into a single cohesive file.',
+    descIt: 'Piccola utility rapida che unisce più documenti PDF in un unico file.',
+    meta: 'Python · CLI',
+    url: 'https://github.com/mirconegri/pdfmerger',
+    color: 'hsl(198, 80%, 65%)',
+    shape: 'paper-layers',
+  },
+  {
+    id: 'qr-generator',
+    index: '14',
+    name: 'QR Generator',
+    emoji: '⬛',
+    typeEn: 'Barcode & QR Matrix Generator',
+    typeIt: 'Generatore di codici QR da terminale',
+    descEn: 'CLI script that turns strings and URLs into customized, high-contrast QR codes.',
+    descIt: 'Script CLI che trasforma stringhe o URL in codici QR pronti alla stampa.',
+    meta: 'Python · CLI',
+    url: 'https://github.com/mirconegri/qrgenerator',
+    color: 'hsl(260, 70%, 72%)',
+    shape: 'qr-tile',
   },
   {
     id: 'mirconegri-com',
+    index: '15',
     name: 'mirconegri.com',
-    typeEn: 'WebGL & Island Architecture',
-    typeIt: 'WebGL & Architettura a isole',
-    descEn: 'Self-hosted portfolio: WebGL custom shaders, Three.js anisotropic chrome, GSAP motion.',
-    descIt: 'Portfolio personale: shader WebGL, Three.js metallico anisotropo, movimento GSAP.',
-    meta: 'TypeScript · Three.js · Vite',
+    emoji: '🌐',
+    typeEn: 'Interactive Portfolio & WebGL Engine',
+    typeIt: 'Portfolio personale & Motore WebGL',
+    descEn: 'Self-hosted portfolio: WebGL2 custom shaders, interactive 3D solar system, GSAP motion.',
+    descIt: 'Sito personale: shader procedurali, sistema solare 3D interattivo, animazioni GSAP.',
+    meta: 'Three.js · Vite · TS',
     url: 'https://github.com/mirconegri/mirconegri.com',
-    geometryType: 'dodeca',
-    color: 'hsl(15, 90%, 65%)',
+    color: 'hsl(18, 92%, 62%)',
+    shape: 'globe-ring',
   },
 ];
+
+/** Creates a high-res GitHub Octocat logo texture on a circular badge */
+function createGitHubTexture(): THREE.CanvasTexture {
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 512;
+  const ctx = canvas.getContext('2d');
+
+  if (ctx) {
+    // Dark metallic obsidian base
+    ctx.fillStyle = '#0d1117';
+    ctx.fillRect(0, 0, 512, 512);
+
+    // Glowing rim gradient
+    const grad = ctx.createRadialGradient(256, 256, 120, 256, 256, 250);
+    grad.addColorStop(0, 'rgba(255, 90, 44, 0.25)');
+    grad.addColorStop(0.7, 'rgba(111, 211, 224, 0.15)');
+    grad.addColorStop(1, 'rgba(13, 17, 23, 0.95)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(256, 256, 240, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Outer border ring
+    ctx.strokeStyle = '#6fd3e0';
+    ctx.lineWidth = 10;
+    ctx.beginPath();
+    ctx.arc(256, 256, 230, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // GitHub Octocat silhouette
+    ctx.save();
+    ctx.translate(256, 256);
+    ctx.scale(16, 16);
+    ctx.translate(-12, -12);
+    ctx.fillStyle = '#ffffff';
+
+    const pathData =
+      'M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z';
+
+    if (typeof Path2D !== 'undefined') {
+      const p2d = new Path2D(pathData);
+      ctx.fill(p2d);
+    }
+    ctx.restore();
+  }
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = true;
+  return texture;
+}
+
+/** Generates customized 3D meshes shaped like the project's emoji/concept */
+function createEmojiInspiredMesh(shape: ProjectSatellite['shape'], color: THREE.Color): THREE.Object3D {
+  const group = new THREE.Group();
+  const mat = new THREE.MeshStandardMaterial({
+    color,
+    flatShading: true,
+    metalness: 0.2,
+    roughness: 0.45,
+    emissive: new THREE.Color(0x000000),
+    emissiveIntensity: 0,
+  });
+
+  switch (shape) {
+    case 'washing-drum': {
+      // 🧺 Basket / washing drum: barrel torus + inner cylinder
+      const torus = new THREE.Mesh(new THREE.TorusGeometry(0.55, 0.22, 10, 20), mat);
+      const inner = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.35, 0.5, 12), mat);
+      group.add(torus, inner);
+      break;
+    }
+    case 'phone-slab': {
+      // 📱 Smartphone / tablet slab
+      const slab = new THREE.Mesh(new THREE.BoxGeometry(0.65, 1.1, 0.16), mat);
+      group.add(slab);
+      break;
+    }
+    case 'lightning-octa': {
+      // ⚡ Energy octahedron
+      const octa = new THREE.Mesh(new THREE.OctahedronGeometry(0.75), mat);
+      group.add(octa);
+      break;
+    }
+    case 'lens-ring': {
+      // 👁️ Inspection lens ring + optic sphere
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(0.62, 0.16, 10, 22), mat);
+      const lens = new THREE.Mesh(new THREE.SphereGeometry(0.38, 12, 12), mat);
+      group.add(ring, lens);
+      break;
+    }
+    case 'folded-sheet': {
+      // 🧾 Paper receipt folded prism
+      const sheet = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.5, 0.1), mat);
+      sheet.rotation.z = 0.4;
+      group.add(sheet);
+      break;
+    }
+    case 'dials-cube': {
+      // 🎛️ Dodecahedron widget
+      const dodeca = new THREE.Mesh(new THREE.DodecahedronGeometry(0.7), mat);
+      group.add(dodeca);
+      break;
+    }
+    case 'tent-pyramid': {
+      // ⛺ Scout camp tent
+      const tent = new THREE.Mesh(new THREE.ConeGeometry(0.7, 0.95, 4), mat);
+      tent.rotation.y = Math.PI / 4;
+      group.add(tent);
+      break;
+    }
+    case 'film-reel': {
+      // 🎬 Film reel disc
+      const reel = new THREE.Mesh(new THREE.CylinderGeometry(0.68, 0.68, 0.25, 16), mat);
+      group.add(reel);
+      break;
+    }
+    case 'disco-ball': {
+      // 🪩 Sparkling disco ball icosahedron
+      const ball = new THREE.Mesh(new THREE.IcosahedronGeometry(0.7, 1), mat);
+      group.add(ball);
+      break;
+    }
+    case 'dice-cube': {
+      // ⏳ / 🎲 Physical timer cube
+      const cube = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.72, 0.72), mat);
+      group.add(cube);
+      break;
+    }
+    case 'book-stack': {
+      // 📚 Stack of university books
+      const b1 = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.2, 0.65), mat);
+      const b2 = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.2, 0.6), mat);
+      b2.position.y = 0.22;
+      b2.rotation.y = 0.25;
+      group.add(b1, b2);
+      break;
+    }
+    case 'chart-wedge': {
+      // 📈 Momentum chart wedge
+      const wedge = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.75, 0.9, 3), mat);
+      group.add(wedge);
+      break;
+    }
+    case 'paper-layers': {
+      // 📑 Layered PDF document sheets
+      const p1 = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.85, 0.12), mat);
+      group.add(p1);
+      break;
+    }
+    case 'qr-tile': {
+      // ⬛ Beveled QR matrix tile
+      const tile = new THREE.Mesh(new THREE.BoxGeometry(0.75, 0.75, 0.2), mat);
+      group.add(tile);
+      break;
+    }
+    case 'globe-ring':
+    default: {
+      // 🌐 Web globe with planetary ring
+      const globe = new THREE.Mesh(new THREE.SphereGeometry(0.5, 12, 12), mat);
+      const ring = new THREE.Mesh(new THREE.RingGeometry(0.68, 0.92, 28), mat);
+      ring.rotation.x = Math.PI / 2.3;
+      group.add(globe, ring);
+      break;
+    }
+  }
+
+  return group;
+}
 
 export default function ProjectOrbit() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -123,6 +408,7 @@ export default function ProjectOrbit() {
   const [activeSpeed, setActiveSpeed] = useState<number>(0);
   const [isGlitching, setIsGlitching] = useState<boolean>(false);
 
+  const unfocusRef = useRef<() => void>(() => {});
   const isItalian = typeof document !== 'undefined' && document.documentElement.lang === 'it';
 
   useEffect(() => {
@@ -131,19 +417,18 @@ export default function ProjectOrbit() {
     if (!canvas || !container) return;
 
     let animId: number;
-    let orbitSpeedFactor = 1.0;
     let isOrbitingPaused = false;
-    let hoveredMoonMesh: THREE.Mesh | null = null;
-    let focusedMoonMesh: THREE.Mesh | null = null;
+    let hoveredMesh: THREE.Mesh | null = null;
+    let focusedMesh: THREE.Mesh | null = null;
 
     const width = container.clientWidth || window.innerWidth;
-    const height = Math.max(380, Math.min(540, width * 0.45));
+    const height = Math.max(400, Math.min(560, width * 0.46));
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.Fog(0x0c0e14, 25, 75);
+    scene.fog = new THREE.Fog(0x080b12, 35, 95);
 
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-    const defaultCameraPosition = new THREE.Vector3(12, 10, 32);
+    const defaultCameraPosition = new THREE.Vector3(14, 12, 36);
     camera.position.copy(defaultCameraPosition);
     const lookTarget = new THREE.Vector3(0, 0, 0);
     camera.lookAt(lookTarget);
@@ -158,170 +443,178 @@ export default function ProjectOrbit() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 
     // Lights
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x1a2035, 1.2);
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x141b2d, 1.4);
     scene.add(hemiLight);
 
-    const dirLight = new THREE.DirectionalLight(0xffeedd, 1.4);
-    dirLight.position.set(40, 60, 30);
+    const dirLight = new THREE.DirectionalLight(0xfff3e6, 1.6);
+    dirLight.position.set(50, 70, 40);
     scene.add(dirLight);
 
-    const backLight = new THREE.DirectionalLight(0x6fd3e0, 0.8);
-    backLight.position.set(-30, 20, -30);
-    scene.add(backLight);
+    const rimLight = new THREE.DirectionalLight(0x6fd3e0, 1.1);
+    rimLight.position.set(-40, 25, -40);
+    scene.add(rimLight);
 
-    const pointLight = new THREE.PointLight(0xff5a2c, 2.0, 40, 2);
-    pointLight.position.set(0, 0, 0);
-    scene.add(pointLight);
+    // Warm core point light inside GitHub central planet
+    const coreLight = new THREE.PointLight(0xff6a3d, 2.8, 55, 1.8);
+    coreLight.position.set(0, 0, 0);
+    scene.add(coreLight);
 
-    // Starfield
-    const starGeometry = new THREE.BufferGeometry();
-    const starPositions: number[] = [];
-    for (let i = 0; i < 280; i++) {
-      starPositions.push(
-        (Math.random() - 0.5) * 200,
-        (Math.random() - 0.5) * 160,
-        (Math.random() - 0.5) * 200
+    // Distant Starfield
+    const starGeom = new THREE.BufferGeometry();
+    const starCoords: number[] = [];
+    for (let i = 0; i < 320; i++) {
+      starCoords.push(
+        (Math.random() - 0.5) * 240,
+        (Math.random() - 0.5) * 180,
+        (Math.random() - 0.5) * 240
       );
     }
-    starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starPositions, 3));
-    const starMaterial = new THREE.PointsMaterial({
+    starGeom.setAttribute('position', new THREE.Float32BufferAttribute(starCoords, 3));
+    const starMat = new THREE.PointsMaterial({
       color: 0xffffff,
-      size: 0.4,
+      size: 0.38,
       transparent: true,
       opacity: 0.65,
     });
-    const stars = new THREE.Points(starGeometry, starMaterial);
-    scene.add(stars);
+    const starField = new THREE.Points(starGeom, starMat);
+    scene.add(starField);
 
-    // Central Core Planet
-    const planetGeometry = new THREE.SphereGeometry(3.6, 9, 9);
-    const planetMaterial = new THREE.MeshStandardMaterial({
-      color: 0x1f3442,
-      flatShading: true,
-      metalness: 0.2,
-      roughness: 0.6,
-      emissive: 0x0f202a,
-      emissiveIntensity: 0.3,
+    // ==========================================
+    // CENTRAL PLANET: GITHUB LOGO PLANET
+    // ==========================================
+    const gitHubGroup = new THREE.Group();
+    scene.add(gitHubGroup);
+
+    // Central Obsidian Sphere Core
+    const corePlanetGeom = new THREE.SphereGeometry(3.2, 28, 28);
+    const corePlanetMat = new THREE.MeshStandardMaterial({
+      color: 0x0f1522,
+      metalness: 0.45,
+      roughness: 0.35,
+      emissive: 0x060c18,
+      emissiveIntensity: 0.4,
     });
-    const planet = new THREE.Mesh(planetGeometry, planetMaterial);
-    scene.add(planet);
+    const coreSphere = new THREE.Mesh(corePlanetGeom, corePlanetMat);
+    gitHubGroup.add(coreSphere);
 
-    // Orbiting Satellites
+    // Double-Sided Medallion with GitHub Logo Texture
+    const ghTexture = createGitHubTexture();
+    const medallionGeom = new THREE.CylinderGeometry(2.7, 2.7, 0.4, 32);
+    const medallionSideMat = new THREE.MeshStandardMaterial({
+      color: 0x1f2738,
+      metalness: 0.8,
+      roughness: 0.25,
+    });
+    const medallionFaceMat = new THREE.MeshBasicMaterial({
+      map: ghTexture,
+      transparent: true,
+    });
+
+    const medallion = new THREE.Mesh(medallionGeom, [
+      medallionSideMat,
+      medallionFaceMat,
+      medallionFaceMat,
+    ]);
+    medallion.rotation.x = Math.PI / 2;
+    gitHubGroup.add(medallion);
+
+    // Outer luminous equatorial orbit ring for GitHub core
+    const ghRingGeom = new THREE.RingGeometry(3.6, 4.0, 48);
+    const ghRingMat = new THREE.MeshBasicMaterial({
+      color: 0x6fd3e0,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.3,
+    });
+    const ghRing = new THREE.Mesh(ghRingGeom, ghRingMat);
+    ghRing.rotation.x = Math.PI / 2.2;
+    gitHubGroup.add(ghRing);
+
+    // ==========================================
+    // ALL 15 ORBITING SATELLITE PLANETS
+    // ==========================================
     const moons: Array<{
-      mesh: THREE.Mesh;
+      group: THREE.Group;
+      hitMesh: THREE.Mesh;
       radius: number;
       speed: number;
       angle: number;
       project: ProjectSatellite;
+      materials: THREE.MeshStandardMaterial[];
     }> = [];
 
-    const getGeometry = (type: ProjectSatellite['geometryType']) => {
-      switch (type) {
-        case 'dodeca':
-          return new THREE.DodecahedronGeometry(0.7);
-        case 'octa':
-          return new THREE.OctahedronGeometry(0.7);
-        case 'box':
-          return new THREE.BoxGeometry(0.75, 0.75, 0.75);
-        case 'cone':
-          return new THREE.ConeGeometry(0.55, 1.0, 7);
-        case 'icosa':
-          return new THREE.IcosahedronGeometry(0.7);
-        case 'sphere':
-        default:
-          return new THREE.SphereGeometry(0.65, 7, 7);
-      }
-    };
+    const hitObjects: THREE.Mesh[] = [];
 
-    PROJECTS_DATA.forEach((proj, i) => {
-      const geom = getGeometry(proj.geometryType);
+    ALL_PROJECTS.forEach((proj, i) => {
       const color = new THREE.Color(proj.color);
-      const mat = new THREE.MeshStandardMaterial({
-        color,
-        flatShading: true,
-        metalness: 0.15,
-        roughness: 0.5,
-        emissive: new THREE.Color(0x000000),
-        emissiveIntensity: 0,
+      const moonGroup = new THREE.Group();
+
+      // Custom shape inspired by the project's emoji
+      const visualShape = createEmojiInspiredMesh(proj.shape, color);
+      moonGroup.add(visualShape);
+
+      // Collect all child materials for emissive hover glow
+      const materials: THREE.MeshStandardMaterial[] = [];
+      visualShape.traverse((child) => {
+        if ((child as THREE.Mesh).isMesh) {
+          const m = (child as THREE.Mesh).material as THREE.MeshStandardMaterial;
+          if (m) materials.push(m);
+        }
       });
 
-      const mesh = new THREE.Mesh(geom, mat);
-      mesh.userData = { project: proj };
+      // ENLARGED INVISIBLE HITBOX (radius 1.8 units) for effortless hovering & clicking
+      const hitGeom = new THREE.SphereGeometry(1.8, 8, 8);
+      const hitMat = new THREE.MeshBasicMaterial({ visible: false });
+      const hitMesh = new THREE.Mesh(hitGeom, hitMat);
+      hitMesh.userData = { projectIndex: i };
+      moonGroup.add(hitMesh);
+      hitObjects.push(hitMesh);
 
-      const radius = 6.8 + i * 1.35;
-      const speed = 0.004 + (i % 3) * 0.002 + 0.002;
-      const angle = (i * (Math.PI * 2)) / PROJECTS_DATA.length;
+      // Orbital parameters (spaced harmoniously across radii 6.8 to 23.5)
+      const radius = 6.8 + i * 1.15;
+      // Constant, calm, slow orbital speed
+      const speed = 0.0014 + (i % 4) * 0.0003;
+      const angle = (i * (Math.PI * 2)) / ALL_PROJECTS.length;
+      const yElevation = Math.sin(i * 1.6) * 1.4;
 
-      mesh.position.set(Math.cos(angle) * radius, (Math.sin(i * 1.5) * 1.2), Math.sin(angle) * radius);
-      scene.add(mesh);
+      moonGroup.position.set(Math.cos(angle) * radius, yElevation, Math.sin(angle) * radius);
+      scene.add(moonGroup);
 
-      // Subtle orbital guide ring
+      // Fine orbital path ring
       const ringGeom = new THREE.BufferGeometry();
       const ringPoints: number[] = [];
       const segments = 64;
       for (let s = 0; s <= segments; s++) {
         const theta = (s / segments) * Math.PI * 2;
-        ringPoints.push(Math.cos(theta) * radius, (Math.sin(i * 1.5) * 1.2), Math.sin(theta) * radius);
+        ringPoints.push(Math.cos(theta) * radius, yElevation, Math.sin(theta) * radius);
       }
       ringGeom.setAttribute('position', new THREE.Float32BufferAttribute(ringPoints, 3));
       const ringMat = new THREE.LineBasicMaterial({
         color: 0xffffff,
         transparent: true,
-        opacity: 0.07,
+        opacity: 0.08,
       });
       const ring = new THREE.Line(ringGeom, ringMat);
       scene.add(ring);
 
-      moons.push({ mesh, radius, speed, angle, project: proj });
+      moons.push({
+        group: moonGroup,
+        hitMesh,
+        radius,
+        speed,
+        angle,
+        project: proj,
+        materials,
+      });
     });
 
-    // Raycasting for Hover & Click
+    // ==========================================
+    // INTERACTION & CAMERA FOCUS
+    // ==========================================
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2(-999, -999);
 
-    const onPointerMove = (e: PointerEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-
-      orbitSpeedFactor = 0.35;
-
-      raycaster.setFromCamera(mouse, camera);
-      const hits = raycaster.intersectObjects(moons.map((m) => m.mesh));
-
-      if (hits.length > 0) {
-        const target = hits[0].object as THREE.Mesh;
-        if (hoveredMoonMesh && hoveredMoonMesh !== target && hoveredMoonMesh !== focusedMoonMesh) {
-          const mat = hoveredMoonMesh.material as THREE.MeshStandardMaterial;
-          gsap.to(mat.emissive, { r: 0, g: 0, b: 0, duration: 0.25 });
-        }
-        hoveredMoonMesh = target;
-        if (hoveredMoonMesh !== focusedMoonMesh) {
-          const mat = hoveredMoonMesh.material as THREE.MeshStandardMaterial;
-          gsap.to(mat.emissive, {
-            r: mat.color.r,
-            g: mat.color.g,
-            b: mat.color.b,
-            duration: 0.25,
-          });
-        }
-      } else if (hoveredMoonMesh && hoveredMoonMesh !== focusedMoonMesh) {
-        const mat = hoveredMoonMesh.material as THREE.MeshStandardMaterial;
-        gsap.to(mat.emissive, { r: 0, g: 0, b: 0, duration: 0.25 });
-        hoveredMoonMesh = null;
-      }
-    };
-
-    const onPointerLeave = () => {
-      orbitSpeedFactor = 1.0;
-      if (hoveredMoonMesh && hoveredMoonMesh !== focusedMoonMesh) {
-        const mat = hoveredMoonMesh.material as THREE.MeshStandardMaterial;
-        gsap.to(mat.emissive, { r: 0, g: 0, b: 0, duration: 0.25 });
-        hoveredMoonMesh = null;
-      }
-    };
-
-    const triggerGlitchFilter = () => {
+    const triggerGlitch = () => {
       setIsGlitching(true);
       const rAnim = document.querySelector('#rAnim') as SVGAnimateElement | null;
       const gAnim = document.querySelector('#gAnim') as SVGAnimateElement | null;
@@ -329,82 +622,146 @@ export default function ProjectOrbit() {
       rAnim?.beginElement?.();
       gAnim?.beginElement?.();
       bAnim?.beginElement?.();
-      setTimeout(() => setIsGlitching(false), 380);
+      setTimeout(() => setIsGlitching(false), 350);
     };
 
-    const focusMoon = (mesh: THREE.Mesh | null) => {
-      if (!mesh || focusedMoonMesh === mesh) {
-        // Zoom out to overview
-        gsap.to(camera.position, {
-          x: defaultCameraPosition.x,
-          y: defaultCameraPosition.y,
-          z: defaultCameraPosition.z,
-          duration: 1.2,
-          ease: 'power2.inOut',
-        });
-        gsap.to(lookTarget, {
-          x: 0,
-          y: 0,
-          z: 0,
-          duration: 1.2,
-          ease: 'power2.inOut',
-        });
+    const unfocus = () => {
+      // Zoom out smoothly directly back to default overview
+      gsap.to(camera.position, {
+        x: defaultCameraPosition.x,
+        y: defaultCameraPosition.y,
+        z: defaultCameraPosition.z,
+        duration: 1.25,
+        ease: 'power2.inOut',
+      });
+      gsap.to(lookTarget, {
+        x: 0,
+        y: 0,
+        z: 0,
+        duration: 1.25,
+        ease: 'power2.inOut',
+      });
 
-        if (focusedMoonMesh) {
-          const mat = focusedMoonMesh.material as THREE.MeshStandardMaterial;
-          gsap.to(mat.emissive, { r: 0, g: 0, b: 0, duration: 0.3 });
+      if (focusedMesh) {
+        const found = moons.find((m) => m.hitMesh === focusedMesh);
+        if (found) {
+          found.materials.forEach((mat) => {
+            gsap.to(mat.emissive, { r: 0, g: 0, b: 0, duration: 0.3 });
+          });
         }
+      }
 
-        focusedMoonMesh = null;
-        isOrbitingPaused = false;
-        setActiveProject(null);
+      focusedMesh = null;
+      isOrbitingPaused = false;
+      setActiveProject(null);
+    };
+
+    unfocusRef.current = unfocus;
+
+    const focusMoon = (hitMesh: THREE.Mesh | null) => {
+      if (!hitMesh || focusedMesh === hitMesh) {
+        unfocus();
       } else {
-        // Focus on selected moon
-        if (focusedMoonMesh) {
-          const mat = focusedMoonMesh.material as THREE.MeshStandardMaterial;
-          gsap.to(mat.emissive, { r: 0, g: 0, b: 0, duration: 0.2 });
+        // Clear previous focus emissive
+        if (focusedMesh) {
+          const prev = moons.find((m) => m.hitMesh === focusedMesh);
+          prev?.materials.forEach((mat) => {
+            gsap.to(mat.emissive, { r: 0, g: 0, b: 0, duration: 0.2 });
+          });
         }
 
-        focusedMoonMesh = mesh;
+        focusedMesh = hitMesh;
         isOrbitingPaused = true;
-        const mat = mesh.material as THREE.MeshStandardMaterial;
-        gsap.to(mat.emissive, {
-          r: mat.color.r * 1.2,
-          g: mat.color.g * 1.2,
-          b: mat.color.b * 1.2,
-          duration: 0.3,
+
+        const found = moons.find((m) => m.hitMesh === hitMesh);
+        if (!found) return;
+
+        // Glow the newly focused planet
+        found.materials.forEach((mat) => {
+          gsap.to(mat.emissive, {
+            r: mat.color.r * 1.4,
+            g: mat.color.g * 1.4,
+            b: mat.color.b * 1.4,
+            duration: 0.35,
+          });
         });
 
-        const target = mesh.position.clone();
-        const dir = target.clone().normalize();
+        // Compute camera docking position
+        const targetPos = found.group.position.clone();
+        const dir = targetPos.clone().normalize();
         const camTarget = new THREE.Vector3(
-          target.x + dir.x * 4.5 + 1.5,
-          target.y + 2.5,
-          target.z + dir.z * 4.5 + 2.0
+          targetPos.x + dir.x * 4.2 + 1.2,
+          targetPos.y + 2.2,
+          targetPos.z + dir.z * 4.2 + 1.6
         );
 
         gsap.to(camera.position, {
           x: camTarget.x,
           y: camTarget.y,
           z: camTarget.z,
-          duration: 1.3,
+          duration: 1.35,
           ease: 'power2.inOut',
         });
         gsap.to(lookTarget, {
-          x: target.x,
-          y: target.y,
-          z: target.z,
-          duration: 1.3,
+          x: targetPos.x,
+          y: targetPos.y,
+          z: targetPos.z,
+          duration: 1.35,
           ease: 'power2.inOut',
         });
 
-        const found = moons.find((m) => m.mesh === mesh);
-        if (found) {
-          setActiveProject(found.project);
-          setActiveRadius(found.radius);
-          setActiveSpeed(found.speed);
-          triggerGlitchFilter();
+        setActiveProject(found.project);
+        setActiveRadius(found.radius);
+        setActiveSpeed(found.speed);
+        triggerGlitch();
+      }
+    };
+
+    const onPointerMove = (e: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+      const hits = raycaster.intersectObjects(hitObjects);
+
+      if (hits.length > 0) {
+        const target = hits[0].object as THREE.Mesh;
+        if (hoveredMesh && hoveredMesh !== target && hoveredMesh !== focusedMesh) {
+          const prev = moons.find((m) => m.hitMesh === hoveredMesh);
+          prev?.materials.forEach((mat) => {
+            gsap.to(mat.emissive, { r: 0, g: 0, b: 0, duration: 0.2 });
+          });
         }
+
+        hoveredMesh = target;
+        if (hoveredMesh !== focusedMesh) {
+          const current = moons.find((m) => m.hitMesh === hoveredMesh);
+          current?.materials.forEach((mat) => {
+            gsap.to(mat.emissive, {
+              r: mat.color.r,
+              g: mat.color.g,
+              b: mat.color.b,
+              duration: 0.25,
+            });
+          });
+        }
+      } else if (hoveredMesh && hoveredMesh !== focusedMesh) {
+        const prev = moons.find((m) => m.hitMesh === hoveredMesh);
+        prev?.materials.forEach((mat) => {
+          gsap.to(mat.emissive, { r: 0, g: 0, b: 0, duration: 0.2 });
+        });
+        hoveredMesh = null;
+      }
+    };
+
+    const onPointerLeave = () => {
+      if (hoveredMesh && hoveredMesh !== focusedMesh) {
+        const prev = moons.find((m) => m.hitMesh === hoveredMesh);
+        prev?.materials.forEach((mat) => {
+          gsap.to(mat.emissive, { r: 0, g: 0, b: 0, duration: 0.2 });
+        });
+        hoveredMesh = null;
       }
     };
 
@@ -414,7 +771,7 @@ export default function ProjectOrbit() {
       mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
 
       raycaster.setFromCamera(mouse, camera);
-      const hits = raycaster.intersectObjects(moons.map((m) => m.mesh));
+      const hits = raycaster.intersectObjects(hitObjects);
       if (hits.length > 0) {
         focusMoon(hits[0].object as THREE.Mesh);
       }
@@ -427,26 +784,30 @@ export default function ProjectOrbit() {
     // Resize
     const onResize = () => {
       const w = container.clientWidth || window.innerWidth;
-      const h = Math.max(380, Math.min(540, w * 0.45));
+      const h = Math.max(400, Math.min(560, w * 0.46));
       renderer.setSize(w, h);
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
     };
     window.addEventListener('resize', onResize);
 
-    // Animation Loop
+    // ==========================================
+    // ANIMATION LOOP (CONSTANT SLOW SPEED)
+    // ==========================================
     const loop = () => {
       animId = requestAnimationFrame(loop);
 
-      planet.rotation.y += 0.0018;
+      // Rotate GitHub Central Planet
+      gitHubGroup.rotation.y += 0.0035;
 
+      // Rotate each satellite around GitHub at CONSTANT, SLOW, STEADY speed
       if (!isOrbitingPaused) {
         moons.forEach((moon) => {
-          moon.angle += moon.speed * orbitSpeedFactor;
-          moon.mesh.position.x = Math.cos(moon.angle) * moon.radius;
-          moon.mesh.position.z = Math.sin(moon.angle) * moon.radius;
-          moon.mesh.rotation.y += 0.015;
-          moon.mesh.rotation.x += 0.008;
+          moon.angle += moon.speed;
+          moon.group.position.x = Math.cos(moon.angle) * moon.radius;
+          moon.group.position.z = Math.sin(moon.angle) * moon.radius;
+          moon.group.rotation.y += 0.012;
+          moon.group.rotation.x += 0.006;
         });
       }
 
@@ -494,8 +855,8 @@ export default function ProjectOrbit() {
         <span className="orbit-cue-dot" />
         <span>
           {isItalian
-            ? 'Esploratore Orbitale • Clicca un satellite per agganciare la visuale'
-            : 'Orbital Explorer • Click any satellite to dock camera'}
+            ? 'Sistema Solare dei Progetti • Clicca un pianeta per agganciare la visuale'
+            : 'Projects Solar System • Click any planet to dock camera'}
         </span>
       </div>
 
@@ -505,8 +866,10 @@ export default function ProjectOrbit() {
       {activeProject && (
         <div className={`orbit-hud ${isGlitching ? 'is-glitching' : ''}`}>
           <div className="orbit-hud-header">
-            <h3 className="orbit-hud-title">🪐 {activeProject.name}</h3>
-            <span className="orbit-hud-badge">{activeProject.meta}</span>
+            <h3 className="orbit-hud-title">
+              {activeProject.emoji} {activeProject.name}
+            </h3>
+            <span className="orbit-hud-badge">#{activeProject.index}</span>
           </div>
 
           <div className="orbit-hud-divider" />
@@ -517,8 +880,13 @@ export default function ProjectOrbit() {
           </p>
 
           <p className="orbit-hud-info">
-            <strong>{isItalian ? 'Orbita:' : 'Radius:'}</strong>{' '}
-            <span>{activeRadius.toFixed(2)} AU · {activeSpeed.toFixed(4)} rad/s</span>
+            <strong>{isItalian ? 'Stack:' : 'Stack:'}</strong>{' '}
+            <span>{activeProject.meta}</span>
+          </p>
+
+          <p className="orbit-hud-info">
+            <strong>{isItalian ? 'Orbita:' : 'Orbit:'}</strong>{' '}
+            <span>{activeRadius.toFixed(1)} AU · {activeSpeed.toFixed(4)} rad/s</span>
           </p>
 
           <p className="orbit-hud-desc">
@@ -527,19 +895,15 @@ export default function ProjectOrbit() {
 
           <div className="orbit-hud-actions">
             <a href={activeProject.url} target="_blank" rel="noopener" className="btn btn--sm">
-              <span>{isItalian ? 'Vedi su GitHub' : 'View on GitHub'}</span>
+              <span>{isItalian ? 'Apri su GitHub' : 'Open on GitHub'}</span>
               <span aria-hidden="true">↗</span>
             </a>
             <button
               type="button"
               className="chip chip--reset"
-              onClick={() => {
-                setActiveProject(null);
-                const clickEvent = new MouseEvent('click', { clientX: 0, clientY: 0 });
-                canvasRef.current?.dispatchEvent(clickEvent);
-              }}
+              onClick={() => unfocusRef.current()}
             >
-              {isItalian ? 'Chiudi visuale' : 'Reset view'}
+              {isItalian ? 'Chiudi visuale' : 'Close view'}
             </button>
           </div>
         </div>
