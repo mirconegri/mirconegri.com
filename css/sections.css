@@ -11,23 +11,6 @@
   padding-block: calc(var(--nav-h) + var(--s-7)) var(--s-7);
 }
 
-/* Scrim keeps the name legible while the 3D geometry breathes in the middle. */
-.hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background: linear-gradient(
-    180deg,
-    var(--bg) 0%,
-    color-mix(in oklab, var(--bg) 55%, transparent) 22%,
-    transparent 46%,
-    transparent 62%,
-    var(--bg) 100%
-  );
-}
-
 .hero-name {
   font-size: var(--step-6);
   line-height: 0.82;
