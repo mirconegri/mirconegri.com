@@ -28811,7 +28811,6 @@ function cE({ host: e }) {
 		tag: "h1",
 		splitType: "chars",
 		effect: "rise",
-		mask: !0,
 		trigger: "load",
 		delay: .12,
 		duration: 1.1,

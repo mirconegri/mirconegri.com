@@ -82,7 +82,6 @@ function HeroName({ host }: { host: HTMLElement }) {
       tag="h1"
       splitType="chars"
       effect="rise"
-      mask
       trigger="load"
       delay={0.12}
       duration={1.1}

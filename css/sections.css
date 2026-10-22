@@ -13,9 +13,15 @@
 
 .hero-name {
   font-size: var(--step-6);
-  line-height: 0.82;
+  line-height: 0.95;
   letter-spacing: -0.035em;
   margin-block: var(--s-6) var(--s-5);
+  padding-bottom: 0.12em;
+  overflow: visible;
+}
+
+.hero-name * {
+  overflow: visible !important;
 }
 
 .hero-role {
