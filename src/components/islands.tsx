@@ -8,6 +8,7 @@ import Magnet from './react-bits/Magnet/Magnet';
 import RotatingText from './react-bits/RotatingText';
 import SpotlightCard from './react-bits/SpotlightCard';
 import MetallicText from './react-bits/MetallicText';
+import ProjectOrbit from './react-bits/ProjectOrbit';
 
 type Lang = 'en' | 'it';
 type Theme = 'dark' | 'light';
@@ -244,6 +245,7 @@ export function initIslands(): void {
   mount('[data-island="contact-card"]', (host) => (
     <ContactCard html={host.innerHTML} className={host.className || 'contact-card'} />
   ));
+  mount('[data-island="project-orbit"]', () => <ProjectOrbit />);
   mount('[data-island="contact-grid"]', () => (
     <ContactGrid paused={window.matchMedia('(prefers-reduced-motion: reduce)').matches} />
   ));

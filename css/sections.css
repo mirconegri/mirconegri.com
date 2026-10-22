@@ -389,3 +389,173 @@
 .sheet-title:hover {
   background-position: -100% 0;
 }
+
+
+/* Project Orbit 3D Explorer */
+.orbit-container {
+  width: 100%;
+  margin-block: var(--s-4) var(--s-6);
+}
+
+.orbit-viewport-wrap {
+  position: relative;
+  width: 100%;
+  min-height: 420px;
+  background: radial-gradient(circle at 50% 50%, color-mix(in oklab, var(--accent) 8%, transparent) 0%, transparent 70%),
+              color-mix(in oklab, var(--bg) 95%, #000);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.orbit-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  touch-action: none;
+}
+
+.orbit-canvas:active {
+  cursor: grabbing;
+}
+
+.orbit-cue {
+  position: absolute;
+  top: var(--s-3);
+  left: var(--s-4);
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-family: var(--font-mono);
+  font-size: var(--step--3);
+  letter-spacing: 0.08em;
+  color: var(--text-3);
+  pointer-events: none;
+  background: color-mix(in oklab, var(--bg) 80%, transparent);
+  backdrop-filter: blur(8px);
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--r-full);
+  border: 1px solid var(--line);
+}
+
+.orbit-cue-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+  animation: pulse-dot 2s infinite ease-in-out;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 0.4; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* Glassmorphic Glitch HUD Card */
+.orbit-hud {
+  position: absolute;
+  right: var(--s-4);
+  bottom: var(--s-4);
+  max-width: min(380px, calc(100% - 2rem));
+  background: color-mix(in oklab, var(--bg) 82%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-2);
+  padding: var(--s-4);
+  color: var(--text);
+  z-index: 10;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+  animation: hud-enter 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes hud-enter {
+  from { opacity: 0; transform: translateY(12px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.orbit-hud.is-glitching {
+  filter: url("#glitch");
+}
+
+.orbit-hud-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  margin-bottom: var(--s-2);
+}
+
+.orbit-hud-title {
+  font-family: var(--font-mono);
+  font-size: var(--step-0);
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+}
+
+.orbit-hud-badge {
+  font-family: var(--font-mono);
+  font-size: var(--step--3);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--r-full);
+  background: color-mix(in oklab, var(--accent) 15%, transparent);
+  color: var(--accent);
+  border: 1px solid color-mix(in oklab, var(--accent) 30%, transparent);
+}
+
+.orbit-hud-divider {
+  height: 1px;
+  background: var(--line);
+  margin: var(--s-2) 0 var(--s-3);
+}
+
+.orbit-hud-info {
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  color: var(--text-2);
+  margin: 0 0 var(--s-1);
+}
+
+.orbit-hud-info strong {
+  color: var(--text);
+}
+
+.orbit-hud-desc {
+  font-size: var(--step--1);
+  color: var(--text-2);
+  line-height: 1.45;
+  margin: var(--s-2) 0 var(--s-4);
+}
+
+.orbit-hud-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+}
+
+.btn--sm {
+  padding: var(--s-1) var(--s-3);
+  font-size: var(--step--2);
+}
+
+.chip--reset {
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--text-3);
+  font-size: var(--step--3);
+  padding: var(--s-1) var(--s-3);
+  border-radius: var(--r-full);
+  transition: all var(--dur-2) var(--ease-out);
+}
+
+.chip--reset:hover {
+  border-color: var(--line-strong);
+  color: var(--text);
+}
