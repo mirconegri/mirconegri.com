@@ -1,72 +1,125 @@
-/* ════════════════════════════════════════════════
-   TOKENS & RESET
-════════════════════════════════════════════════ */
+/* Design tokens — "Section Drawing". */
+
 :root {
-  --bg:        #07070A;
-  --surf:      #0D0D12;
-  --card:      #111118;
-  --border:    rgba(255,255,255,0.06);
-  --border-hov:rgba(255,255,255,0.12);
-  --t1:        #F5F7FA;
-  --t2:        #C6CDD8;
-  --t3:        #8B93A3;
-  --accent-a:  #7c3aed;
-  --accent-b:  #4f46e5;
-  --accent-c:  #06b6d4;
-  --accent-d:  #a855f7;
-  --r:         12px;
-  --ease:      cubic-bezier(.16,1,.3,1);
+  /* layout */
+  --page-max: 1560px;
+  --gutter: clamp(1.25rem, 4vw, 4rem);
+  --rail: 4.5rem;
+  --nav-h: 4.25rem;
+  --measure: 62ch;
+
+  /* spacing */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-7: 3rem;
+  --s-8: 4rem;
+  --s-9: 6rem;
+  --s-10: 8rem;
+  --s-11: 12rem;
+
+  /* corners — the drawing language stays square */
+  --r-1: 2px;
+  --r-2: 4px;
+  --r-pill: 999px;
+
+  /* type */
+  --font-display: 'Instrument Serif', ui-serif, Georgia, serif;
+  --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --step--2: clamp(0.6875rem, 0.67rem + 0.08vw, 0.75rem);
+  --step--1: clamp(0.8125rem, 0.79rem + 0.12vw, 0.875rem);
+  --step-0: clamp(1rem, 0.97rem + 0.16vw, 1.0625rem);
+  --step-1: clamp(1.125rem, 1.06rem + 0.34vw, 1.375rem);
+  --step-2: clamp(1.5rem, 1.31rem + 0.95vw, 2.125rem);
+  --step-3: clamp(2rem, 1.62rem + 1.9vw, 3.25rem);
+  --step-4: clamp(2.5rem, 1.72rem + 3.9vw, 5rem);
+  --step-5: clamp(3.25rem, 1.5rem + 8.75vw, 9rem);
+  --step-6: clamp(4rem, 0.75rem + 16.25vw, 15rem);
+
+  --leading-tight: 0.94;
+  --leading-snug: 1.16;
+  --leading-body: 1.62;
+
+  /* motion */
+  --dur-1: 140ms;
+  --dur-2: 300ms;
+  --dur-3: 560ms;
+  --dur-4: 900ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-draw: cubic-bezier(0.83, 0, 0.17, 1);
+
+  /* stacking */
+  --z-canvas: 0;
+  --z-content: 10;
+  --z-rail: 30;
+  --z-nav: 40;
+  --z-overlay: 70;
+  --z-intro: 90;
 }
 
-/* ────────────────────────────────────────────────
-   LIGHT MODE — Sistema di Design Premium
-   Ispirazione: Linear, Vercel, Stripe, Arc
-   ──────────────────────────────────────────────── */
-html.light-mode {
-  /* Backgrounds — scala cromatica neutro-fredda */
-  --bg:        #F8F8FB;
-  --surf:      #F1F2F7;
-  --card:      #FFFFFF;
+:root,
+html[data-theme='dark'] {
+  color-scheme: dark;
 
-  /* Borders — sottilissimi, quasi impercettibili */
-  --border:    rgba(15,23,42,0.07);
-  --border-hov:rgba(15,23,42,0.14);
+  --bg: #08090b;
+  --bg-raised: #0d0f12;
+  --bg-elevated: #13161a;
+  --bg-inset: #050608;
 
-  /* Typography — contrasto AA+ garantito */
-  --t1:        #0F172A;   /* Primary — quasi nero */
-  --t2:        #475569;   /* Secondary — slate-600 */
-  --t3:        #64748B;   /* Muted — slate-500 */
+  --line: rgba(233, 231, 226, 0.1);
+  --line-strong: rgba(233, 231, 226, 0.2);
+  --line-faint: rgba(233, 231, 226, 0.05);
 
-  /* Accents — invariati, funzionano benissimo su chiaro */
-  --accent-a:  #7c3aed;
-  --accent-b:  #4F46E5;
-  --accent-c:  #06b6d4;
-  --accent-d:  #a855f7;
+  --text: #e9e7e2;
+  --text-2: #b6b3ad;
+  --text-3: #7e838c;
 
-  /* Ombre — livelli progressivi */
-  --shadow-sm: 0 1px 3px rgba(15,23,42,.06), 0 1px 2px rgba(15,23,42,.04);
-  --shadow-md: 0 4px 16px rgba(15,23,42,.07), 0 2px 6px rgba(15,23,42,.05);
-  --shadow-lg: 0 12px 40px rgba(15,23,42,.10), 0 4px 12px rgba(15,23,42,.06);
-  --shadow-xl: 0 20px 60px rgba(15,23,42,.12), 0 8px 20px rgba(15,23,42,.07);
+  --accent: #ff5a2c;
+  --accent-soft: rgba(255, 90, 44, 0.14);
+  --accent-ink: #150703;
+  --accent-2: #6fd3e0;
+  --accent-2-soft: rgba(111, 211, 224, 0.14);
 
-  /* Card floating */
-  --card-shadow:       0 1px 3px rgba(15,23,42,.06), 0 4px 16px rgba(15,23,42,.06), 0 0 0 1px rgba(15,23,42,.05);
-  --card-shadow-hover: 0 2px 6px rgba(15,23,42,.08), 0 12px 40px rgba(15,23,42,.10), 0 0 0 1px rgba(15,23,42,.08);
+  --dot: rgba(233, 231, 226, 0.16);
+  --dot-active: #ff5a2c;
+  --grid-line: rgba(233, 231, 226, 0.055);
+
+  --shadow-lift: 0 24px 60px -32px rgba(0, 0, 0, 0.9);
+  --grain-opacity: 0.035;
 }
 
-/* ════════════════════════════════════════════════
-   RESET & BASE
-════════════════════════════════════════════════ */
-*,*::before,*::after { box-sizing:border-box; margin:0; padding:0 }
-html { scroll-behavior:smooth; -webkit-font-smoothing:antialiased }
-body {
-  background: var(--bg);
-  color: var(--t1);
-  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  overflow-x: hidden;
-  min-height: 100vh;
-  transition: background-color 0.4s ease, color 0.4s ease;
+html[data-theme='light'] {
+  color-scheme: light;
+
+  --bg: #f3f1ec;
+  --bg-raised: #fffefb;
+  --bg-elevated: #ffffff;
+  --bg-inset: #eae7e0;
+
+  --line: rgba(16, 18, 21, 0.13);
+  --line-strong: rgba(16, 18, 21, 0.26);
+  --line-faint: rgba(16, 18, 21, 0.06);
+
+  --text: #101215;
+  --text-2: #3a4048;
+  --text-3: #6b7178;
+
+  --accent: #c9380f;
+  --accent-soft: rgba(201, 56, 15, 0.1);
+  --accent-ink: #fffefb;
+  --accent-2: #0e7c8c;
+  --accent-2-soft: rgba(14, 124, 140, 0.1);
+
+  --dot: rgba(16, 18, 21, 0.2);
+  --dot-active: #c9380f;
+  --grid-line: rgba(16, 18, 21, 0.07);
+
+  --shadow-lift: 0 24px 60px -36px rgba(16, 18, 21, 0.35);
+  --grain-opacity: 0.022;
 }
-::-webkit-scrollbar { width: 2px }
-::-webkit-scrollbar-track { background: var(--bg) }
-::-webkit-scrollbar-thumb { background: rgba(124,58,237,.4); border-radius: 2px }
