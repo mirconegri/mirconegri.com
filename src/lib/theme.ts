@@ -17,7 +17,7 @@ export function readStoredTheme(storage: StorageLike): Theme | null {
   return isTheme(raw) ? raw : null;
 }
 
-/** A stored choice wins; otherwise the operating system preference decides. */
+// Stored choice takes priority over system preference.
 export function resolveInitialTheme(storage: StorageLike, prefersLight: boolean): Theme {
   return readStoredTheme(storage) ?? (prefersLight ? 'light' : 'dark');
 }
@@ -26,13 +26,14 @@ export function otherTheme(theme: Theme): Theme {
   return theme === 'dark' ? 'light' : 'dark';
 }
 
+// Applies theme attribute and matches mobile theme-color meta tag.
 export function applyTheme(root: HTMLElement, theme: Theme): void {
   root.dataset.theme = theme;
   const meta = select<HTMLMetaElement>('meta[name="theme-color"]');
   if (meta) meta.content = theme === 'dark' ? '#08090b' : '#f3f1ec';
 }
 
-/** Resolves the theme the inline head script already applied, then wires the toggle. */
+// Resolves current theme and binds the dark/light toggle control.
 export function initTheme(): Theme {
   const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
   const initial = isTheme(document.documentElement.dataset.theme)

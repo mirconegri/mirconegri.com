@@ -1,4 +1,4 @@
-/** Thin DOM helpers so feature modules stay free of boilerplate. */
+// DOM query and event helpers.
 
 export function select<T extends Element>(selector: string, root: ParentNode = document): T | null {
   return root.querySelector<T>(selector);
@@ -8,7 +8,7 @@ export function selectAll<T extends Element>(selector: string, root: ParentNode 
   return Array.from(root.querySelectorAll<T>(selector));
 }
 
-/** Registers a listener and returns its removal function. */
+// Registers an event listener and returns a cleanup function.
 export function on(
   target: EventTarget,
   type: string,
@@ -20,7 +20,7 @@ export function on(
   return () => target.removeEventListener(type, listener, options);
 }
 
-/** Calls the handler immediately with the current state, then on every change. */
+// Runs callback on current media query match and subscribes to changes.
 export function watchMedia(query: string, handler: (matches: boolean) => void): () => void {
   const list = window.matchMedia(query);
   const listener = () => handler(list.matches);

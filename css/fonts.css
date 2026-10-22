@@ -1,4 +1,4 @@
-/* Self-hosted faces — no third-party requests at runtime. */
+/* Self-hosted fonts loaded locally without external requests. */
 
 @font-face {
   font-family: 'Inter';

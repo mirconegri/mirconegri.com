@@ -1,4 +1,4 @@
-/* Design tokens — "Section Drawing". */
+/* Global design tokens and scale values. */
 
 :root {
   /* layout */
@@ -21,7 +21,7 @@
   --s-10: 8rem;
   --s-11: 12rem;
 
-  /* corners — the drawing language stays square */
+  /* Corner radiuses. */
   --r-1: 2px;
   --r-2: 4px;
   --r-pill: 999px;

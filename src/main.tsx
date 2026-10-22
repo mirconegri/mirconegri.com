@@ -7,7 +7,7 @@ import { initStrata } from './lib/strata';
 import { initTerrain } from './lib/terrain';
 import { initTheme } from './lib/theme';
 
-/** Islands mount first so the behaviour modules bind to the rendered controls. */
+// Initializes theme, language, interactive islands, and animation systems.
 function boot(): void {
   initTheme();
   initLanguage();

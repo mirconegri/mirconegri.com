@@ -1,6 +1,6 @@
-/* Sections — sheet composition. */
+/* Section sheet composition. */
 
-/* 00 ground / hero */
+/* 00 - hero */
 
 .hero {
   position: relative;
@@ -59,7 +59,7 @@
   transform-origin: left center;
 }
 
-/* the fixed WebGL 3D geometry sits behind every transparent sheet */
+/* Fixed WebGL 3D canvas background. */
 
 .strata-canvas {
   position: fixed;
@@ -84,7 +84,7 @@
     radial-gradient(60% 50% at 50% 45%, var(--accent-soft), transparent 70%);
 }
 
-/* 01 strata / about */
+/* 01 - about */
 
 .strata-sheet {
   min-height: 88svh;
@@ -96,7 +96,7 @@
   max-width: 46ch;
 }
 
-/* sheet furniture */
+/* Section header indexes and metadata labels. */
 
 .sheet-index {
   display: flex;
@@ -137,7 +137,7 @@
   margin-bottom: var(--s-7);
 }
 
-/* Claude "thinking" reflection shimmer — smooth specular beam gliding left to right */
+/* Claude-style horizontal specular shimmer sweep. */
 @keyframes claude-shimmer {
   0% {
     background-position: 100% 0;
@@ -228,7 +228,7 @@ html[data-theme='light'] .sheet-title {
   font-weight: 500;
 }
 
-/* 03 training */
+/* 03 - education and experience */
 
 .track {
   display: flex;
@@ -269,7 +269,7 @@ html[data-theme='light'] .sheet-title {
   color: var(--text-2);
 }
 
-/* 05 terrain */
+/* 05 - journey map */
 
 .terrain {
   position: relative;
@@ -316,7 +316,7 @@ html[data-theme='light'] .sheet-title {
   border: 1px solid currentColor;
 }
 
-/* 06 contact */
+/* 06 - contact form */
 
 .contact-mail {
   display: inline-flex;
@@ -338,7 +338,7 @@ html[data-theme='light'] .sheet-title {
   margin-top: var(--s-5);
 }
 
-/* 07 revisions — the changelog reads as a drawing revision block */
+/* 07 - changelog and revision log */
 
 .revisions {
   border: 1px solid var(--line);
@@ -377,7 +377,7 @@ html[data-theme='light'] .sheet-title {
 
 
 
-/* Project Orbit 3D Explorer */
+/* 3D project orbit explorer container. */
 .orbit-container {
   width: 100%;
   margin-block: var(--s-4) var(--s-6);
@@ -442,7 +442,7 @@ html[data-theme='light'] .sheet-title {
   50% { opacity: 1; transform: scale(1.2); }
 }
 
-/* Glassmorphic Glitch HUD Card */
+/* Glassmorphic HUD glitch status card. */
 .orbit-hud {
   position: absolute;
   right: var(--s-4);

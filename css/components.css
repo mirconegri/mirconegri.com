@@ -1,4 +1,4 @@
-/* Components — navigation, controls, rows, overlays. */
+/* UI components: navigation, controls, cards, and overlays. */
 
 .nav {
   position: fixed;
@@ -183,7 +183,7 @@
   gap: var(--s-2);
 }
 
-/* hairline row lists — the stratigraphy motif for projects, roles, dates */
+/* Project and experience hairline row lists. */
 
 .rows {
   border-top: 1px solid var(--line);

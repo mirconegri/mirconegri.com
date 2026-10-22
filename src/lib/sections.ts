@@ -1,5 +1,3 @@
-/** Sheet geometry shared by the scroll driven modules. */
-
 import { selectAll } from './dom';
 import { clamp } from './env';
 
@@ -8,6 +6,7 @@ export interface Rect {
   bottom: number;
 }
 
+// Maps DOM elements to bounding client rect tops and bottoms.
 export function rectsOf(elements: readonly Element[]): Rect[] {
   return elements.map((element) => {
     const rect = element.getBoundingClientRect();
@@ -15,13 +14,13 @@ export function rectsOf(elements: readonly Element[]): Rect[] {
   });
 }
 
-/** 0 before the sheet reaches the viewport, 1 once it has fully left. */
+// Calculates section scroll progress from 0 (approaching) to 1 (left viewport).
 export function sectionProgress(rect: Rect, viewportHeight: number): number {
   const span = rect.bottom - rect.top + viewportHeight;
   return span <= 0 ? 0 : clamp((viewportHeight - rect.top) / span, 0, 1);
 }
 
-/** Index of the sheet covering the given viewport line, or the nearest one. */
+// Identifies the active sheet nearest to the viewport center.
 export function activeSectionIndex(rects: readonly Rect[], line: number): number {
   let best = 0;
   let bestDistance = Number.POSITIVE_INFINITY;
@@ -37,6 +36,7 @@ export function activeSectionIndex(rects: readonly Rect[], line: number): number
   return best;
 }
 
+// Queries all authored sheets in document order.
 export function sheets(root: ParentNode = document): HTMLElement[] {
   return selectAll<HTMLElement>('[data-sheet]', root);
 }

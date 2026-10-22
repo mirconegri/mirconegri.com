@@ -14957,7 +14957,7 @@ function Om(e, { root: t, margin: n, amount: r, once: i = !1, initial: a = !1 } 
 	]), o;
 }
 //#endregion
-//#region src/components/react-bits/CountUp/CountUp.tsx
+//#region src/components/react-bits/CountUp.tsx
 var km = 1.2, Am = .07, jm = [
 	[0xe8d4a51000, "T"],
 	[1e9, "B"],
@@ -14992,7 +14992,7 @@ var km = 1.2, Am = .07, jm = [
 	let t = e.toString();
 	if (t.includes(".")) {
 		let e = t.split(".")[1];
-		if (parseInt(e) !== 0) return e.length;
+		if (parseInt(e, 10) !== 0) return e.length;
 	}
 	return 0;
 }, Vm = (e) => jm.find(([t]) => Math.abs(e) >= t * .9995) || [1, ""], Hm = (e, t, n, r) => {
@@ -15900,7 +15900,7 @@ var Mh = jh, Nh = typeof document < "u" ? _.useLayoutEffect : _.useEffect, Ph = 
 	};
 };
 //#endregion
-//#region src/components/react-bits/SplitText/SplitText.tsx
+//#region src/components/react-bits/SplitText.tsx
 Rh.register = (e) => {
 	Lh = e;
 }, Rh.headless = !0, Ii.registerPlugin(tc, Mh, Rh);
@@ -29702,33 +29702,48 @@ function aD() {
 	if (!e) return;
 	let n = y("[data-palette-input]", e), r = y("[data-palette-list]", e), i = y("[data-palette-empty]", e);
 	if (!n || !r) return;
-	let a = [...rD, ...nD(document)], o = [], s = 0, c = (e) => {
-		f(), e.action === "navigate" ? y(e.value)?.scrollIntoView({
-			behavior: "smooth",
-			block: "start"
-		}) : e.action === "external" ? window.open(e.value, "_blank", "noopener") : e.action === "theme" ? y("[data-theme-toggle]")?.click() : e.action === "language" ? y("[data-lang-toggle]")?.click() : navigator.clipboard?.writeText(e.value);
-	}, l = () => {
-		r.replaceChildren(), o.forEach((e, t) => {
+	let a = [...rD, ...nD(document)], o = [], s = 0, c = () => {
+		r.innerHTML = "", o.length === 0 ? i && (i.hidden = !1) : (i && (i.hidden = !0), o.forEach((e, t) => {
 			let n = document.createElement("button");
-			n.type = "button", n.className = "palette-item", n.setAttribute("role", "option"), n.setAttribute("aria-selected", String(t === s)), n.innerHTML = `<span class="row-index">${e.group}</span><span class="row-name">${e.label}</span><span class="row-meta">${e.hint}</span>`, n.addEventListener("click", () => c(e)), n.addEventListener("pointermove", () => {
+			n.type = "button", n.className = "palette-item", n.setAttribute("role", "option"), n.setAttribute("aria-selected", String(t === s)), t === s && n.classList.add("is-active"), n.innerHTML = `
+        <span class="palette-item-main">
+          <span class="palette-item-label">${e.label}</span>
+          <span class="palette-item-group">${e.group}</span>
+        </span>
+        <span class="palette-item-hint">${e.hint}</span>
+      `, x(n, "pointerenter", () => {
 				s = t, l();
-			}), r.append(n);
-		}), i && (i.hidden = o.length > 0);
-	}, u = () => {
-		o = tD(a, n.value).slice(0, iD), s = 0, l();
+			}), x(n, "click", () => u(e)), r.appendChild(n);
+		}));
+	}, l = () => {
+		b(".palette-item", r).forEach((e, t) => {
+			let n = t === s;
+			e.classList.toggle("is-active", n), e.setAttribute("aria-selected", String(n)), n && e.scrollIntoView({ block: "nearest" });
+		});
+	}, u = (e) => {
+		f(), e.action === "navigate" ? y(e.value)?.scrollIntoView({ behavior: "smooth" }) : e.action === "external" ? window.open(e.value, "_blank", "noopener") : e.action === "theme" ? y("[data-theme-toggle]")?.click() : e.action === "language" ? y("[data-lang-toggle]")?.click() : e.action === "email" && navigator.clipboard?.writeText(e.value);
 	}, d = () => {
-		e.hidden = !1, u(), n.focus(), n.select();
+		e.hidden = !1, document.body.classList.add("palette-open"), n.value = "", o = a.slice(0, iD).map((e) => ({
+			...e,
+			score: 1
+		})), s = 0, c(), setTimeout(() => n.focus(), 10);
 	}, f = () => {
-		e.hidden = !0, n.value = "";
+		e.hidden = !0, document.body.classList.remove("palette-open");
 	};
-	t && x(t, "click", d), x(n, "input", u), x(n, "keydown", (e) => {
+	x(n, "input", () => {
+		let e = n.value.trim();
+		o = e ? tD(a, e).slice(0, iD) : a.slice(0, iD).map((e) => ({
+			...e,
+			score: 1
+		})), s = 0, c();
+	}), x(n, "keydown", (e) => {
 		let t = e.key;
-		t === "ArrowDown" ? (e.preventDefault(), s = Math.min(s + 1, o.length - 1), l()) : t === "ArrowUp" ? (e.preventDefault(), s = Math.max(s - 1, 0), l()) : t === "Enter" && o[s] && (e.preventDefault(), c(o[s]));
-	}), x(e, "click", (t) => {
-		t.target === e && f();
+		t === "ArrowDown" ? (e.preventDefault(), s = (s + 1) % Math.max(1, o.length), l()) : t === "ArrowUp" ? (e.preventDefault(), s = (s - 1 + o.length) % Math.max(1, o.length), l()) : t === "Enter" ? (e.preventDefault(), o[s] && u(o[s])) : t === "Escape" && f();
 	}), x(document, "keydown", (t) => {
 		let n = t;
-		n.key.toLowerCase() === "k" && (n.metaKey || n.ctrlKey) ? (n.preventDefault(), e.hidden ? d() : f()) : n.key === "Escape" && !e.hidden && f();
+		(n.metaKey || n.ctrlKey) && n.key.toLowerCase() === "k" && (t.preventDefault(), e.hidden ? d() : f());
+	}), t && x(t, "click", d), x(e, "click", (t) => {
+		t.target === e && f();
 	});
 }
 //#endregion
@@ -33812,7 +33827,7 @@ function jD() {
 	return {
 		ink: t("--text", "#e9e7e2"),
 		grid: t("--grid-line", "rgba(233,231,226,.055)"),
-		home: t("--accent", "#ff5a2c"),
+		home: t("--accent", "#df7d60"),
 		study: t("--accent-2", "#6fd3e0"),
 		journey: t("--text-3", "#7e838c"),
 		panel: t("--bg-elevated", "#13161a"),

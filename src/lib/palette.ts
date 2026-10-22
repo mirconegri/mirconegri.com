@@ -19,7 +19,7 @@ const CONSECUTIVE_BONUS = 3;
 const SINGLE_BONUS = 1;
 const GROUP_WEIGHT = 0.4;
 
-/** Subsequence match: returns 0 when any query character is missing, in order. */
+// Fuzzy subsequence match returning character-order bonus scores.
 export function fuzzyScore(query: string, target: string): number {
   const needle = query.trim().toLowerCase();
   if (needle.length === 0) return 1;
@@ -38,6 +38,7 @@ export function fuzzyScore(query: string, target: string): number {
   return score;
 }
 
+// Ranks command palette entries by matching query against label and group.
 export function rankEntries(entries: readonly PaletteEntry[], query: string): RankedEntry[] {
   return entries
     .map((entry) => ({
@@ -48,7 +49,7 @@ export function rankEntries(entries: readonly PaletteEntry[], query: string): Ra
     .sort((a, b) => b.score - a.score);
 }
 
-/** Reads the searchable index straight from the markup, so content has one source. */
+// Scrapes searchable entries directly from authored HTML markup.
 export function collectEntries(root: ParentNode): PaletteEntry[] {
   const entries: PaletteEntry[] = [];
 
@@ -86,6 +87,7 @@ const STATIC_ENTRIES: readonly PaletteEntry[] = [
 
 const MAX_VISIBLE = 9;
 
+// Binds global keyboard shortcuts and search interactions for the command palette.
 export function initPalette(): void {
   const root = select<HTMLElement>('[data-palette]');
   const trigger = select<HTMLButtonElement>('[data-palette-open]');
@@ -98,96 +100,119 @@ export function initPalette(): void {
 
   const entries = [...STATIC_ENTRIES, ...collectEntries(document)];
   let visible: RankedEntry[] = [];
-  let cursor = 0;
+  let selected = 0;
 
-  const run = (entry: RankedEntry) => {
+  const render = () => {
+    list.innerHTML = '';
+    if (visible.length === 0) {
+      if (empty) empty.hidden = false;
+      return;
+    }
+    if (empty) empty.hidden = true;
+
+    visible.forEach((entry, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'palette-item';
+      button.setAttribute('role', 'option');
+      button.setAttribute('aria-selected', String(index === selected));
+      if (index === selected) button.classList.add('is-active');
+
+      button.innerHTML = `
+        <span class="palette-item-main">
+          <span class="palette-item-label">${entry.label}</span>
+          <span class="palette-item-group">${entry.group}</span>
+        </span>
+        <span class="palette-item-hint">${entry.hint}</span>
+      `;
+
+      on(button, 'pointerenter', () => {
+        selected = index;
+        syncSelected();
+      });
+
+      on(button, 'click', () => execute(entry));
+      list.appendChild(button);
+    });
+  };
+
+  const syncSelected = () => {
+    const items = selectAll<HTMLElement>('.palette-item', list);
+    items.forEach((item, index) => {
+      const active = index === selected;
+      item.classList.toggle('is-active', active);
+      item.setAttribute('aria-selected', String(active));
+      if (active) item.scrollIntoView({ block: 'nearest' });
+    });
+  };
+
+  const execute = (entry: PaletteEntry) => {
     close();
     if (entry.action === 'navigate') {
-      select<HTMLElement>(entry.value)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      return;
-    }
-    if (entry.action === 'external') {
+      const target = select<HTMLElement>(entry.value);
+      target?.scrollIntoView({ behavior: 'smooth' });
+    } else if (entry.action === 'external') {
       window.open(entry.value, '_blank', 'noopener');
-      return;
-    }
-    if (entry.action === 'theme') {
+    } else if (entry.action === 'theme') {
       select<HTMLButtonElement>('[data-theme-toggle]')?.click();
-      return;
-    }
-    if (entry.action === 'language') {
+    } else if (entry.action === 'language') {
       select<HTMLButtonElement>('[data-lang-toggle]')?.click();
-      return;
+    } else if (entry.action === 'email') {
+      navigator.clipboard?.writeText(entry.value);
     }
-    void navigator.clipboard?.writeText(entry.value);
-  };
-
-  const paint = () => {
-    list.replaceChildren();
-    visible.forEach((entry, index) => {
-      const item = document.createElement('button');
-      item.type = 'button';
-      item.className = 'palette-item';
-      item.setAttribute('role', 'option');
-      item.setAttribute('aria-selected', String(index === cursor));
-      item.innerHTML = `<span class="row-index">${entry.group}</span><span class="row-name">${entry.label}</span><span class="row-meta">${entry.hint}</span>`;
-      item.addEventListener('click', () => run(entry));
-      item.addEventListener('pointermove', () => {
-        cursor = index;
-        paint();
-      });
-      list.append(item);
-    });
-    if (empty) empty.hidden = visible.length > 0;
-  };
-
-  const search = () => {
-    visible = rankEntries(entries, input.value).slice(0, MAX_VISIBLE);
-    cursor = 0;
-    paint();
   };
 
   const open = () => {
     root.hidden = false;
-    search();
-    input.focus();
-    input.select();
+    document.body.classList.add('palette-open');
+    input.value = '';
+    visible = entries.slice(0, MAX_VISIBLE).map(e => ({ ...e, score: 1 }));
+    selected = 0;
+    render();
+    setTimeout(() => input.focus(), 10);
   };
 
   const close = () => {
     root.hidden = true;
-    input.value = '';
+    document.body.classList.remove('palette-open');
   };
 
-  if (trigger) on(trigger, 'click', open);
-  on(input, 'input', search);
-  on(input, 'keydown', (event) => {
-    const key = (event as KeyboardEvent).key;
+  on(input, 'input', () => {
+    const query = input.value.trim();
+    visible = query ? rankEntries(entries, query).slice(0, MAX_VISIBLE) : entries.slice(0, MAX_VISIBLE).map(e => ({ ...e, score: 1 }));
+    selected = 0;
+    render();
+  });
+
+  on(input, 'keydown', (e: Event) => {
+    const key = (e as KeyboardEvent).key;
     if (key === 'ArrowDown') {
-      event.preventDefault();
-      cursor = Math.min(cursor + 1, visible.length - 1);
-      paint();
+      e.preventDefault();
+      selected = (selected + 1) % Math.max(1, visible.length);
+      syncSelected();
     } else if (key === 'ArrowUp') {
-      event.preventDefault();
-      cursor = Math.max(cursor - 1, 0);
-      paint();
-    } else if (key === 'Enter' && visible[cursor]) {
-      event.preventDefault();
-      run(visible[cursor]);
+      e.preventDefault();
+      selected = (selected - 1 + visible.length) % Math.max(1, visible.length);
+      syncSelected();
+    } else if (key === 'Enter') {
+      e.preventDefault();
+      if (visible[selected]) execute(visible[selected]);
+    } else if (key === 'Escape') {
+      close();
     }
   });
 
-  on(root, 'click', (event) => {
-    if (event.target === root) close();
-  });
-
-  on(document, 'keydown', (event) => {
-    const keyboard = event as KeyboardEvent;
-    if (keyboard.key.toLowerCase() === 'k' && (keyboard.metaKey || keyboard.ctrlKey)) {
-      keyboard.preventDefault();
+  on(document, 'keydown', (e: Event) => {
+    const ke = e as KeyboardEvent;
+    if ((ke.metaKey || ke.ctrlKey) && ke.key.toLowerCase() === 'k') {
+      e.preventDefault();
       if (root.hidden) open();
       else close();
-      return;
     }
-    if (keyboard.key === 'Escape' && !root.hidden) close();
+  });
+
+  if (trigger) on(trigger, 'click', open);
+  on(root, 'click', (e) => {
+    if (e.target === root) close();
   });
 }

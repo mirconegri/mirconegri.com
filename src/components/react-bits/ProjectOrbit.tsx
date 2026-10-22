@@ -385,7 +385,6 @@ function createEmojiInspiredMesh(shape: ProjectSatellite['shape'], color: THREE.
       group.add(tile);
       break;
     }
-    case 'globe-ring':
     default: {
       // 🌐 Web globe with planetary ring
       const globe = new THREE.Mesh(new THREE.SphereGeometry(0.5, 12, 12), mat);

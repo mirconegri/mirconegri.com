@@ -10,7 +10,7 @@ gsap.registerPlugin(ScrollTrigger);
 const REVEAL_DURATION = 0.85;
 const REVEAL_SHIFT = 22;
 
-/** Lenis keeps the scroll from jumping, GSAP reveals each sheet as it arrives. */
+// Wires Lenis smooth scrolling, nav progress indicators, and GSAP scroll reveals.
 export function initMotion(): void {
   const reduced = prefersReducedMotion();
   const progress = select<HTMLElement>('[data-nav-progress]');

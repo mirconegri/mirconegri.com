@@ -3,7 +3,7 @@ import { pixelRatio } from './env';
 import type { CountryRings, GeoPoint } from './world-geo';
 import { SHAPES } from './world-geo';
 
-/** Journey map drawn on a 2D canvas: Natural Earth 50m outlines, no map library. */
+// Canvas journey map rendering Natural Earth 50m outlines.
 
 const LON_MIN = -25;
 const LON_MAX = 45;
@@ -118,7 +118,7 @@ export function countryAt(index: readonly CountryEntry[], lon: number, lat: numb
   return null;
 }
 
-/** Index of the pin under the pointer, or -1 when the pointer misses every pin. */
+// Hit-tests whether pointer coordinates intersect any plotted location.
 export function hitPlace(
   places: readonly TerrainPlace[],
   x: number,
@@ -151,7 +151,7 @@ function readPalette(): CanvasPalette {
   return {
     ink: read('--text', '#e9e7e2'),
     grid: read('--grid-line', 'rgba(233,231,226,.055)'),
-    home: read('--accent', '#ff5a2c'),
+    home: read('--accent', '#df7d60'),
     study: read('--accent-2', '#6fd3e0'),
     journey: read('--text-3', '#7e838c'),
     panel: read('--bg-elevated', '#13161a'),

@@ -48,7 +48,7 @@ const useIsoLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : use
 const fontsAreLoaded = (): boolean =>
   typeof document !== 'undefined' && (!document.fonts || document.fonts.status === 'loaded');
 
-const waveEase = (t: number) => 1 - Math.cos(t * Math.PI * 1.5) * Math.pow(1 - t, 1.2);
+const waveEase = (t: number) => 1 - Math.cos(t * Math.PI * 1.5) * (1 - t) ** 1.2;
 
 const getEffect = (effect: SplitTextEffect, em: number): Look => {
   switch (effect) {

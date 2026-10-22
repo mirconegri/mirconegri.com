@@ -12,7 +12,7 @@ type StatusKey = ContactError | 'sending' | 'success' | 'error';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-/** Second gate before the network: native validation already covers the no-script path. */
+// Validates form payload before network transmission.
 export function validateContact(payload: ContactPayload, consent: boolean): ContactError | null {
   if (payload.name.trim().length === 0 || payload.message.trim().length === 0) return 'required';
   if (!EMAIL_PATTERN.test(payload.email.trim())) return 'email';
@@ -20,6 +20,7 @@ export function validateContact(payload: ContactPayload, consent: boolean): Cont
   return null;
 }
 
+// Binds form validation and AJAX submission to the contact form.
 export function initContact(): void {
   const form = select<HTMLFormElement>('[data-contact]');
   if (!form) return;

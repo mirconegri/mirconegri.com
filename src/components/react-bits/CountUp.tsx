@@ -99,7 +99,7 @@ const makeSpring = (overshoot: number) => {
 const EASINGS: Record<Easing, (t: number) => number> = {
   linear: t => t,
   easeOut: cubicBezier(0.33, 1, 0.68, 1),
-  expo: t => (t >= 1 ? 1 : (1 - Math.pow(2, -10 * t)) / (1 - Math.pow(2, -10))),
+  expo: t => (t >= 1 ? 1 : (1 - 2 ** (-10 * t)) / (1 - 2 ** -10)),
   spring: makeSpring(0.06)
 };
 
@@ -109,7 +109,7 @@ const getDecimalPlaces = (num: number): number => {
   if (str.includes('.')) {
     const decimals = str.split('.')[1];
 
-    if (parseInt(decimals) !== 0) {
+    if (parseInt(decimals, 10) !== 0) {
       return decimals.length;
     }
   }

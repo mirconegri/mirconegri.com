@@ -1,7 +1,6 @@
-/* Motion — shared primitives and reduced-motion policy. */
+/* Motion primitives and reduced-motion fallbacks. */
 
-/* Elements start hidden only when scripting is available, so the page never
-   traps content behind a failed bundle. */
+/* Hidden initially only when JS is active to avoid trapping content. */
 html.js [data-reveal] {
   opacity: 0;
 }
@@ -50,16 +49,15 @@ html.js [data-reveal='mask'] {
     clip-path: none;
   }
 
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+  .u-hover-lift {
+    transition: none;
   }
 
   .u-hover-lift:hover {
     transform: none;
+  }
+
+  .u-link-underline::after {
+    transition: none;
   }
 }

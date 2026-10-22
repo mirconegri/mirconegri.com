@@ -1,4 +1,4 @@
-/* Base — reset, typography, layout primitives, utilities. */
+/* Base resets, typography, and layout primitives. */
 
 *,
 *::before,
@@ -30,7 +30,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* A faint drawing grid marks the sheet without competing with content. */
+/* Ambient vertical grid lines marking the viewport width. */
 body::before {
   content: '';
   position: fixed;

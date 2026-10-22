@@ -1,11 +1,11 @@
 import { type ReactNode, useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { selectAll, watchMedia } from '../lib/dom';
-import AnimatedContent from './react-bits/AnimatedContent/AnimatedContent';
-import CountUp from './react-bits/CountUp/CountUp';
+import AnimatedContent from './react-bits/AnimatedContent';
+import CountUp from './react-bits/CountUp';
 import DotGrid from './react-bits/DotGrid';
-import Magnet from './react-bits/Magnet/Magnet';
-import SplitText from './react-bits/SplitText/SplitText';
+import Magnet from './react-bits/Magnet';
+import SplitText from './react-bits/SplitText';
 import SpotlightCard from './react-bits/SpotlightCard';
 import ProjectOrbit from './react-bits/ProjectOrbit';
 
@@ -20,6 +20,7 @@ function currentTheme(): Theme {
   return document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
 }
 
+// React hook tracking active language.
 function useLanguage(): Lang {
   const [lang, setLang] = useState(currentLang);
   useEffect(() => {
@@ -30,6 +31,7 @@ function useLanguage(): Lang {
   return lang;
 }
 
+// React hook tracking active theme.
 function useTheme(): Theme {
   const [theme, setTheme] = useState(currentTheme);
   useEffect(() => {
@@ -40,13 +42,14 @@ function useTheme(): Theme {
   return theme;
 }
 
+// React hook tracking reduced motion preference.
 function useReducedMotion(): boolean {
   const [reduced, setReduced] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   useEffect(() => watchMedia('(prefers-reduced-motion: reduce)', setReduced), []);
   return reduced;
 }
 
-/** Reads a design token and follows theme changes. */
+// Reads a design token value and updates on theme changes.
 function useToken(name: string): string {
   const read = () => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   const [value, setValue] = useState(read);
@@ -58,15 +61,17 @@ function useToken(name: string): string {
   return value;
 }
 
+// Extracts localized text from data-text-it or data-text-en dataset attributes.
 function pick(host: HTMLElement, key: string, lang: Lang): string {
   return host.dataset[`${key}${lang === 'it' ? 'It' : 'En'}`] ?? '';
 }
 
-/** Keeps an HTML string out of reconciliation so React never rewrites the subtree. */
+// Memoizes HTML to keep React from rewriting server-rendered nodes.
 function useMarkup(html: string): ReactNode {
   return useMemo(() => <div dangerouslySetInnerHTML={{ __html: html }} />, [html]);
 }
 
+// Hero title with staggered character reveal.
 function HeroName({ host }: { host: HTMLElement }) {
   const lang = useLanguage();
   const reduced = useReducedMotion();
@@ -97,6 +102,7 @@ interface StatEntry {
   label: string;
 }
 
+// Parses numeric counters from data-stat attributes.
 function readStats(host: HTMLElement, lang: Lang): StatEntry[] {
   return selectAll<HTMLElement>('[data-stat]', host).map((item) => ({
     value: Number(item.dataset.value ?? 0),
@@ -105,6 +111,7 @@ function readStats(host: HTMLElement, lang: Lang): StatEntry[] {
   }));
 }
 
+// Animated stats section with ease-out count up.
 function Stats({ host }: { host: HTMLElement }) {
   const lang = useLanguage();
   const reduced = useReducedMotion();
@@ -124,6 +131,7 @@ function Stats({ host }: { host: HTMLElement }) {
   );
 }
 
+// Magnetic search icon button.
 function PaletteMagnet({ host }: { host: HTMLElement }) {
   const reduced = useReducedMotion();
   return (
@@ -143,6 +151,7 @@ function PaletteMagnet({ host }: { host: HTMLElement }) {
   );
 }
 
+// Vertical prose block with staggered fade-in.
 function AboutProse({ html, className }: { html: string; className: string }) {
   const reduced = useReducedMotion();
   const markup = useMarkup(html);
@@ -165,6 +174,7 @@ function AboutProse({ html, className }: { html: string; className: string }) {
   );
 }
 
+// Interactive spotlight contact card with cursor flare.
 function ContactCard({ html, className }: { html: string; className: string }) {
   const theme = useTheme();
   const reduced = useReducedMotion();
@@ -189,6 +199,7 @@ function ContactCard({ html, className }: { html: string; className: string }) {
   );
 }
 
+// Interactive WebGL interactive dot grid canvas.
 function ContactGrid({ paused }: { paused: boolean }) {
   const base = useToken('--text');
   const active = useToken('--accent');
@@ -211,13 +222,14 @@ function ContactGrid({ paused }: { paused: boolean }) {
   );
 }
 
+// Mount helper for individual island containers.
 function mount(selector: string, render: (host: HTMLElement) => ReactNode): void {
   for (const host of selectAll<HTMLElement>(selector)) {
     createRoot(host).render(render(host));
   }
 }
 
-/** Mounts the React Bits islands; each host keeps its authored markup for the no-script path. */
+// Mounts interactive React islands into static HTML hosts.
 export function initIslands(): void {
   mount('[data-island="hero-name"]', (host) => <HeroName host={host} />);
   mount('[data-island="stats"]', (host) => <Stats host={host} />);

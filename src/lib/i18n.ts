@@ -18,21 +18,22 @@ export function readStoredLang(storage: StorageLike): Lang | null {
   return isLang(raw) ? raw : null;
 }
 
-/** A stored choice wins; otherwise the browser locale decides. */
+// Chooses initial language: stored selection wins, then browser locale, fallback to English.
 export function resolveInitialLang(storage: StorageLike, navigatorLanguage: string): Lang {
   return readStoredLang(storage) ?? (navigatorLanguage.toLowerCase().startsWith('it') ? 'it' : DEFAULT_LANG);
 }
 
-// Both locales are authored inside this repository, so the markup is trusted.
+// Reads localized markup from data-it or data-en attributes.
 export function localizedMarkup(element: Element, lang: Lang): string | null {
   return element.getAttribute(`data-${lang}`);
 }
 
+// Reads localized placeholder text from data-ph-it or data-ph-en attributes.
 export function localizedPlaceholder(element: Element, lang: Lang): string | null {
   return element.getAttribute(`data-ph-${lang}`);
 }
 
-/** Swaps every translated node under root and returns how many were applied. */
+// Updates all localized HTML nodes and input placeholders across the root tree.
 export function applyLanguage(root: ParentNode, lang: Lang): number {
   let applied = 0;
 
@@ -55,6 +56,7 @@ export function applyLanguage(root: ParentNode, lang: Lang): number {
   return applied;
 }
 
+// Initializes language detection, updates page markup, and binds the toggle button.
 export function initLanguage(): Lang {
   const stored = readStoredLang(localStorage);
   const initial = stored ?? (document.documentElement.lang.startsWith('it') ? 'it' : DEFAULT_LANG);
