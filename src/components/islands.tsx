@@ -6,8 +6,8 @@ import CountUp from './react-bits/CountUp/CountUp';
 import DotGrid from './react-bits/DotGrid';
 import Magnet from './react-bits/Magnet/Magnet';
 import RotatingText from './react-bits/RotatingText';
+import SplitText from './react-bits/SplitText/SplitText';
 import SpotlightCard from './react-bits/SpotlightCard';
-import MetallicText from './react-bits/MetallicText';
 import ProjectOrbit from './react-bits/ProjectOrbit';
 import CubeMatrix from './react-bits/CubeMatrix';
 
@@ -77,7 +77,21 @@ function HeroName({ host }: { host: HTMLElement }) {
 
   if (reduced) return <h1 className={className}>{text}</h1>;
 
-  return <MetallicText text={text} defaultPreset="chrome" showPresets={true} className={className} />;
+  return (
+    <SplitText
+      className={className}
+      text={text}
+      tag="h1"
+      splitType="chars"
+      effect="rise"
+      mask
+      trigger="load"
+      delay={0.12}
+      duration={1.1}
+      staggerFrom="start"
+      textAlign="left"
+    />
+  );
 }
 
 function HeroRole({ host }: { host: HTMLElement }) {

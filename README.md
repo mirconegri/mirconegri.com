@@ -21,9 +21,8 @@ Direct, pragmatic, and built by hand: software built from concrete problems, vol
 Unlike monolithic single-page applications, **v4.0** is architected around **Progressive Enhancement & Island Architecture**:
 
 - **Static HTML First**: Semantic HTML5 document containing all text and structure. Fast first paint, SEO-ready, and fully legible even if JavaScript is disabled.
-- **Selective React Islands (`data-island`)**: React 19 is isolated strictly to interactive micro-components ([React Bits](https://reactbits.dev/)) such as the 3D anisotropic metallic chrome hero title, kinetic rotating titles, numerical stat counters, spring magnetic buttons, and spotlight gradient cards.
+- **Selective React Islands (`data-island`)**: React 19 is isolated strictly to interactive micro-components ([React Bits](https://reactbits.dev/)) such as kinetic rotating titles, numerical stat counters, spring magnetic buttons, and spotlight gradient cards.
 - **Custom Three.js & GLSL Shaders**:
-  - **3D Metallic Anisotropic Text**: Interactive PBR chrome typography with Anisotropic GGX specular reflections, chromatic edge dispersion, dynamic mouse lighting, and real-time material presets (Chrome, Gold, Titanium, Copper, Diamond).
   - **Organic Noise Sphere & Particle Swarm**: An organic sphere dynamically distorted via 3D Simplex noise and GSAP, surrounded by an orbital Fibonacci cloud of 26,000 particles and textured ambient film-grain noise.
   - **3D Planetary Project Orbit Explorer**: An interactive celestial orbital system where projects orbit as low-poly geometric satellites; clicking any satellite smoothly docks the camera via GSAP and displays a glassmorphic HUD card with chromatic SVG glitch filters.
   - **3D Instanced Data Cube Matrix**: A $6 \times 6 \times 6$ (216 micro-modules) instanced GPU hypercube that morphs smoothly between structured architectural order and kinetic cloud entropy with holographic framed faces and real-time lighting.
