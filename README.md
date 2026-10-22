@@ -21,8 +21,10 @@ Direct, pragmatic, and built by hand: software built from concrete problems, vol
 Unlike monolithic single-page applications, **v4.0** is architected around **Progressive Enhancement & Island Architecture**:
 
 - **Static HTML First**: Semantic HTML5 document containing all text and structure. Fast first paint, SEO-ready, and fully legible even if JavaScript is disabled.
-- **Selective React Islands (`data-island`)**: React 19 is isolated strictly to interactive micro-components ([React Bits](https://reactbits.dev/)) such as kinetic rotating titles, numerical stat counters, spring magnetic buttons, and spotlight gradient cards.
-- **Custom Three.js & GLSL Shaders**: An organic sphere dynamically distorted via 3D Simplex noise and GSAP, surrounded by an orbital Fibonacci cloud of 26,000 particles and textured ambient film-grain noise.
+- **Selective React Islands (`data-island`)**: React 19 is isolated strictly to interactive micro-components ([React Bits](https://reactbits.dev/)) such as the 3D anisotropic metallic chrome hero title, kinetic rotating titles, numerical stat counters, spring magnetic buttons, and spotlight gradient cards.
+- **Custom Three.js & GLSL Shaders**:
+  - **3D Metallic Anisotropic Text**: Interactive PBR chrome typography with Anisotropic GGX specular reflections, chromatic edge dispersion, dynamic mouse lighting, and real-time material presets (Chrome, Gold, Titanium, Copper, Diamond).
+  - **Organic Noise Sphere & Particle Swarm**: An organic sphere dynamically distorted via 3D Simplex noise and GSAP, surrounded by an orbital Fibonacci cloud of 26,000 particles and textured ambient film-grain noise.
 - **Canvas 2D Journey Map**: Interactive geospatial map drawing Natural Earth 50m vector coastlines with custom projected path arcs and responsive tooltips without hefty mapping libraries (like Leaflet or Mapbox).
 - **Motion & Kinetic Scroll**: Butter-smooth inertial scrolling via [Lenis](https://lenis.darkroom.engineering/), orchestrated alongside [GSAP](https://gsap.com/) ScrollTrigger for section reveals.
 - **Zero Third-Party Tracking**: All fonts (Instrument Serif, Inter, JetBrains Mono) are self-hosted in WOFF2 format. Zero external analytics or third-party tracking scripts.
