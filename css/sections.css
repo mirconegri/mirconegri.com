@@ -39,14 +39,16 @@
   font-size: var(--step-1);
   color: var(--text-2);
   max-width: 42ch;
+  margin-bottom: var(--s-6);
 }
 
 .hero-foot {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   gap: var(--s-5);
+  margin-top: var(--s-4);
 }
 
 .hero-cue {
@@ -146,8 +148,68 @@
   margin-bottom: var(--s-7);
 }
 
+/* Claude "thinking" reflection shimmer — smooth specular beam gliding left to right */
+@keyframes claude-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -50% 0;
+  }
+}
+
+.claude-shimmer,
 .sheet-title {
+  display: inline-block;
+  width: fit-content;
+  max-width: 100%;
   font-size: var(--step-3);
+  background-image: linear-gradient(
+    90deg,
+    rgba(233, 231, 226, 0.35) 0%,
+    rgba(233, 231, 226, 0.35) 35%,
+    rgba(233, 231, 226, 0.72) 44%,
+    #ffffff 50%,
+    rgba(233, 231, 226, 0.72) 56%,
+    rgba(233, 231, 226, 0.35) 65%,
+    rgba(233, 231, 226, 0.35) 100%
+  );
+  background-size: 300% 100%;
+  background-repeat: repeat-x;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  -webkit-text-fill-color: transparent;
+  animation: claude-shimmer 3.2s ease-in-out infinite;
+}
+
+html[data-theme='light'] .claude-shimmer,
+html[data-theme='light'] .sheet-title {
+  background-image: linear-gradient(
+    90deg,
+    rgba(16, 18, 21, 0.35) 0%,
+    rgba(16, 18, 21, 0.35) 35%,
+    rgba(16, 18, 21, 0.72) 44%,
+    #101215 50%,
+    rgba(16, 18, 21, 0.72) 56%,
+    rgba(16, 18, 21, 0.35) 65%,
+    rgba(16, 18, 21, 0.35) 100%
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .claude-shimmer,
+  .sheet-title {
+    animation: none;
+    background-image: none;
+    -webkit-text-fill-color: var(--text);
+    color: var(--text);
+  }
 }
 
 .sheet-note {

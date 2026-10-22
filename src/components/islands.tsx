@@ -5,7 +5,6 @@ import AnimatedContent from './react-bits/AnimatedContent/AnimatedContent';
 import CountUp from './react-bits/CountUp/CountUp';
 import DotGrid from './react-bits/DotGrid';
 import Magnet from './react-bits/Magnet/Magnet';
-import RotatingText from './react-bits/RotatingText';
 import SplitText from './react-bits/SplitText/SplitText';
 import SpotlightCard from './react-bits/SpotlightCard';
 import ProjectOrbit from './react-bits/ProjectOrbit';
@@ -90,36 +89,6 @@ function HeroName({ host }: { host: HTMLElement }) {
       staggerFrom="start"
       textAlign="left"
     />
-  );
-}
-
-function HeroRole({ host }: { host: HTMLElement }) {
-  const lang = useLanguage();
-  const reduced = useReducedMotion();
-  const accent = useToken('--accent');
-  const lead = pick(host, 'lead', lang);
-  const words = pick(host, 'words', lang)
-    .split('|')
-    .map((word) => word.trim())
-    .filter((word) => word.length > 0);
-
-  return (
-    <p className={host.className || 'hero-role'}>
-      {lead}{' '}
-      <RotatingText
-        texts={words}
-        effect="slide"
-        direction="up"
-        auto={!reduced}
-        rotationInterval={2600}
-        staggerDuration={0.02}
-        staggerFrom="first"
-        splitBy="characters"
-        highlight
-        highlightColor={accent}
-        mainClassName="role-rotate"
-      />
-    </p>
   );
 }
 
@@ -252,7 +221,6 @@ function mount(selector: string, render: (host: HTMLElement) => ReactNode): void
 /** Mounts the React Bits islands; each host keeps its authored markup for the no-script path. */
 export function initIslands(): void {
   mount('[data-island="hero-name"]', (host) => <HeroName host={host} />);
-  mount('[data-island="hero-role"]', (host) => <HeroRole host={host} />);
   mount('[data-island="stats"]', (host) => <Stats host={host} />);
   mount('[data-island="magnet"]', (host) => <PaletteMagnet host={host} />);
   mount('[data-island="about"]', (host) => <AboutProse html={host.innerHTML} className={host.className || 'prose'} />);
