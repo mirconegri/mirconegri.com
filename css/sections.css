@@ -559,3 +559,99 @@
   border-color: var(--line-strong);
   color: var(--text);
 }
+
+
+/* Cube Matrix 3D Data Architecture */
+.cube-matrix-container {
+  width: 100%;
+  margin-top: var(--s-5);
+}
+
+.cube-matrix-wrap {
+  position: relative;
+  width: 100%;
+  background: radial-gradient(circle at 50% 50%, color-mix(in oklab, var(--accent) 7%, transparent) 0%, transparent 70%),
+              color-mix(in oklab, var(--bg) 94%, #000);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  overflow: hidden;
+  padding: var(--s-4);
+  display: flex;
+  flex-direction: column;
+}
+
+.cube-matrix-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-bottom: var(--s-2);
+}
+
+.cube-matrix-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-family: var(--font-mono);
+  font-size: var(--step--3);
+  letter-spacing: 0.08em;
+  color: var(--text-2);
+}
+
+.cube-matrix-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-2, #6fd3e0);
+  box-shadow: 0 0 8px var(--accent-2, #6fd3e0);
+}
+
+.cube-matrix-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.chip--matrix {
+  background: color-mix(in oklab, var(--bg) 80%, transparent);
+  border: 1px solid var(--line);
+  font-size: var(--step--3);
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--r-full);
+  color: var(--text-2);
+  cursor: pointer;
+  transition: all var(--dur-2) var(--ease-out);
+}
+
+.chip--matrix:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.chip--matrix.is-active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: color-mix(in oklab, var(--accent) 15%, transparent);
+}
+
+.cube-matrix-canvas {
+  display: block;
+  width: 100%;
+  height: clamp(280px, 32vw, 420px);
+  cursor: grab;
+  touch-action: none;
+}
+
+.cube-matrix-canvas:active {
+  cursor: grabbing;
+}
+
+.cube-matrix-footnote {
+  font-family: var(--font-mono);
+  font-size: var(--step--3);
+  color: var(--text-3);
+  text-align: center;
+  margin-top: var(--s-2);
+  letter-spacing: 0.04em;
+}
