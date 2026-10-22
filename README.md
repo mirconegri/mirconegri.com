@@ -3,7 +3,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0%2B-blue?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Bundler-Vite%208-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/Islands-React%2019-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
-[![WebGL2](https://img.shields.io/badge/Graphics-WebGL2-990000?style=for-the-badge&logo=webgl&logoColor=white)](https://www.khronos.org/webgl/)
+[![Three.js](https://img.shields.io/badge/Graphics-Three.js%20%2B%20GLSL-000000?style=for-the-badge&logo=threedotjs&logoColor=white)](https://threejs.org/)
 [![GSAP](https://img.shields.io/badge/Motion-GSAP%203%20%2B%20Lenis-88CE02?style=for-the-badge&logo=greensock&logoColor=white)](https://gsap.com/)
 [![Deploy](https://img.shields.io/badge/Deploy-Cloudflare%20Pages-F38020?style=for-the-badge&logo=cloudflare&logoColor=white)](https://pages.cloudflare.com/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
@@ -16,13 +16,13 @@ Direct, pragmatic, and built by hand: software built from concrete problems, vol
 
 ## 🏛️ Architecture & Philosophy
 
-> *"A kinetic WebGL2 geometric polyhedron, a custom 2D canvas map, and no framework runtime beyond the islands that need one."*
+> *"A Three.js noise sphere with orbital particle swarm, a custom 2D canvas map, and no framework runtime beyond the islands that need one."*
 
 Unlike monolithic single-page applications, **v4.0** is architected around **Progressive Enhancement & Island Architecture**:
 
 - **Static HTML First**: Semantic HTML5 document containing all text and structure. Fast first paint, SEO-ready, and fully legible even if JavaScript is disabled.
 - **Selective React Islands (`data-island`)**: React 19 is isolated strictly to interactive micro-components ([React Bits](https://reactbits.dev/)) such as kinetic rotating titles, numerical stat counters, spring magnetic buttons, and spotlight gradient cards.
-- **Custom WebGL2 Kinetic Geometry**: A full-screen WebGL2 raymarched faceted polyhedron (crystalline icosahedron with luminous edges and glowing internal core) that reacts smoothly to pointer movement and scroll progress.
+- **Custom Three.js & GLSL Shaders**: An organic sphere dynamically distorted via 3D Simplex noise and GSAP, surrounded by an orbital Fibonacci cloud of 26,000 particles and textured ambient film-grain noise.
 - **Canvas 2D Journey Map**: Interactive geospatial map drawing Natural Earth 50m vector coastlines with custom projected path arcs and responsive tooltips without hefty mapping libraries (like Leaflet or Mapbox).
 - **Motion & Kinetic Scroll**: Butter-smooth inertial scrolling via [Lenis](https://lenis.darkroom.engineering/), orchestrated alongside [GSAP](https://gsap.com/) ScrollTrigger for section reveals.
 - **Zero Third-Party Tracking**: All fonts (Instrument Serif, Inter, JetBrains Mono) are self-hosted in WOFF2 format. Zero external analytics or third-party tracking scripts.

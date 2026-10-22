@@ -1,251 +1,462 @@
+import * as THREE from 'three';
+import { gsap } from 'gsap';
 import { on, select } from './dom';
-import { clamp, createWebGL2, damp, pixelRatio, prefersReducedMotion } from './env';
-import { activeSectionIndex, rectsOf, sheets } from './sections';
+import { prefersReducedMotion } from './env';
 
-/** Kinetic 3D geometric polyhedron: single full-screen quad raymarcher. */
+/**
+ * Three.js + Custom GLSL Organic Noise Sphere & Particle Swarm
+ */
 
-const DPR_CAP = 1.5;
-const CAMERA_Z = 3.2;
-const IDLE_YAW_SPEED = 0.12;
-const POINTER_YAW = 0.45;
-const POINTER_PITCH = 0.25;
-const OFFSET_SMOOTHING = 3.0;
-const VISIBILITY_INTERVAL = 8;
-
-const VERTEX_SHADER = `#version 300 es
-precision highp float;
-
-void main() {
-  vec2 corner = vec2(float((gl_VertexID << 1) & 2), float(gl_VertexID & 2));
-  gl_Position = vec4(corner * 2.0 - 1.0, 0.0, 1.0);
-}
-`;
-
-const FRAGMENT_SHADER = `#version 300 es
-precision highp float;
-
-uniform vec2 uResolution;
-uniform vec3 uInk;
-uniform vec3 uAccent;
-uniform vec3 uAccent2;
-uniform float uOffset;
-uniform float uActive;
-uniform float uYaw;
-uniform float uPitch;
-uniform float uTime;
-uniform float uIsDark;
-
-out vec4 fragColor;
-
-mat2 rot(float a) {
-  float c = cos(a), s = sin(a);
-  return mat2(c, -s, s, c);
+const BACKGROUND_FRAGMENT = `
+float hue2rgb(float f1, float f2, float hue) {
+    if (hue < 0.0)
+        hue += 1.0;
+    else if (hue > 1.0)
+        hue -= 1.0;
+    float res;
+    if ((6.0 * hue) < 1.0)
+        res = f1 + (f2 - f1) * 6.0 * hue;
+    else if ((2.0 * hue) < 1.0)
+        res = f2;
+    else if ((3.0 * hue) < 2.0)
+        res = f1 + (f2 - f1) * ((2.0 / 3.0) - hue) * 6.0;
+    else
+        res = f1;
+    return res;
 }
 
-// Distance to an icosahedral faceted polyhedron
-float sdPolyhedron(vec3 p, float r) {
-  const float phi = 1.61803398875;
-  const vec3 n1 = normalize(vec3(phi, 1.0, 0.0));
-  const vec3 n2 = normalize(vec3(0.0, phi, 1.0));
-  const vec3 n3 = normalize(vec3(1.0, 0.0, phi));
-  vec3 ap = abs(p);
-  float d = dot(ap, n1);
-  d = max(d, dot(ap, n2));
-  d = max(d, dot(ap, n3));
-  d = max(d, (ap.x + ap.y + ap.z) * 0.57735);
-  return d - r;
-}
-
-// Distance to inner core
-float sdCore(vec3 p, float r) {
-  return length(p) - r;
-}
-
-// Scene SDF
-float map(vec3 p, out float matId, out float edgeDist) {
-  float ico = sdPolyhedron(p, 1.12);
-  float core = sdCore(p, 0.38);
-
-  // Approximate edge distance for wireframe glow
-  const float phi = 1.61803398875;
-  const vec3 n1 = normalize(vec3(phi, 1.0, 0.0));
-  const vec3 n2 = normalize(vec3(0.0, phi, 1.0));
-  const vec3 n3 = normalize(vec3(1.0, 0.0, phi));
-  vec3 ap = abs(p);
-  float d1 = dot(ap, n1);
-  float d2 = dot(ap, n2);
-  float d3 = dot(ap, n3);
-  edgeDist = min(abs(d1 - d2), min(abs(d2 - d3), abs(d3 - d1)));
-
-  if (ico < core) {
-    matId = 1.0;
-    return ico;
-  } else {
-    matId = 2.0;
-    return core;
-  }
-}
-
-vec3 calcNormal(vec3 p) {
-  float dummyMat, dummyEdge;
-  const vec2 e = vec2(0.002, 0.0);
-  return normalize(vec3(
-    map(p + e.xyy, dummyMat, dummyEdge) - map(p - e.xyy, dummyMat, dummyEdge),
-    map(p + e.yxy, dummyMat, dummyEdge) - map(p - e.yxy, dummyMat, dummyEdge),
-    map(p + e.yyx, dummyMat, dummyEdge) - map(p - e.yyx, dummyMat, dummyEdge)
-  ));
-}
-
-void main() {
-  vec2 uv = (gl_FragCoord.xy * 2.0 - uResolution) / min(uResolution.x, uResolution.y);
-  float aspect = uResolution.x / uResolution.y;
-
-  vec3 ro = vec3(0.0, 0.0, ${CAMERA_Z});
-  vec3 rd = normalize(vec3(uv, -1.8));
-
-  // Kinetic rotation: mouse orientation + idle drift + scroll-driven spin
-  float ry = uYaw + uTime * 0.16 + uOffset * 0.75;
-  float rx = uPitch + sin(uTime * 0.22) * 0.09;
-
-  ro.yz = rot(rx) * ro.yz;
-  rd.yz = rot(rx) * rd.yz;
-  ro.xz = rot(ry) * ro.xz;
-  rd.xz = rot(ry) * rd.xz;
-
-  float t = 0.0;
-  float matId = 0.0;
-  float hitMat = 0.0;
-  float hitEdge = 0.0;
-  float glowCore = 0.0;
-  float glowEdge = 0.0;
-
-  for (int i = 0; i < 54; i++) {
-    vec3 p = ro + rd * t;
-    float edgeD;
-    float d = map(p, matId, edgeD);
-
-    // Volumetric glow accumulation
-    float dCenter = length(p) - 0.38;
-    glowCore += 0.008 / (0.04 + dCenter * dCenter);
-    glowEdge += 0.002 / (0.01 + edgeD * edgeD);
-
-    if (d < 0.001) {
-      hitMat = matId;
-      hitEdge = edgeD;
-      break;
-    }
-    t += d * 0.85;
-    if (t > 6.5) break;
-  }
-
-  vec3 col = vec3(0.0);
-
-  if (t < 6.5) {
-    vec3 p = ro + rd * t;
-    vec3 n = calcNormal(p);
-    vec3 v = -rd;
-    float fresnel = pow(clamp(1.0 - dot(n, v), 0.0, 1.0), 2.2);
-
-    if (hitMat < 1.5) {
-      // Outer multifaceted polyhedron
-      float wire = 1.0 - smoothstep(0.0, 0.035, hitEdge);
-      vec3 facetEdge = mix(uAccent, uAccent2, 0.5 + 0.5 * sin(p.y * 3.5 + uTime * 0.5));
-      
-      vec3 darkSurface = mix(uInk * 0.06, uAccent * 0.12, fresnel);
-      vec3 lightSurface = mix(vec3(0.92), uAccent * 0.3, fresnel);
-      vec3 baseSurface = mix(lightSurface, darkSurface, uIsDark);
-
-      col = mix(baseSurface, facetEdge, wire * 0.95);
-      col += facetEdge * fresnel * 0.6;
+vec3 hsl2rgb(vec3 hsl) {
+    vec3 rgb;
+    
+    if (hsl.y == 0.0) {
+        rgb = vec3(hsl.z);
     } else {
-      // Inner glowing nucleus
-      col = mix(uAccent, uAccent2, 0.6 + 0.4 * sin(uTime * 1.2));
-    }
-  }
+        float f2;
+        
+        if (hsl.z < 0.5)
+            f2 = hsl.z * (1.0 + hsl.y);
+        else
+            f2 = hsl.z + hsl.y - hsl.y * hsl.z;
+            
+        float f1 = 2.0 * hsl.z - f2;
+        
+        rgb.r = hue2rgb(f1, f2, hsl.x + (1.0/3.0));
+        rgb.g = hue2rgb(f1, f2, hsl.x);
+        rgb.b = hue2rgb(f1, f2, hsl.x - (1.0/3.0));
+    }   
+    return rgb;
+}
 
-  // Add ambient volumetric glow
-  col += uAccent * (glowCore * 0.022);
-  col += mix(uAccent, uAccent2, 0.5) * (glowEdge * 0.012);
+vec3 random3(vec3 c) {
+    float j = 4096.0 * sin(dot(c, vec3(17.0, 59.4, 15.0)));
+    vec3 r;
+    r.z = fract(512.0 * j);
+    j *= 0.125;
+    r.x = fract(512.0 * j);
+    j *= 0.125;
+    r.y = fract(512.0 * j);
+    return r - 0.5;
+}
 
-  // Soft vignette fade at edges
-  vec2 screen = gl_FragCoord.xy / uResolution;
-  float vignette = smoothstep(0.0, 0.12, screen.x) * smoothstep(1.0, 0.88, screen.x) *
-                   smoothstep(0.0, 0.12, screen.y) * smoothstep(1.0, 0.88, screen.y);
+const float F3 = 0.3333333;
+const float G3 = 0.1666667;
 
-  float alpha = clamp(length(col) * 1.35, 0.0, 0.92) * vignette;
-  fragColor = vec4(col, alpha);
+float simplex3d(vec3 p) {
+    vec3 s = floor(p + dot(p, vec3(F3)));
+    vec3 x = p - s + dot(s, vec3(G3));
+    
+    vec3 e = step(vec3(0.0), x - x.yzx);
+    vec3 i1 = e * (1.0 - e.zxy);
+    vec3 i2 = 1.0 - e.zxy * (1.0 - e);
+    
+    vec3 x1 = x - i1 + G3;
+    vec3 x2 = x - i2 + 2.0 * G3;
+    vec3 x3 = x - 1.0 + 3.0 * G3;
+    
+    vec4 w, d;
+    w.x = dot(x, x);
+    w.y = dot(x1, x1);
+    w.z = dot(x2, x2);
+    w.w = dot(x3, x3);
+    
+    w = max(0.6 - w, 0.0);
+    
+    d.x = dot(random3(s), x);
+    d.y = dot(random3(s + i1), x1);
+    d.z = dot(random3(s + i2), x2);
+    d.w = dot(random3(s + 1.0), x3);
+    
+    w *= w;
+    w *= w;
+    d *= w;
+    
+    return dot(d, vec4(52.0));
+}
+
+float hash(vec2 p) {
+    return fract(1e4 * sin(17.0 * p.x + p.y * 0.1) * (0.1 + abs(sin(p.y * 13.0 + p.x))));
+}
+
+varying vec2 vUv;
+uniform float u_time;
+uniform float u_isDark;
+
+void main() {    
+    float n = simplex3d(vec3(vUv.xy, u_time * 1.0));
+    vec3 darkColor = hsl2rgb(vec3(0.0 + n * 0.1, 0.0, 0.03));
+    vec3 lightColor = hsl2rgb(vec3(0.0 + n * 0.1, 0.0, 0.95));
+    vec3 color = mix(lightColor, darkColor, u_isDark);
+    
+    float val = hash(vUv + u_time);
+    gl_FragColor = vec4(color + vec3(val / 20.0), 1.0);
 }
 `;
 
-function compile(gl: WebGL2RenderingContext, type: number, source: string): WebGLShader | null {
-  const shader = gl.createShader(type);
-  if (!shader) return null;
-  gl.shaderSource(shader, source);
-  gl.compileShader(shader);
-  if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) return shader;
-  console.error('Polyhedron shader failed to compile', gl.getShaderInfoLog(shader));
-  gl.deleteShader(shader);
-  return null;
+const BACKGROUND_VERTEX = `
+varying vec2 vUv;
+uniform float u_time;
+
+void main() {
+    vec3 p = position;
+    vec4 mvPosition = modelViewMatrix * vec4(p, 1.0);
+    gl_PointSize = 10.0 * (1.0 / -mvPosition.z);
+    gl_Position = projectionMatrix * mvPosition;
+    vUv = uv;
+}
+`;
+
+const PARTICLE_FRAGMENT = `
+uniform float u_progress;
+uniform float u_isDark;
+
+void main() {
+    vec3 particleCol = mix(vec3(0.2, 0.2, 0.2), vec3(0.65, 0.65, 0.65), u_isDark);
+    gl_FragColor = vec4(particleCol, u_progress);
+}
+`;
+
+const PARTICLE_VERTEX = `
+uniform float u_time;
+
+void main() {
+    vec3 p = position;
+    p.y += 0.25 * (sin(p.y * 5.0 + u_time) * 0.5 + 0.5);
+    p.z += 0.05 * (sin(p.y * 10.0 + u_time) * 0.5 + 0.5);
+    
+    vec4 mvPosition = modelViewMatrix * vec4(p, 1.0);
+    gl_PointSize = 10.0 * (1.0 / -mvPosition.z);
+    gl_Position = projectionMatrix * mvPosition;
+}
+`;
+
+const SPHERE_FRAGMENT = `
+varying vec2 vUv;
+varying vec3 v_color;
+varying vec3 v_normal;
+
+void main() {
+    vec3 light = vec3(0.0);
+    vec3 skyColor = vec3(1.000, 1.000, 0.547);
+    vec3 groundColor = vec3(0.562, 0.275, 0.111);
+    
+    vec3 lightDirection = normalize(vec3(0.0, -1.0, -1.0));
+    light += dot(lightDirection, v_normal);
+    light = mix(skyColor, groundColor, dot(lightDirection, v_normal));
+    
+    gl_FragColor = vec4(light * v_color, 1.0);
+}
+`;
+
+const SPHERE_VERTEX = `
+varying vec2 vUv;
+varying vec3 v_color;
+varying vec3 v_normal;
+
+uniform float u_time;
+uniform float u_progress;
+
+vec3 hsv2rgb(vec3 c) {
+    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
 }
 
-interface Program {
-  program: WebGLProgram;
-  uniforms: Record<string, WebGLUniformLocation | null>;
+vec4 permute(vec4 x) { return mod(((x * 34.0) + 1.0) * x, 289.0); }
+vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
+
+float snoise(vec3 v) {
+    const vec2 C = vec2(1.0 / 6.0, 1.0 / 3.0);
+    const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
+
+    vec3 i = floor(v + dot(v, C.yyy));
+    vec3 x0 = v - i + dot(i, C.xxx);
+
+    vec3 g = step(x0.yzx, x0.xyz);
+    vec3 l = 1.0 - g;
+    vec3 i1 = min(g.xyz, l.zxy);
+    vec3 i2 = max(g.xyz, l.zxy);
+
+    vec3 x1 = x0 - i1 + 1.0 * C.xxx;
+    vec3 x2 = x0 - i2 + 2.0 * C.xxx;
+    vec3 x3 = x0 - 1.0 + 3.0 * C.xxx;
+
+    i = mod(i, 289.0);
+    vec4 p = permute(permute(permute(
+          i.z + vec4(0.0, i1.z, i2.z, 1.0))
+        + i.y + vec4(0.0, i1.y, i2.y, 1.0))
+      + i.x + vec4(0.0, i1.x, i2.x, 1.0));
+
+    float n_ = 1.0 / 7.0;
+    vec3 ns = n_ * D.wyz - D.xzx;
+
+    vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+
+    vec4 x_ = floor(j * ns.z);
+    vec4 y_ = floor(j - 7.0 * x_);
+
+    vec4 x = x_ * ns.x + ns.yyyy;
+    vec4 y = y_ * ns.x + ns.yyyy;
+    vec4 h = 1.0 - abs(x) - abs(y);
+
+    vec4 b0 = vec4(x.xy, y.xy);
+    vec4 b1 = vec4(x.zw, y.zw);
+
+    vec4 s0 = floor(b0) * 2.0 + 1.0;
+    vec4 s1 = floor(b1) * 2.0 + 1.0;
+    vec4 sh = -step(h, vec4(0.0));
+
+    vec4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;
+    vec4 a1 = b1.xzyw + s1.xzyw * sh.zzww;
+
+    vec3 p0 = vec3(a0.xy, h.x);
+    vec3 p1 = vec3(a0.zw, h.y);
+    vec3 p2 = vec3(a1.xy, h.z);
+    vec3 p3 = vec3(a1.zw, h.w);
+
+    vec4 norm = taylorInvSqrt(vec4(dot(p0, p0), dot(p1, p1), dot(p2, p2), dot(p3, p3)));
+    p0 *= norm.x;
+    p1 *= norm.y;
+    p2 *= norm.z;
+    p3 *= norm.w;
+
+    vec4 m = max(0.6 - vec4(dot(x0, x0), dot(x1, x1), dot(x2, x2), dot(x3, x3)), 0.0);
+    m = m * m;
+    return 42.0 * dot(m * m, vec4(dot(p0, x0), dot(p1, x1), dot(p2, x2), dot(p3, x3)));
 }
 
-function buildProgram(gl: WebGL2RenderingContext): Program | null {
-  const vertex = compile(gl, gl.VERTEX_SHADER, VERTEX_SHADER);
-  const fragment = compile(gl, gl.FRAGMENT_SHADER, FRAGMENT_SHADER);
-  if (!vertex || !fragment) return null;
-
-  const program = gl.createProgram();
-  if (!program) return null;
-  gl.attachShader(program, vertex);
-  gl.attachShader(program, fragment);
-  gl.linkProgram(program);
-  gl.deleteShader(vertex);
-  gl.deleteShader(fragment);
-
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    console.error('Polyhedron program failed to link', gl.getProgramInfoLog(program));
-    gl.deleteProgram(program);
-    return null;
-  }
-
-  const names = [
-    'uResolution',
-    'uInk',
-    'uAccent',
-    'uAccent2',
-    'uOffset',
-    'uActive',
-    'uYaw',
-    'uPitch',
-    'uTime',
-    'uIsDark',
-  ];
-  const uniforms: Record<string, WebGLUniformLocation | null> = {};
-  for (const name of names) uniforms[name] = gl.getUniformLocation(program, name);
-
-  return { program, uniforms };
+void main() {
+    vUv = uv;
+    float noise = snoise(position * u_progress + u_time / 10.0);
+    vec3 newPos = position * (noise + 0.7);
+    v_color = hsv2rgb(vec3(noise * 0.1 + 0.03, 0.7, 0.7));
+    v_normal = normal;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(newPos, 1.0);
 }
+`;
 
-export function parseColor(value: string): [number, number, number] {
-  const text = value.trim();
-  const short = text.match(/^#([0-9a-f]{3})$/i);
-  if (short) {
-    return [0, 1, 2].map((i) => Number.parseInt(short[1][i].repeat(2), 16) / 255) as [number, number, number];
+class THREEScene {
+  private canvas: HTMLCanvasElement;
+  private scene: THREE.Scene;
+  private renderer: THREE.WebGLRenderer;
+  private camera: THREE.PerspectiveCamera;
+  private sphereMaterial: THREE.ShaderMaterial;
+  private pointsMaterial: THREE.ShaderMaterial;
+  private backgroundMaterial: THREE.ShaderMaterial;
+  private points: THREE.Points;
+  private sphere: THREE.Mesh;
+  private backgroundMesh: THREE.Mesh;
+  private clock: THREE.Clock;
+  private isReduced: boolean;
+  private targetYaw = 0;
+  private targetPitch = 0;
+  private currentYaw = 0;
+  private currentPitch = 0;
+  private isRunning = true;
+
+  constructor(canvas: HTMLCanvasElement) {
+    this.canvas = canvas;
+    this.isReduced = prefersReducedMotion();
+
+    this.scene = new THREE.Scene();
+    this.clock = new THREE.Clock();
+
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const aspect = width / height;
+
+    this.camera = new THREE.PerspectiveCamera(40, aspect, 0.1, 1000);
+    this.camera.position.set(0, 0, 10);
+
+    this.renderer = new THREE.WebGLRenderer({
+      canvas: this.canvas,
+      antialias: true,
+      alpha: true,
+      powerPreference: 'high-performance',
+    });
+    this.renderer.setSize(width, height);
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+    const isDark = document.documentElement.dataset.theme !== 'light' ? 1.0 : 0.0;
+
+    this.sphereMaterial = new THREE.ShaderMaterial({
+      vertexShader: SPHERE_VERTEX,
+      fragmentShader: SPHERE_FRAGMENT,
+      wireframe: false,
+      uniforms: {
+        u_time: { value: 0 },
+        u_progress: { value: 1.0 },
+      },
+    });
+
+    this.pointsMaterial = new THREE.ShaderMaterial({
+      vertexShader: PARTICLE_VERTEX,
+      fragmentShader: PARTICLE_FRAGMENT,
+      wireframe: false,
+      side: THREE.DoubleSide,
+      transparent: true,
+      depthWrite: false,
+      uniforms: {
+        u_time: { value: 0 },
+        u_progress: { value: 0.0 },
+        u_isDark: { value: isDark },
+      },
+    });
+
+    this.backgroundMaterial = new THREE.ShaderMaterial({
+      vertexShader: BACKGROUND_VERTEX,
+      fragmentShader: BACKGROUND_FRAGMENT,
+      wireframe: false,
+      depthWrite: false,
+      uniforms: {
+        u_time: { value: 0 },
+        u_progress: { value: 0 },
+        u_isDark: { value: isDark },
+      },
+    });
+
+    // Main organic morphing sphere
+    const sphereGeometry = new THREE.SphereGeometry(1, 140, 140);
+    this.sphere = new THREE.Mesh(sphereGeometry, this.sphereMaterial);
+    this.scene.add(this.sphere);
+
+    // Surrounding particle swarm
+    const N = 26000;
+    const positions = new Float32Array(N * 3);
+    const particleGeometry = new THREE.BufferGeometry();
+    const inc = Math.PI * (3 - Math.sqrt(5));
+    const offset = 2 / N;
+    const radius = 2.0;
+
+    for (let i = 0; i < N; i++) {
+      const y = i * offset - 1 + offset / 2;
+      const r = Math.sqrt(Math.max(0, 1 - y * y));
+      const phi = i * inc;
+
+      positions[3 * i] = radius * Math.cos(phi) * r;
+      positions[3 * i + 1] = radius * y;
+      positions[3 * i + 2] = radius * Math.sin(phi) * r;
+    }
+
+    particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    this.points = new THREE.Points(particleGeometry, this.pointsMaterial);
+    this.scene.add(this.points);
+
+    // Ambient noise background plane
+    const bgGeometry = new THREE.PlaneGeometry(120, 80, 16);
+    this.backgroundMesh = new THREE.Mesh(bgGeometry, this.backgroundMaterial);
+    this.backgroundMesh.position.z = -5;
+    this.scene.add(this.backgroundMesh);
+
+    this.eventListeners();
+    this.animate();
+    this.render();
   }
-  const long = text.match(/^#([0-9a-f]{6})/i);
-  if (long) {
-    return [0, 2, 4].map((i) => Number.parseInt(long[1].slice(i, i + 2), 16) / 255) as [number, number, number];
+
+  private animate(): void {
+    if (this.isReduced) {
+      this.sphereMaterial.uniforms.u_progress.value = 1.2;
+      this.pointsMaterial.uniforms.u_progress.value = 0.35;
+      return;
+    }
+
+    gsap.timeline({
+      repeat: -1,
+      yoyo: true,
+    })
+      .to(this.sphereMaterial.uniforms.u_progress, {
+        value: 5,
+        duration: 5,
+        ease: 'power3.inOut',
+      })
+      .to(this.sphereMaterial.uniforms.u_progress, {
+        value: 1,
+        duration: 5,
+        ease: 'power3.inOut',
+      });
+
+    gsap.to(this.pointsMaterial.uniforms.u_progress, {
+      value: 0.4,
+      duration: 5,
+      ease: 'power3.inOut',
+    });
   }
-  const channels = text.match(/-?\d*\.?\d+/g);
-  if (channels && channels.length >= 3) {
-    const [r, g, b] = channels.slice(0, 3).map(Number);
-    return [clamp(r / 255, 0, 1), clamp(g / 255, 0, 1), clamp(b / 255, 0, 1)];
+
+  private render = (): void => {
+    if (!this.isRunning) return;
+
+    const elapsedTime = this.clock.getElapsedTime();
+    this.sphereMaterial.uniforms.u_time.value = elapsedTime;
+    this.pointsMaterial.uniforms.u_time.value = elapsedTime;
+    this.backgroundMaterial.uniforms.u_time.value = elapsedTime;
+
+    // Orbital spin
+    this.points.rotation.y += 0.005;
+
+    if (!this.isReduced) {
+      this.currentYaw += (this.targetYaw - this.currentYaw) * 0.05;
+      this.currentPitch += (this.targetPitch - this.currentPitch) * 0.05;
+      this.sphere.rotation.y = this.currentYaw + elapsedTime * 0.06;
+      this.sphere.rotation.x = this.currentPitch;
+      this.points.rotation.x = this.currentPitch * 0.4;
+    }
+
+    this.camera.lookAt(this.scene.position);
+    this.renderer.render(this.scene, this.camera);
+
+    requestAnimationFrame(this.render);
+  };
+
+  private eventListeners(): void {
+    on(window, 'resize', () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      this.camera.aspect = width / height;
+      this.camera.updateProjectionMatrix();
+      this.renderer.setSize(width, height);
+    });
+
+    on(window, 'pointermove', (event) => {
+      const pointer = event as PointerEvent;
+      this.targetYaw = ((pointer.clientX / window.innerWidth) * 2 - 1) * 0.4;
+      this.targetPitch = -((pointer.clientY / window.innerHeight) * 2 - 1) * 0.25;
+    }, { passive: true });
+
+    on(document, 'visibilitychange', () => {
+      if (document.hidden) {
+        this.isRunning = false;
+      } else {
+        this.isRunning = true;
+        this.clock.start();
+        requestAnimationFrame(this.render);
+      }
+    });
+
+    on(document, 'mn:themechange', () => {
+      const isDark = document.documentElement.dataset.theme !== 'light' ? 1.0 : 0.0;
+      this.pointsMaterial.uniforms.u_isDark.value = isDark;
+      this.backgroundMaterial.uniforms.u_isDark.value = isDark;
+    });
   }
-  return [0, 0, 0];
 }
 
 export function initStrata(): void {
@@ -253,137 +464,11 @@ export function initStrata(): void {
   const root = document.documentElement;
   if (!canvas) return;
 
-  const gl = createWebGL2(canvas);
-  const built = gl ? buildProgram(gl) : null;
-  if (!gl || !built) {
+  try {
+    new THREEScene(canvas);
+    root.classList.add('strata-live');
+  } catch (error) {
+    console.error('Three.js scene initialization failed:', error);
     root.classList.remove('strata-live');
-    return;
   }
-
-  root.classList.add('strata-live');
-
-  gl.bindVertexArray(gl.createVertexArray());
-  gl.enable(gl.BLEND);
-  gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-  gl.useProgram(built.program);
-
-  const reduced = prefersReducedMotion();
-  const sectionElements = sheets();
-
-  let yaw = 0;
-  let pitch = 0;
-  let offset = 0.0;
-  let active = 0;
-  let pointerX = 0;
-  let pointerY = 0;
-  let elapsed = 0;
-  let frame = 0;
-  let viewportVisible = !document.hidden;
-  let sectionsVisible = true;
-  let scrolling = true;
-
-  const uploadThemeUniforms = () => {
-    const styles = getComputedStyle(document.documentElement);
-    const ink = parseColor(styles.getPropertyValue('--line-strong').trim() || '#e9e7e2');
-    const accent = parseColor(styles.getPropertyValue('--accent').trim() || '#ff5a2c');
-    const accent2 = parseColor(styles.getPropertyValue('--accent-2').trim() || '#6fd3e0');
-    const isDark = document.documentElement.dataset.theme !== 'light' ? 1.0 : 0.0;
-
-    gl.uniform3fv(built.uniforms.uInk ?? null, ink);
-    gl.uniform3fv(built.uniforms.uAccent ?? null, accent);
-    gl.uniform3fv(built.uniforms.uAccent2 ?? null, accent2);
-    gl.uniform1f(built.uniforms.uIsDark ?? null, isDark);
-  };
-
-  const resize = () => {
-    const ratio = pixelRatio(DPR_CAP);
-    const width = Math.max(1, Math.round(canvas.clientWidth * ratio));
-    const height = Math.max(1, Math.round(canvas.clientHeight * ratio));
-    if (canvas.width === width && canvas.height === height) return;
-    canvas.width = width;
-    canvas.height = height;
-    gl.viewport(0, 0, width, height);
-    gl.uniform2f(built.uniforms.uResolution ?? null, width, height);
-  };
-
-  const updateSectionState = () => {
-    if (!scrolling || sectionElements.length === 0) return;
-    scrolling = false;
-    const index = activeSectionIndex(rectsOf(sectionElements), window.innerHeight / 2);
-    active = index;
-  };
-
-  const coveredByOpaqueSheet = () =>
-    !sectionElements.some((element) => {
-      if (element.classList.contains('sheet--opaque')) return false;
-      const rect = element.getBoundingClientRect();
-      return rect.top < window.innerHeight && rect.bottom > 0;
-    });
-
-  const render = (delta: number) => {
-    elapsed += delta;
-    const targetYaw = reduced ? 0 : pointerX * POINTER_YAW + Math.sin(elapsed * IDLE_YAW_SPEED) * 0.08;
-    const targetPitch = reduced ? 0 : pointerY * POINTER_PITCH;
-    const targetOffset = active * 0.8;
-
-    if (reduced) {
-      yaw = targetYaw;
-      pitch = targetPitch;
-      offset = targetOffset;
-    } else {
-      yaw = damp(yaw, targetYaw, 3, delta);
-      pitch = damp(pitch, targetPitch, 3, delta);
-      offset = damp(offset, targetOffset, OFFSET_SMOOTHING, delta);
-    }
-
-    gl.uniform1f(built.uniforms.uOffset ?? null, offset);
-    gl.uniform1f(built.uniforms.uActive ?? null, active);
-    gl.uniform1f(built.uniforms.uYaw ?? null, yaw);
-    gl.uniform1f(built.uniforms.uPitch ?? null, pitch);
-    gl.uniform1f(built.uniforms.uTime ?? null, elapsed);
-
-    gl.clearColor(0, 0, 0, 0);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
-  };
-
-  let previous = performance.now();
-  const loop = (time: number) => {
-    const delta = Math.min(Math.max((time - previous) / 1000, 0), 0.05);
-    previous = time;
-    frame += 1;
-
-    if (frame % VISIBILITY_INTERVAL === 0) sectionsVisible = !coveredByOpaqueSheet();
-    if (viewportVisible && sectionsVisible) {
-      updateSectionState();
-      render(delta);
-    }
-
-    requestAnimationFrame(loop);
-  };
-
-  uploadThemeUniforms();
-  resize();
-  render(0);
-  requestAnimationFrame(loop);
-
-  on(window, 'resize', () => {
-    resize();
-    render(0);
-  });
-  on(document, 'scroll', () => {
-    scrolling = true;
-  }, { passive: true });
-  on(document, 'visibilitychange', () => {
-    viewportVisible = !document.hidden;
-  });
-  on(document, 'mn:themechange', () => {
-    uploadThemeUniforms();
-    render(0);
-  });
-  on(window, 'pointermove', (event) => {
-    const pointer = event as PointerEvent;
-    pointerX = (pointer.clientX / window.innerWidth) * 2 - 1;
-    pointerY = (pointer.clientY / window.innerHeight) * 2 - 1;
-  }, { passive: true });
 }

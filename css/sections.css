@@ -79,6 +79,10 @@
   pointer-events: none;
 }
 
+.strata-live .strata-fallback {
+  display: none;
+}
+
 .strata-fallback {
   position: fixed;
   inset: 0;
@@ -311,3 +315,4 @@
   letter-spacing: 0.08em;
   color: var(--text-3);
 }
+
