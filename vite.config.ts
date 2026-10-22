@@ -9,6 +9,9 @@ const root = fileURLToPath(new URL('.', import.meta.url));
 export default defineConfig({
   root,
   plugins: [react()],
+  define: {
+    'process.env.NODE_ENV': JSON.stringify('production'),
+  },
   build: {
     outDir: 'js',
     emptyOutDir: true,
