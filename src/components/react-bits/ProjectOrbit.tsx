@@ -281,116 +281,191 @@ function createGitHubTexture(): THREE.CanvasTexture {
   return texture;
 }
 
-/** Generates customized 3D meshes shaped like the project's emoji/concept */
+/** Generates customized 3D planetary celestial bodies themed around each project */
 function createEmojiInspiredMesh(shape: ProjectSatellite['shape'], color: THREE.Color): THREE.Object3D {
   const group = new THREE.Group();
-  const mat = new THREE.MeshStandardMaterial({
+
+  const planetMat = new THREE.MeshStandardMaterial({
     color,
-    flatShading: true,
-    metalness: 0.2,
-    roughness: 0.45,
-    emissive: new THREE.Color(0x000000),
-    emissiveIntensity: 0,
+    metalness: 0.25,
+    roughness: 0.35,
+    emissive: color.clone().multiplyScalar(0.12),
+  });
+
+  const ringMat = new THREE.MeshStandardMaterial({
+    color,
+    side: THREE.DoubleSide,
+    transparent: true,
+    opacity: 0.65,
+    metalness: 0.4,
+    roughness: 0.3,
+  });
+
+  const darkMat = new THREE.MeshStandardMaterial({
+    color: 0x111827,
+    metalness: 0.6,
+    roughness: 0.35,
   });
 
   switch (shape) {
     case 'washing-drum': {
-      // 🧺 Basket / washing drum: barrel torus + inner cylinder
-      const torus = new THREE.Mesh(new THREE.TorusGeometry(0.55, 0.22, 10, 20), mat);
-      const inner = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.35, 0.5, 12), mat);
-      group.add(torus, inner);
+      // 🧺 LaundryBot: Banded Gas Planet with double woven atmospheric rings
+      const planet = new THREE.Mesh(new THREE.SphereGeometry(0.55, 20, 20), planetMat);
+      const ring1 = new THREE.Mesh(new THREE.RingGeometry(0.72, 0.95, 32), ringMat);
+      ring1.rotation.x = Math.PI / 2.3;
+      const ring2 = new THREE.Mesh(new THREE.TorusGeometry(0.85, 0.04, 8, 24), ringMat);
+      ring2.rotation.x = Math.PI / 2.3;
+      group.add(planet, ring1, ring2);
       break;
     }
     case 'phone-slab': {
-      // 📱 Smartphone / tablet slab
-      const slab = new THREE.Mesh(new THREE.BoxGeometry(0.65, 1.1, 0.16), mat);
-      group.add(slab);
+      // 📱 LifeOS: Crystalline tech planet with vertical polar bezel ring
+      const planet = new THREE.Mesh(new THREE.IcosahedronGeometry(0.54, 2), planetMat);
+      const bezelRing = new THREE.Mesh(new THREE.TorusGeometry(0.82, 0.04, 6, 28), ringMat);
+      bezelRing.rotation.y = Math.PI / 2.5;
+      group.add(planet, bezelRing);
       break;
     }
     case 'lightning-octa': {
-      // ⚡ Energy octahedron
-      const octa = new THREE.Mesh(new THREE.OctahedronGeometry(0.75), mat);
-      group.add(octa);
+      // ⚡ TEPO: Emerald lightning planet with orbiting energy octahedron crystal
+      const planet = new THREE.Mesh(new THREE.SphereGeometry(0.5, 18, 18), planetMat);
+      const ionRing = new THREE.Mesh(new THREE.RingGeometry(0.7, 0.88, 24), ringMat);
+      ionRing.rotation.x = Math.PI / 2.5;
+      const crystal = new THREE.Mesh(new THREE.OctahedronGeometry(0.24), ringMat);
+      crystal.position.set(0.72, 0.25, 0);
+      group.add(planet, ionRing, crystal);
       break;
     }
     case 'lens-ring': {
-      // 👁️ Inspection lens ring + optic sphere
-      const ring = new THREE.Mesh(new THREE.TorusGeometry(0.62, 0.16, 10, 22), mat);
-      const lens = new THREE.Mesh(new THREE.SphereGeometry(0.38, 12, 12), mat);
-      group.add(ring, lens);
+      // 👁️ Quality Inspector: Ocular planet with concentric inspection lens aperture
+      const planet = new THREE.Mesh(new THREE.SphereGeometry(0.52, 20, 20), planetMat);
+      const lensRing = new THREE.Mesh(new THREE.RingGeometry(0.65, 0.92, 32), ringMat);
+      lensRing.rotation.x = Math.PI / 2.2;
+      const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.24, 12, 12), darkMat);
+      pupil.position.z = 0.44;
+      group.add(planet, lensRing, pupil);
       break;
     }
     case 'folded-sheet': {
-      // 🧾 Paper receipt folded prism
-      const sheet = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.5, 0.1), mat);
-      sheet.rotation.z = 0.4;
-      group.add(sheet);
+      // 🧾 Receipt Scanner: Terraced golden strata planet with dual concentric rings
+      const planet = new THREE.Mesh(new THREE.SphereGeometry(0.52, 16, 16), planetMat);
+      const strata1 = new THREE.Mesh(new THREE.RingGeometry(0.68, 0.84, 28), ringMat);
+      strata1.rotation.x = Math.PI / 2.4;
+      const strata2 = new THREE.Mesh(new THREE.RingGeometry(0.92, 1.05, 28), ringMat);
+      strata2.rotation.x = Math.PI / 2.4;
+      group.add(planet, strata1, strata2);
       break;
     }
     case 'dials-cube': {
-      // 🎛️ Dodecahedron widget
-      const dodeca = new THREE.Mesh(new THREE.DodecahedronGeometry(0.7), mat);
-      group.add(dodeca);
+      // 🎛️ OpenRouter Widget: Dodecahedral telemetry planet with dual gimbal rings
+      const planet = new THREE.Mesh(new THREE.DodecahedronGeometry(0.54), planetMat);
+      const gimbal1 = new THREE.Mesh(new THREE.TorusGeometry(0.8, 0.035, 6, 24), ringMat);
+      const gimbal2 = new THREE.Mesh(new THREE.TorusGeometry(0.8, 0.035, 6, 24), ringMat);
+      gimbal1.rotation.x = Math.PI / 3;
+      gimbal2.rotation.y = Math.PI / 3;
+      group.add(planet, gimbal1, gimbal2);
       break;
     }
     case 'tent-pyramid': {
-      // ⛺ Scout camp tent
-      const tent = new THREE.Mesh(new THREE.ConeGeometry(0.7, 0.95, 4), mat);
-      tent.rotation.y = Math.PI / 4;
-      group.add(tent);
+      // ⛺ ScoutMealPlanner: Terra globe accompanied by twin scout pyramid moonlets
+      const planet = new THREE.Mesh(new THREE.SphereGeometry(0.5, 18, 18), planetMat);
+      const moon1 = new THREE.Mesh(new THREE.ConeGeometry(0.18, 0.28, 4), ringMat);
+      moon1.position.set(0.72, 0.15, 0);
+      moon1.rotation.y = Math.PI / 4;
+      const moon2 = new THREE.Mesh(new THREE.ConeGeometry(0.14, 0.22, 4), ringMat);
+      moon2.position.set(-0.68, -0.2, 0.2);
+      moon2.rotation.y = Math.PI / 4;
+      group.add(planet, moon1, moon2);
       break;
     }
     case 'film-reel': {
-      // 🎬 Film reel disc
-      const reel = new THREE.Mesh(new THREE.CylinderGeometry(0.68, 0.68, 0.25, 16), mat);
-      group.add(reel);
+      // 🎬 MovieRecommender: Violet gas giant with wide cinematic reel ring
+      const planet = new THREE.Mesh(new THREE.SphereGeometry(0.54, 20, 20), planetMat);
+      const reelRing = new THREE.Mesh(new THREE.RingGeometry(0.7, 1.05, 32), ringMat);
+      reelRing.rotation.x = Math.PI / 2.2;
+      group.add(planet, reelRing);
       break;
     }
     case 'disco-ball': {
-      // 🪩 Sparkling disco ball icosahedron
-      const ball = new THREE.Mesh(new THREE.IcosahedronGeometry(0.7, 1), mat);
-      group.add(ball);
+      // 🪩 Carnival Effects: Faceted reflective geodesic mirror planet
+      const planetMatFaceted = new THREE.MeshStandardMaterial({
+        color,
+        flatShading: true,
+        metalness: 0.85,
+        roughness: 0.15,
+        emissive: color.clone().multiplyScalar(0.2),
+      });
+      const planet = new THREE.Mesh(new THREE.IcosahedronGeometry(0.58, 1), planetMatFaceted);
+      const glitterRing = new THREE.Mesh(new THREE.TorusGeometry(0.85, 0.04, 8, 32), ringMat);
+      glitterRing.rotation.x = Math.PI / 2.3;
+      group.add(planet, glitterRing);
       break;
     }
     case 'dice-cube': {
-      // ⏳ / 🎲 Physical timer cube
-      const cube = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.72, 0.72), mat);
-      group.add(cube);
+      // ⏳ Pomodoro Cube: Copper celestial sphere with gyroscopic armillary rings
+      const planet = new THREE.Mesh(new THREE.SphereGeometry(0.5, 18, 18), planetMat);
+      const gyroRing = new THREE.Mesh(new THREE.TorusGeometry(0.78, 0.04, 8, 28), ringMat);
+      gyroRing.rotation.x = Math.PI / 4;
+      gyroRing.rotation.y = Math.PI / 4;
+      group.add(planet, gyroRing);
       break;
     }
     case 'book-stack': {
-      // 📚 Stack of university books
-      const b1 = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.2, 0.65), mat);
-      const b2 = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.2, 0.6), mat);
-      b2.position.y = 0.22;
-      b2.rotation.y = 0.25;
-      group.add(b1, b2);
+      // 📚 UniArchive: Terracotta academic planet with tiered horizontal shelf rings
+      const planet = new THREE.Mesh(new THREE.SphereGeometry(0.52, 18, 18), planetMat);
+      const shelf1 = new THREE.Mesh(new THREE.RingGeometry(0.68, 0.82, 28), ringMat);
+      const shelf2 = new THREE.Mesh(new THREE.RingGeometry(0.88, 1.02, 28), ringMat);
+      shelf1.rotation.x = Math.PI / 2.4;
+      shelf2.rotation.x = Math.PI / 2.4;
+      group.add(planet, shelf1, shelf2);
       break;
     }
     case 'chart-wedge': {
-      // 📈 Momentum chart wedge
-      const wedge = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.75, 0.9, 3), mat);
-      group.add(wedge);
+      // 📈 Quant-Tech-Rotator: Lime momentum planet with an inclined ascending trajectory ring
+      const planet = new THREE.Mesh(new THREE.SphereGeometry(0.5, 18, 18), planetMat);
+      const vectorRing = new THREE.Mesh(new THREE.TorusGeometry(0.82, 0.045, 8, 28), ringMat);
+      vectorRing.rotation.x = Math.PI / 3;
+      vectorRing.rotation.z = Math.PI / 6;
+      group.add(planet, vectorRing);
       break;
     }
     case 'paper-layers': {
-      // 📑 Layered PDF document sheets
-      const p1 = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.85, 0.12), mat);
-      group.add(p1);
+      // 📑 PdfMerger: Sky-blue planet with interlocking orthogonal polar rings
+      const planet = new THREE.Mesh(new THREE.SphereGeometry(0.52, 18, 18), planetMat);
+      const ringH = new THREE.Mesh(new THREE.RingGeometry(0.7, 0.88, 24), ringMat);
+      ringH.rotation.x = Math.PI / 2;
+      const ringV = new THREE.Mesh(new THREE.RingGeometry(0.7, 0.88, 24), ringMat);
+      group.add(planet, ringH, ringV);
       break;
     }
     case 'qr-tile': {
-      // ⬛ Beveled QR matrix tile
-      const tile = new THREE.Mesh(new THREE.BoxGeometry(0.75, 0.75, 0.2), mat);
-      group.add(tile);
+      // ⬛ QR Generator: Basalt planet with geometric cubic nodes and square ring
+      const planetMatFaceted = new THREE.MeshStandardMaterial({
+        color,
+        flatShading: true,
+        metalness: 0.3,
+        roughness: 0.4,
+      });
+      const planet = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.65, 0.65), planetMatFaceted);
+      const squareRing = new THREE.Mesh(new THREE.RingGeometry(0.82, 0.98, 4), ringMat);
+      squareRing.rotation.x = Math.PI / 2;
+      squareRing.rotation.z = Math.PI / 4;
+      group.add(planet, squareRing);
       break;
     }
     default: {
-      // 🌐 Web globe with planetary ring
-      const globe = new THREE.Mesh(new THREE.SphereGeometry(0.5, 12, 12), mat);
-      const ring = new THREE.Mesh(new THREE.RingGeometry(0.68, 0.92, 28), mat);
-      ring.rotation.x = Math.PI / 2.3;
-      group.add(globe, ring);
+      // 🌐 mirconegri.com: Blue-amber terrestrial globe encased in a wireframe network cage
+      const planet = new THREE.Mesh(new THREE.SphereGeometry(0.52, 20, 20), planetMat);
+      const cageMat = new THREE.MeshBasicMaterial({
+        color,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.45,
+      });
+      const cage = new THREE.Mesh(new THREE.SphereGeometry(0.7, 10, 10), cageMat);
+      const equatorRing = new THREE.Mesh(new THREE.RingGeometry(0.82, 0.96, 32), ringMat);
+      equatorRing.rotation.x = Math.PI / 2.3;
+      group.add(planet, cage, equatorRing);
       break;
     }
   }
@@ -486,24 +561,24 @@ function DesktopProjectOrbit({ isItalian }: { isItalian: boolean }) {
     scene.add(gitHubGroup);
 
     // Central Obsidian Sphere Core
-    const corePlanetGeom = new THREE.SphereGeometry(3.2, 28, 28);
+    const corePlanetGeom = new THREE.SphereGeometry(2.65, 32, 32);
     const corePlanetMat = new THREE.MeshStandardMaterial({
-      color: 0x0f1522,
-      metalness: 0.45,
-      roughness: 0.35,
-      emissive: 0x060c18,
-      emissiveIntensity: 0.4,
+      color: 0x0d121c,
+      metalness: 0.6,
+      roughness: 0.3,
+      emissive: 0x060d1a,
+      emissiveIntensity: 0.5,
     });
     const coreSphere = new THREE.Mesh(corePlanetGeom, corePlanetMat);
     gitHubGroup.add(coreSphere);
 
-    // Double-Sided Medallion with GitHub Logo Texture
+    // Prominent GitHub Logo Crest Medallion (radius 3.0 exceeds 2.65 sphere so it sits prominently on front & back)
     const ghTexture = createGitHubTexture();
-    const medallionGeom = new THREE.CylinderGeometry(2.7, 2.7, 0.4, 32);
+    const medallionGeom = new THREE.CylinderGeometry(2.95, 2.95, 0.35, 48);
     const medallionSideMat = new THREE.MeshStandardMaterial({
-      color: 0x1f2738,
-      metalness: 0.8,
-      roughness: 0.25,
+      color: 0x1a2334,
+      metalness: 0.85,
+      roughness: 0.2,
     });
     const medallionFaceMat = new THREE.MeshBasicMaterial({
       map: ghTexture,
@@ -518,17 +593,33 @@ function DesktopProjectOrbit({ isItalian }: { isItalian: boolean }) {
     medallion.rotation.x = Math.PI / 2;
     gitHubGroup.add(medallion);
 
-    // Outer luminous equatorial orbit ring for GitHub core
-    const ghRingGeom = new THREE.RingGeometry(3.6, 4.0, 48);
+    // Primary luminous equatorial neon cyan planetary ring
+    const ghRingGeom = new THREE.RingGeometry(3.4, 4.3, 64);
     const ghRingMat = new THREE.MeshBasicMaterial({
       color: 0x6fd3e0,
       side: THREE.DoubleSide,
       transparent: true,
-      opacity: 0.3,
+      opacity: 0.45,
     });
     const ghRing = new THREE.Mesh(ghRingGeom, ghRingMat);
     ghRing.rotation.x = Math.PI / 2.2;
     gitHubGroup.add(ghRing);
+
+    // Secondary angled golden-orange accent ring
+    const ghRing2Geom = new THREE.RingGeometry(4.6, 4.9, 64);
+    const ghRing2Mat = new THREE.MeshBasicMaterial({
+      color: 0xff5a2c,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.3,
+    });
+    const ghRing2 = new THREE.Mesh(ghRing2Geom, ghRing2Mat);
+    ghRing2.rotation.x = Math.PI / 3.2;
+    gitHubGroup.add(ghRing2);
+
+    // Soft celestial core point light illuminating nearby satellites
+    const ghPointLight = new THREE.PointLight(0x6fd3e0, 2.2, 35);
+    gitHubGroup.add(ghPointLight);
 
     // ==========================================
     // ALL 15 ORBITING SATELLITE PLANETS

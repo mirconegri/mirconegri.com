@@ -28295,86 +28295,123 @@ function tE() {
 function nE(e, t) {
 	let n = new ty(), r = new Ex({
 		color: t,
-		flatShading: !0,
-		metalness: .2,
-		roughness: .45,
-		emissive: new cy(0),
-		emissiveIntensity: 0
+		metalness: .25,
+		roughness: .35,
+		emissive: t.clone().multiplyScalar(.12)
+	}), i = new Ex({
+		color: t,
+		side: 2,
+		transparent: !0,
+		opacity: .65,
+		metalness: .4,
+		roughness: .3
+	}), a = new Ex({
+		color: 1120295,
+		metalness: .6,
+		roughness: .35
 	});
 	switch (e) {
 		case "washing-drum": {
-			let e = new kb(new hx(.55, .22, 10, 20), r), t = new kb(new ox(.35, .35, .5, 12), r);
-			n.add(e, t);
+			let e = new kb(new mx(.55, 20, 20), r), t = new kb(new px(.72, .95, 32), i);
+			t.rotation.x = Math.PI / 2.3;
+			let a = new kb(new hx(.85, .04, 8, 24), i);
+			a.rotation.x = Math.PI / 2.3, n.add(e, t, a);
 			break;
 		}
 		case "phone-slab": {
-			let e = new kb(new ax(.65, 1.1, .16), r);
-			n.add(e);
+			let e = new kb(new ux(.54, 2), r), t = new kb(new hx(.82, .04, 6, 28), i);
+			t.rotation.y = Math.PI / 2.5, n.add(e, t);
 			break;
 		}
 		case "lightning-octa": {
-			let e = new kb(new dx(.75), r);
-			n.add(e);
+			let e = new kb(new mx(.5, 18, 18), r), t = new kb(new px(.7, .88, 24), i);
+			t.rotation.x = Math.PI / 2.5;
+			let a = new kb(new dx(.24), i);
+			a.position.set(.72, .25, 0), n.add(e, t, a);
 			break;
 		}
 		case "lens-ring": {
-			let e = new kb(new hx(.62, .16, 10, 22), r), t = new kb(new mx(.38, 12, 12), r);
-			n.add(e, t);
+			let e = new kb(new mx(.52, 20, 20), r), t = new kb(new px(.65, .92, 32), i);
+			t.rotation.x = Math.PI / 2.2;
+			let o = new kb(new mx(.24, 12, 12), a);
+			o.position.z = .44, n.add(e, t, o);
 			break;
 		}
 		case "folded-sheet": {
-			let e = new kb(new ax(.85, .5, .1), r);
-			e.rotation.z = .4, n.add(e);
+			let e = new kb(new mx(.52, 16, 16), r), t = new kb(new px(.68, .84, 28), i);
+			t.rotation.x = Math.PI / 2.4;
+			let a = new kb(new px(.92, 1.05, 28), i);
+			a.rotation.x = Math.PI / 2.4, n.add(e, t, a);
 			break;
 		}
 		case "dials-cube": {
-			let e = new kb(new lx(.7), r);
-			n.add(e);
+			let e = new kb(new lx(.54), r), t = new kb(new hx(.8, .035, 6, 24), i), a = new kb(new hx(.8, .035, 6, 24), i);
+			t.rotation.x = Math.PI / 3, a.rotation.y = Math.PI / 3, n.add(e, t, a);
 			break;
 		}
 		case "tent-pyramid": {
-			let e = new kb(new sx(.7, .95, 4), r);
-			e.rotation.y = Math.PI / 4, n.add(e);
+			let e = new kb(new mx(.5, 18, 18), r), t = new kb(new sx(.18, .28, 4), i);
+			t.position.set(.72, .15, 0), t.rotation.y = Math.PI / 4;
+			let a = new kb(new sx(.14, .22, 4), i);
+			a.position.set(-.68, -.2, .2), a.rotation.y = Math.PI / 4, n.add(e, t, a);
 			break;
 		}
 		case "film-reel": {
-			let e = new kb(new ox(.68, .68, .25, 16), r);
-			n.add(e);
+			let e = new kb(new mx(.54, 20, 20), r), t = new kb(new px(.7, 1.05, 32), i);
+			t.rotation.x = Math.PI / 2.2, n.add(e, t);
 			break;
 		}
 		case "disco-ball": {
-			let e = new kb(new ux(.7, 1), r);
-			n.add(e);
+			let e = new Ex({
+				color: t,
+				flatShading: !0,
+				metalness: .85,
+				roughness: .15,
+				emissive: t.clone().multiplyScalar(.2)
+			}), r = new kb(new ux(.58, 1), e), a = new kb(new hx(.85, .04, 8, 32), i);
+			a.rotation.x = Math.PI / 2.3, n.add(r, a);
 			break;
 		}
 		case "dice-cube": {
-			let e = new kb(new ax(.72, .72, .72), r);
-			n.add(e);
+			let e = new kb(new mx(.5, 18, 18), r), t = new kb(new hx(.78, .04, 8, 28), i);
+			t.rotation.x = Math.PI / 4, t.rotation.y = Math.PI / 4, n.add(e, t);
 			break;
 		}
 		case "book-stack": {
-			let e = new kb(new ax(.85, .2, .65), r), t = new kb(new ax(.8, .2, .6), r);
-			t.position.y = .22, t.rotation.y = .25, n.add(e, t);
+			let e = new kb(new mx(.52, 18, 18), r), t = new kb(new px(.68, .82, 28), i), a = new kb(new px(.88, 1.02, 28), i);
+			t.rotation.x = Math.PI / 2.4, a.rotation.x = Math.PI / 2.4, n.add(e, t, a);
 			break;
 		}
 		case "chart-wedge": {
-			let e = new kb(new ox(.12, .75, .9, 3), r);
-			n.add(e);
+			let e = new kb(new mx(.5, 18, 18), r), t = new kb(new hx(.82, .045, 8, 28), i);
+			t.rotation.x = Math.PI / 3, t.rotation.z = Math.PI / 6, n.add(e, t);
 			break;
 		}
 		case "paper-layers": {
-			let e = new kb(new ax(.65, .85, .12), r);
-			n.add(e);
+			let e = new kb(new mx(.52, 18, 18), r), t = new kb(new px(.7, .88, 24), i);
+			t.rotation.x = Math.PI / 2;
+			let a = new kb(new px(.7, .88, 24), i);
+			n.add(e, t, a);
 			break;
 		}
 		case "qr-tile": {
-			let e = new kb(new ax(.75, .75, .2), r);
-			n.add(e);
+			let e = new Ex({
+				color: t,
+				flatShading: !0,
+				metalness: .3,
+				roughness: .4
+			}), r = new kb(new ax(.65, .65, .65), e), a = new kb(new px(.82, .98, 4), i);
+			a.rotation.x = Math.PI / 2, a.rotation.z = Math.PI / 4, n.add(r, a);
 			break;
 		}
 		default: {
-			let e = new kb(new mx(.5, 12, 12), r), t = new kb(new px(.68, .92, 28), r);
-			t.rotation.x = Math.PI / 2.3, n.add(e, t);
+			let e = new kb(new mx(.52, 20, 20), r), a = new _b({
+				color: t,
+				wireframe: !0,
+				transparent: !0,
+				opacity: .45
+			}), o = new kb(new mx(.7, 10, 10), a), s = new kb(new px(.82, .96, 32), i);
+			s.rotation.x = Math.PI / 2.3, n.add(e, o, s);
 			break;
 		}
 	}
@@ -28418,18 +28455,18 @@ function rE({ isItalian: e }) {
 		g.add(D);
 		let O = new ty();
 		g.add(O);
-		let k = new kb(new mx(3.2, 28, 28), new Ex({
-			color: 988450,
-			metalness: .45,
-			roughness: .35,
-			emissive: 396312,
-			emissiveIntensity: .4
+		let k = new kb(new mx(2.65, 32, 32), new Ex({
+			color: 856604,
+			metalness: .6,
+			roughness: .3,
+			emissive: 396570,
+			emissiveIntensity: .5
 		}));
 		O.add(k);
-		let A = tE(), j = new ox(2.7, 2.7, .4, 32), M = new Ex({
-			color: 2041656,
-			metalness: .8,
-			roughness: .25
+		let A = tE(), j = new ox(2.95, 2.95, .35, 48), M = new Ex({
+			color: 1712948,
+			metalness: .85,
+			roughness: .2
 		}), N = new _b({
 			map: A,
 			transparent: !0
@@ -28439,14 +28476,23 @@ function rE({ isItalian: e }) {
 			N
 		]);
 		P.rotation.x = Math.PI / 2, O.add(P);
-		let F = new kb(new px(3.6, 4, 48), new _b({
+		let F = new kb(new px(3.4, 4.3, 64), new _b({
 			color: 7328736,
+			side: 2,
+			transparent: !0,
+			opacity: .45
+		}));
+		F.rotation.x = Math.PI / 2.2, O.add(F);
+		let I = new kb(new px(4.6, 4.9, 64), new _b({
+			color: 16734764,
 			side: 2,
 			transparent: !0,
 			opacity: .3
 		}));
-		F.rotation.x = Math.PI / 2.2, O.add(F);
-		let I = [], ee = [];
+		I.rotation.x = Math.PI / 3.2, O.add(I);
+		let ee = new lS(7328736, 2.2, 35);
+		O.add(ee);
+		let L = [], te = [];
 		eE.forEach((e, t) => {
 			let n = new cy(e.color), r = new ty(), i = nE(e.shape, n);
 			r.add(i);
@@ -28458,7 +28504,7 @@ function rE({ isItalian: e }) {
 				}
 			});
 			let o = new kb(new mx(1.8, 8, 8), new _b({ visible: !1 }));
-			o.userData = { projectIndex: t }, r.add(o), ee.push(o);
+			o.userData = { projectIndex: t }, r.add(o), te.push(o);
 			let s = 6.8 + t * 1.15, c = .0014 + t % 4 * 3e-4, l = Math.PI * 2 * t / eE.length, u = Math.sin(t * 1.6) * 1.4;
 			r.position.set(Math.cos(l) * s, u, Math.sin(l) * s), g.add(r);
 			let d = new ab(), f = [];
@@ -28472,7 +28518,7 @@ function rE({ isItalian: e }) {
 				transparent: !0,
 				opacity: .08
 			}));
-			g.add(p), I.push({
+			g.add(p), L.push({
 				group: r,
 				hitMesh: o,
 				radius: s,
@@ -28482,11 +28528,11 @@ function rE({ isItalian: e }) {
 				materials: a
 			});
 		});
-		let L = new AS(), te = new nv(-999, -999), ne = () => {
+		let ne = new AS(), R = new nv(-999, -999), re = () => {
 			u(!0);
 			let e = document.querySelector("#rAnim"), t = document.querySelector("#gAnim"), n = document.querySelector("#bAnim");
 			e?.beginElement?.(), t?.beginElement?.(), n?.beginElement?.(), setTimeout(() => u(!1), 350);
-		}, R = () => {
+		}, z = () => {
 			if (Bi.to(_.position, {
 				x: v.x,
 				y: v.y,
@@ -28500,7 +28546,7 @@ function rE({ isItalian: e }) {
 				duration: 1.25,
 				ease: "power2.inOut"
 			}), f) {
-				let e = I.find((e) => e.hitMesh === f);
+				let e = L.find((e) => e.hitMesh === f);
 				e && e.materials.forEach((e) => {
 					Bi.to(e.emissive, {
 						r: 0,
@@ -28512,11 +28558,11 @@ function rE({ isItalian: e }) {
 			}
 			f = null, s = !1, i(null);
 		};
-		d.current = R;
-		let re = (e) => {
-			if (!e || f === e) R();
+		d.current = z;
+		let ie = (e) => {
+			if (!e || f === e) z();
 			else {
-				f && I.find((e) => e.hitMesh === f)?.materials.forEach((e) => {
+				f && L.find((e) => e.hitMesh === f)?.materials.forEach((e) => {
 					Bi.to(e.emissive, {
 						r: 0,
 						g: 0,
@@ -28524,7 +28570,7 @@ function rE({ isItalian: e }) {
 						duration: .2
 					});
 				}), f = e, s = !0;
-				let t = I.find((t) => t.hitMesh === e);
+				let t = L.find((t) => t.hitMesh === e);
 				if (!t) return;
 				t.materials.forEach((e) => {
 					Bi.to(e.emissive, {
@@ -28547,22 +28593,22 @@ function rE({ isItalian: e }) {
 					z: n.z,
 					duration: 1.35,
 					ease: "power2.inOut"
-				}), i(t.project), o(t.radius), c(t.speed), ne();
+				}), i(t.project), o(t.radius), c(t.speed), re();
 			}
-		}, z = (t) => {
+		}, ae = (t) => {
 			let n = e.getBoundingClientRect();
-			te.x = (t.clientX - n.left) / n.width * 2 - 1, te.y = -((t.clientY - n.top) / n.height) * 2 + 1, L.setFromCamera(te, _);
-			let r = L.intersectObjects(ee);
+			R.x = (t.clientX - n.left) / n.width * 2 - 1, R.y = -((t.clientY - n.top) / n.height) * 2 + 1, ne.setFromCamera(R, _);
+			let r = ne.intersectObjects(te);
 			if (r.length > 0) {
 				let e = r[0].object;
-				l && l !== e && l !== f && I.find((e) => e.hitMesh === l)?.materials.forEach((e) => {
+				l && l !== e && l !== f && L.find((e) => e.hitMesh === l)?.materials.forEach((e) => {
 					Bi.to(e.emissive, {
 						r: 0,
 						g: 0,
 						b: 0,
 						duration: .2
 					});
-				}), l = e, l !== f && I.find((e) => e.hitMesh === l)?.materials.forEach((e) => {
+				}), l = e, l !== f && L.find((e) => e.hitMesh === l)?.materials.forEach((e) => {
 					Bi.to(e.emissive, {
 						r: e.color.r,
 						g: e.color.g,
@@ -28570,7 +28616,7 @@ function rE({ isItalian: e }) {
 						duration: .25
 					});
 				});
-			} else l && l !== f && (I.find((e) => e.hitMesh === l)?.materials.forEach((e) => {
+			} else l && l !== f && (L.find((e) => e.hitMesh === l)?.materials.forEach((e) => {
 				Bi.to(e.emissive, {
 					r: 0,
 					g: 0,
@@ -28578,8 +28624,8 @@ function rE({ isItalian: e }) {
 					duration: .2
 				});
 			}), l = null);
-		}, ie = () => {
-			l && l !== f && (I.find((e) => e.hitMesh === l)?.materials.forEach((e) => {
+		}, oe = () => {
+			l && l !== f && (L.find((e) => e.hitMesh === l)?.materials.forEach((e) => {
 				Bi.to(e.emissive, {
 					r: 0,
 					g: 0,
@@ -28587,27 +28633,27 @@ function rE({ isItalian: e }) {
 					duration: .2
 				});
 			}), l = null);
-		}, ae = (t) => {
+		}, B = (t) => {
 			let n = e.getBoundingClientRect();
-			te.x = (t.clientX - n.left) / n.width * 2 - 1, te.y = -((t.clientY - n.top) / n.height) * 2 + 1, L.setFromCamera(te, _);
-			let r = L.intersectObjects(ee);
-			r.length > 0 && re(r[0].object);
+			R.x = (t.clientX - n.left) / n.width * 2 - 1, R.y = -((t.clientY - n.top) / n.height) * 2 + 1, ne.setFromCamera(R, _);
+			let r = ne.intersectObjects(te);
+			r.length > 0 && ie(r[0].object);
 		};
-		e.addEventListener("pointermove", z, { passive: !0 }), e.addEventListener("pointerleave", ie), e.addEventListener("click", ae);
-		let oe = () => {
+		e.addEventListener("pointermove", ae, { passive: !0 }), e.addEventListener("pointerleave", oe), e.addEventListener("click", B);
+		let se = () => {
 			let e = r.clientWidth || window.innerWidth, t = e < 768, n = Math.max(340, Math.min(560, t ? 360 : e * .46));
 			b.setSize(e, n), b.setPixelRatio(Math.min(window.devicePixelRatio || 1, t ? 1.5 : 2)), _.aspect = e / n, f || (v.set(t ? 12 : 14, t ? 14 : 12, t ? 50 : 36), _.position.copy(v)), _.updateProjectionMatrix();
 		};
-		window.addEventListener("resize", oe);
-		let B = !0, se = () => {
-			B && (a = requestAnimationFrame(se), O.rotation.y += .0035, s || I.forEach((e) => {
+		window.addEventListener("resize", se);
+		let ce = !0, V = () => {
+			ce && (a = requestAnimationFrame(V), O.rotation.y += .0035, s || L.forEach((e) => {
 				e.angle += e.speed, e.group.position.x = Math.cos(e.angle) * e.radius, e.group.position.z = Math.sin(e.angle) * e.radius, e.group.rotation.y += .012, e.group.rotation.x += .006;
 			}), _.lookAt(y), b.render(g, _));
-		}, ce = new IntersectionObserver(([e]) => {
-			B = e.isIntersecting, B ? (cancelAnimationFrame(a), se()) : cancelAnimationFrame(a);
+		}, H = new IntersectionObserver(([e]) => {
+			ce = e.isIntersecting, ce ? (cancelAnimationFrame(a), V()) : cancelAnimationFrame(a);
 		}, { threshold: .05 });
-		return ce.observe(r), se(), () => {
-			ce.disconnect(), cancelAnimationFrame(a), window.removeEventListener("resize", oe), e.removeEventListener("pointermove", z), e.removeEventListener("pointerleave", ie), e.removeEventListener("click", ae), b.dispose();
+		return H.observe(r), V(), () => {
+			H.disconnect(), cancelAnimationFrame(a), window.removeEventListener("resize", se), e.removeEventListener("pointermove", ae), e.removeEventListener("pointerleave", oe), e.removeEventListener("click", B), b.dispose();
 		};
 	}, []), /* @__PURE__ */ (0, X.jsxs)("div", {
 		className: "orbit-viewport-wrap",
