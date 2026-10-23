@@ -2,7 +2,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 import { on, select, selectAll } from './dom';
-import { clamp, prefersReducedMotion } from './env';
+import { clamp, isMobileDevice, prefersReducedMotion } from './env';
 import { activeSectionIndex, rectsOf, sheets } from './sections';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -13,7 +13,7 @@ const REVEAL_SHIFT = 22;
 // Wires Lenis smooth scrolling, nav progress indicators, and GSAP scroll reveals.
 export function initMotion(): void {
   const reduced = prefersReducedMotion();
-  const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  const isTouch = isMobileDevice();
   const progress = select<HTMLElement>('[data-nav-progress]');
   const navLinks = selectAll<HTMLAnchorElement>('[data-palette-nav]');
   const sections = sheets();
@@ -71,9 +71,11 @@ export function initMotion(): void {
   });
 
   const reveals = selectAll<HTMLElement>('[data-reveal]');
-  if (reduced) {
+  // Immediately reveal text on touch/reduced motion to avoid laggy scroll triggers.
+  if (reduced || isTouch) {
     for (const element of reveals) {
       element.style.opacity = '1';
+      element.style.transform = 'none';
       element.style.clipPath = 'none';
     }
     return;

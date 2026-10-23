@@ -1,6 +1,7 @@
 import { type ReactNode, useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { selectAll, watchMedia } from '../lib/dom';
+import { isMobileDevice } from '../lib/env';
 import AnimatedContent from './react-bits/AnimatedContent';
 import CountUp from './react-bits/CountUp';
 import DotGrid from './react-bits/DotGrid';
@@ -71,14 +72,15 @@ function useMarkup(html: string): ReactNode {
   return useMemo(() => <div dangerouslySetInnerHTML={{ __html: html }} />, [html]);
 }
 
-// Hero title with staggered character reveal.
+// Hero title with staggered character reveal on desktop and instant paint on mobile.
 function HeroName({ host }: { host: HTMLElement }) {
   const lang = useLanguage();
   const reduced = useReducedMotion();
+  const isMobile = isMobileDevice();
   const text = pick(host, 'text', lang) || host.textContent?.trim() || '';
   const className = host.className || 'hero-name';
 
-  if (reduced) return <h1 className={className}>{text}</h1>;
+  if (reduced || isMobile) return <h1 className={className}>{text}</h1>;
 
   return (
     <SplitText
@@ -151,12 +153,13 @@ function PaletteMagnet({ host }: { host: HTMLElement }) {
   );
 }
 
-// Vertical prose block with staggered fade-in.
+// Vertical prose block with staggered fade-in on desktop and instant visibility on mobile.
 function AboutProse({ html, className }: { html: string; className: string }) {
   const reduced = useReducedMotion();
+  const isMobile = isMobileDevice();
   const markup = useMarkup(html);
 
-  if (reduced) return <div className={className}>{markup}</div>;
+  if (reduced || isMobile) return <div className={className}>{markup}</div>;
 
   return (
     <AnimatedContent
@@ -178,6 +181,7 @@ function AboutProse({ html, className }: { html: string; className: string }) {
 function ContactCard({ html, className }: { html: string; className: string }) {
   const theme = useTheme();
   const reduced = useReducedMotion();
+  const isMobile = isMobileDevice();
   const markup = useMarkup(html);
 
   return (
@@ -190,8 +194,8 @@ function ContactCard({ html, className }: { html: string; className: string }) {
       softness={0.5}
       proximity={300}
       smoothing={0.12}
-      ambient={!reduced}
-      flare={!reduced}
+      ambient={!reduced && !isMobile}
+      flare={!reduced && !isMobile}
       grain={0.06}
     >
       {markup}
@@ -231,6 +235,8 @@ function mount(selector: string, render: (host: HTMLElement) => ReactNode): void
 
 // Mounts interactive React islands into static HTML hosts.
 export function initIslands(): void {
+  const isMobile = isMobileDevice();
+
   mount('[data-island="hero-name"]', (host) => <HeroName host={host} />);
   mount('[data-island="stats"]', (host) => <Stats host={host} />);
   mount('[data-island="magnet"]', (host) => <PaletteMagnet host={host} />);
@@ -239,7 +245,10 @@ export function initIslands(): void {
     <ContactCard html={host.innerHTML} className={host.className || 'contact-card'} />
   ));
   mount('[data-island="project-orbit"]', () => <ProjectOrbit />);
-  mount('[data-island="contact-grid"]', () => (
-    <ContactGrid paused={window.matchMedia('(prefers-reduced-motion: reduce)').matches} />
-  ));
+  // Skip heavy WebGL dot grid on mobile devices to preserve frame rate.
+  if (!isMobile) {
+    mount('[data-island="contact-grid"]', () => (
+      <ContactGrid paused={window.matchMedia('(prefers-reduced-motion: reduce)').matches} />
+    ));
+  }
 }

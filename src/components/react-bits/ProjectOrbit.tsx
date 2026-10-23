@@ -398,7 +398,7 @@ function createEmojiInspiredMesh(shape: ProjectSatellite['shape'], color: THREE.
   return group;
 }
 
-export default function ProjectOrbit() {
+function DesktopProjectOrbit({ isItalian }: { isItalian: boolean }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -408,7 +408,7 @@ export default function ProjectOrbit() {
   const [isGlitching, setIsGlitching] = useState<boolean>(false);
 
   const unfocusRef = useRef<() => void>(() => {});
-  const isItalian = typeof document !== 'undefined' && document.documentElement.lang === 'it';
+// using passed isItalian prop
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -932,4 +932,138 @@ export default function ProjectOrbit() {
       )}
     </div>
   );
+}
+
+
+// Mobile swipeable project cards carousel using hardware-accelerated CSS scroll snap.
+function MobileProjectCarousel({ isItalian }: { isItalian: boolean }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const handleScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const first = el.firstElementChild as HTMLElement | null;
+    const cardWidth = (first?.offsetWidth || 280) + 12;
+    const index = Math.round(el.scrollLeft / cardWidth);
+    setActiveIndex(Math.max(0, Math.min(ALL_PROJECTS.length - 1, index)));
+  };
+
+  const scrollToCard = (index: number) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const target = el.children[index] as HTMLElement | null;
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+  };
+
+  return (
+    <div className="mobile-orbit-container">
+      <div className="mobile-orbit-header">
+        <span className="mobile-orbit-badge">
+          <span className="mobile-orbit-dot" />
+          {isItalian ? 'Progetti interattivi' : 'Interactive projects'}
+        </span>
+        <span className="mobile-orbit-counter">
+          {String(activeIndex + 1).padStart(2, '0')} / {ALL_PROJECTS.length}
+        </span>
+      </div>
+
+      <div
+        className="mobile-orbit-track"
+        ref={scrollRef}
+        onScroll={handleScroll}
+      >
+        {ALL_PROJECTS.map((proj, idx) => (
+          <div
+            key={proj.id}
+            className={`mobile-project-card ${idx === activeIndex ? 'is-active' : ''}`}
+            style={{
+              '--proj-color': proj.color,
+            } as React.CSSProperties}
+          >
+            <div className="mobile-card-top">
+              <div className="mobile-card-emoji-wrap">
+                <span className="mobile-card-emoji">{proj.emoji}</span>
+              </div>
+              <span className="mobile-card-index">#{proj.index}</span>
+            </div>
+
+            <div className="mobile-card-body">
+              <h3 className="mobile-card-title">{proj.name}</h3>
+              <span className="mobile-card-type">
+                {isItalian ? proj.typeIt : proj.typeEn}
+              </span>
+              <p className="mobile-card-desc">
+                {isItalian ? proj.descIt : proj.descEn}
+              </p>
+            </div>
+
+            <div className="mobile-card-footer">
+              <span className="mobile-card-meta">{proj.meta}</span>
+              <a
+                href={proj.url}
+                target="_blank"
+                rel="noopener"
+                className="btn btn--sm mobile-card-btn"
+              >
+                <span>GitHub</span>
+                <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="mobile-orbit-dots">
+        {ALL_PROJECTS.map((proj, idx) => (
+          <button
+            key={proj.id}
+            type="button"
+            className={`mobile-orbit-dot-btn ${idx === activeIndex ? 'is-active' : ''}`}
+            onClick={() => scrollToCard(idx)}
+            aria-label={`Project ${proj.name}`}
+          />
+        ))}
+      </div>
+
+      <div className="mobile-orbit-hint">
+        <span>{isItalian ? '← Scorri per esplorare tutti i 15 progetti →' : '← Swipe to explore all 15 projects →'}</span>
+      </div>
+    </div>
+  );
+}
+
+// Adaptive project showcase serving touch carousel on mobile and 3D solar system on desktop.
+export default function ProjectOrbit() {
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.innerWidth < 768 || window.matchMedia('(pointer: coarse)').matches;
+  });
+  const [isItalian, setIsItalian] = useState(() => {
+    if (typeof document === 'undefined') return false;
+    return document.documentElement.lang === 'it';
+  });
+
+  useEffect(() => {
+    const onResize = () => {
+      setIsMobile(window.innerWidth < 768 || window.matchMedia('(pointer: coarse)').matches);
+    };
+    const onLang = () => {
+      setIsItalian(document.documentElement.lang === 'it');
+    };
+    window.addEventListener('resize', onResize);
+    document.addEventListener('mn:languagechange', onLang);
+    return () => {
+      window.removeEventListener('resize', onResize);
+      document.removeEventListener('mn:languagechange', onLang);
+    };
+  }, []);
+
+  if (isMobile) {
+    return <MobileProjectCarousel isItalian={isItalian} />;
+  }
+
+  return <DesktopProjectOrbit isItalian={isItalian} />;
 }

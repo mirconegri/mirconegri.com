@@ -322,7 +322,11 @@ export function initTerrain(): void {
     if (hovered >= 0) drawTooltip(PLACES[hovered]);
   };
 
+  let isVisible = true;
+  let animId = 0;
+
   const frame = () => {
+    if (!isVisible) return;
     if (dirty) {
       draw();
       dirty = false;
@@ -330,7 +334,7 @@ export function initTerrain(): void {
       elapsed += 0.6;
       draw();
     }
-    requestAnimationFrame(frame);
+    animId = requestAnimationFrame(frame);
   };
 
   on(canvas, 'pointermove', (event) => {
@@ -362,5 +366,19 @@ export function initTerrain(): void {
   document.fonts.ready.then(() => {
     dirty = true;
   });
-  requestAnimationFrame(frame);
+
+  // Pause canvas drawing when map is scrolled out of view
+  const observer = new IntersectionObserver(([entry]) => {
+    isVisible = entry.isIntersecting;
+    if (isVisible) {
+      dirty = true;
+      cancelAnimationFrame(animId);
+      frame();
+    } else {
+      cancelAnimationFrame(animId);
+    }
+  }, { threshold: 0.05 });
+  observer.observe(host);
+
+  frame();
 }

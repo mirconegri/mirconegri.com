@@ -17,6 +17,12 @@ export function prefersReducedMotion(): boolean {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
+// Detects touch or mobile viewport devices.
+export function isMobileDevice(): boolean {
+  if (typeof window === 'undefined') return false;
+  return window.innerWidth < 768 || window.matchMedia('(pointer: coarse)').matches;
+}
+
 // Returns a WebGL2 rendering context or null if unavailable.
 export function createWebGL2(canvas: HTMLCanvasElement): WebGL2RenderingContext | null {
   try {

@@ -1,12 +1,26 @@
 /* Motion primitives and reduced-motion fallbacks. */
 
-/* Hidden initially only when JS is active to avoid trapping content. */
-html.js [data-reveal] {
-  opacity: 0;
+/* Hidden initially only on desktop to avoid scroll lag and delayed reveals on mobile. */
+@media (min-width: 768px) and (hover: hover) {
+  html.js [data-reveal] {
+    opacity: 0;
+  }
+
+  html.js [data-reveal='mask'] {
+    clip-path: inset(0 0 100% 0);
+  }
 }
 
-html.js [data-reveal='mask'] {
-  clip-path: inset(0 0 100% 0);
+/* Ensure content on mobile and touch devices is immediately visible without scroll delay. */
+@media (max-width: 767px), (hover: none), (pointer: coarse) {
+  html.js [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  html.js [data-reveal='mask'] {
+    clip-path: none !important;
+  }
 }
 
 .u-hover-lift {
