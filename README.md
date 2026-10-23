@@ -18,15 +18,17 @@ Direct, pragmatic, and built by hand: software built from concrete problems, vol
 
 > *"A Three.js noise sphere with orbital particle swarm, a custom 2D canvas map, and no framework runtime beyond the islands that need one."*
 
-Unlike monolithic single-page applications, **v4.0** is architected around **Progressive Enhancement & Island Architecture**:
+Unlike monolithic single-page applications, **v4.0** is architected around **Progressive Enhancement & Adaptive Dual-Tier Platform Architecture**:
 
 - **Static HTML First**: Semantic HTML5 document containing all text and structure. Fast first paint, SEO-ready, and fully legible even if JavaScript is disabled.
+- **Adaptive Platform Tiers**:
+  - **Desktop Profile**: Three.js 3D Strata sphere with 26,000 particles, interactive 3D Solar System with GitHub core and 15 orbiting planets, Lenis smooth inertial scrolling, and GSAP ScrollTrigger reveals.
+  - **Mobile Profile**: Zero scroll delay (instant 100% text visibility), GPU-accelerated horizontal touch swipeable carousel with CSS scroll snap at 120 FPS, and 0% background WebGL battery drain.
 - **Selective React Islands (`data-island`)**: React 19 is isolated strictly to interactive micro-components ([React Bits](https://reactbits.dev/)) such as kinetic rotating titles, numerical stat counters, spring magnetic buttons, and spotlight gradient cards.
 - **Custom Three.js & GLSL Shaders**:
-  - **Organic Noise Sphere & Particle Swarm**: An organic sphere dynamically distorted via 3D Simplex noise and GSAP, surrounded by an orbital Fibonacci cloud of 26,000 particles and textured ambient film-grain noise, animating with calm and serene pacing.
-  - **3D Projects Solar System**: An interactive celestial solar system with a central 3D GitHub logo core, surrounded by all 15 projects orbiting as custom emoji-inspired geometric satellites with enlarged hitboxes; clicking any satellite smoothly docks the camera via GSAP and displays a glassmorphic HUD card with chromatic SVG glitch filters.
-- **Canvas 2D Journey Map**: Interactive geospatial map drawing Natural Earth 50m vector coastlines with custom projected path arcs and responsive tooltips without hefty mapping libraries (like Leaflet or Mapbox).
-- **Motion & Kinetic Scroll**: Butter-smooth inertial scrolling via [Lenis](https://lenis.darkroom.engineering/), orchestrated alongside [GSAP](https://gsap.com/) ScrollTrigger for section reveals.
+  - **Organic Noise Sphere & Particle Swarm**: An organic sphere dynamically distorted via 3D Simplex noise and GSAP, surrounded by an orbital Fibonacci cloud of 26,000 particles and textured ambient film-grain noise.
+  - **3D Projects Solar System**: An interactive celestial solar system with a prominent central GitHub logo core, surrounded by all 15 projects orbiting as custom 3D planetary bodies with rings, moons, and geodesic facets.
+- **Canvas 2D Journey Map**: Interactive geospatial map drawing Natural Earth 50m vector coastlines with custom projected path arcs and responsive tooltips without hefty mapping libraries.
 - **Zero Third-Party Tracking**: All fonts (Instrument Serif, Inter, JetBrains Mono) are self-hosted in WOFF2 format. Zero external analytics or third-party tracking scripts.
 
 ---
@@ -39,6 +41,26 @@ Unlike monolithic single-page applications, **v4.0** is architected around **Pro
 - **Command Palette (`⌘K` / `Ctrl+K`)**: Keyboard-driven fuzzy-search overlay to quickly jump to sections, filter projects, or copy contact info.
 - **Accessible Motion**: Automatically respects `prefers-reduced-motion` across GSAP transitions, WebGL shaders, and React animations.
 - **Contact Form**: Integrated with Formspree, client-side validation, bot honeypot, and GDPR consent handling.
+
+---
+
+## 📸 Visual Showcase & Screenshots
+
+Tabella comparativa delle **6 sezioni della navmap** nei diversi temi e dispositivi:
+
+| Sezione Navmap | ☀️ PC — Modalità Chiara | 🌙 PC — Modalità Scura | 📱 Telefono — Modalità Scura |
+| :--- | :---: | :---: | :---: |
+| **01. Chi sono**<br>*(About)* | ![Chi sono - PC Chiara](assets/about_white.png) | ![Chi sono - PC Scura](assets/about.png) | ![Chi sono - Mobile Scura](assets/about_mobile.png) |
+| **02. Progetti**<br>*(Projects)* | ![Progetti - PC Chiara](assets/projects_white.png) | ![Progetti - PC Scura](assets/projects.png) | ![Progetti - Mobile Scura](assets/projects_mobile.png) |
+| **03. Percorso**<br>*(Education)* | ![Percorso - PC Chiara](assets/education_white.png) | ![Percorso - PC Scura](assets/education.png) | ![Percorso - Mobile Scura](assets/education_mobile.png) |
+| **04. Volontariato**<br>*(Volunteering)* | ![Volontariato - PC Chiara](assets/volunteering_white.png) | ![Volontariato - PC Scura](assets/volunteering.png) | ![Volontariato - Mobile Scura](assets/volunteering_mobile.png) |
+| **05. Mappa**<br>*(Map / Places)* | ![Mappa - PC Chiara](assets/places_white.png) | ![Mappa - PC Scura](assets/places.png) | ![Mappa - Mobile Scura](assets/places_mobile.png) |
+| **06. Contatti**<br>*(Contact)* | ![Contatti - PC Chiara](assets/contact_white.png) | ![Contatti - PC Scura](assets/contact.png) | ![Contatti - Mobile Scura](assets/contact_mobile.png) |
+
+> 💡 **Come aggiornare le immagini**: per sostituire o aggiungere screenshot è sufficiente incollare i file PNG nella cartella `assets/` seguendo la convenzione dei nomi:
+> - **PC Chiara**: `assets/<sezione>_white.png`
+> - **PC Scura**: `assets/<sezione>.png`
+> - **Telefono Scura**: `assets/<sezione>_mobile.png`
 
 ---
 
@@ -65,14 +87,14 @@ mirconegri.com/
 │   ├── main.tsx             # Application bootstrapper
 │   ├── components/
 │   │   ├── islands.tsx      # Mounts React components to data-island DOM targets
-│   │   └── react-bits/      # SplitText, RotatingText, CountUp, Magnet, SpotlightCard, DotGrid
+│   │   └── react-bits/      # SplitText, ProjectOrbit, CountUp, Magnet, SpotlightCard, DotGrid
 │   └── lib/
 │       ├── dom.ts           # Minimal typed DOM query and event helpers
-│       ├── env.ts           # Math helpers (damp, lerp, clamp) and WebGL2 probe
+│       ├── env.ts           # Math helpers (damp, lerp, clamp) and mobile device probe
 │       ├── i18n.ts          # Localization manager (IT/EN)
 │       ├── theme.ts         # Theme persistence and synchronization
 │       ├── motion.ts        # GSAP ScrollTrigger and Lenis smooth scrolling
-│       ├── strata.ts        # Custom WebGL2 raymarched geometric polyhedron shader
+│       ├── strata.ts        # Custom WebGL2 noise sphere & 26k particle swarm
 │       ├── terrain.ts       # Canvas 2D journey map renderer
 │       ├── world-geo.ts     # Natural Earth 50m vector polygon coordinates
 │       ├── palette.ts       # Fuzzy search and Command Palette logic
@@ -89,7 +111,8 @@ mirconegri.com/
 │   └── jetbrains-mono/
 │
 └── assets/
-    └── CV_Mirco_Negri.pdf   # Downloadable curriculum vitae
+    ├── CV_Mirco_Negri.pdf   # Downloadable curriculum vitae
+    └── *.png                # Documentation and showcase preview screenshots
 ```
 
 ---
