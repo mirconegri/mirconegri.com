@@ -48,6 +48,7 @@ Comparative preview table of the **6 navmap sections** across desktop and mobile
 
 | Navmap Section | PC — Light Mode | PC — Dark Mode | Mobile — Dark Mode |
 | :--- | :---: | :---: | :---: |
+| **Hero** | ![About - PC Light](assets/hero_white.png) | ![About - PC Dark](assets/hero.gif) | ![About - Mobile Dark](assets/hero_mobile.png) |
 | **01. About** | ![About - PC Light](assets/about_white.png) | ![About - PC Dark](assets/about.png) | ![About - Mobile Dark](assets/about_mobile.png) |
 | **02. Projects** | ![Projects - PC Light](assets/projects_white.png) | ![Projects - PC Dark](assets/projects.png) | ![Projects - Mobile Dark](assets/projects_mobile.png) |
 | **03. Education** | ![Education - PC Light](assets/education_white.png) | ![Education - PC Dark](assets/education.png) | ![Education - Mobile Dark](assets/education_mobile.png) |
