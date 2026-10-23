@@ -281,191 +281,463 @@ function createGitHubTexture(): THREE.CanvasTexture {
   return texture;
 }
 
-/** Generates customized 3D planetary celestial bodies themed around each project */
-function createEmojiInspiredMesh(shape: ProjectSatellite['shape'], color: THREE.Color): THREE.Object3D {
+/** Generates rich, multi-part, multi-colored 3D models corresponding to each project's emoji */
+function createEmojiInspiredMesh(shape: ProjectSatellite['shape'], _color: THREE.Color): THREE.Object3D {
   const group = new THREE.Group();
-
-  const planetMat = new THREE.MeshStandardMaterial({
-    color,
-    metalness: 0.25,
-    roughness: 0.35,
-    emissive: color.clone().multiplyScalar(0.12),
-  });
-
-  const ringMat = new THREE.MeshStandardMaterial({
-    color,
-    side: THREE.DoubleSide,
-    transparent: true,
-    opacity: 0.65,
-    metalness: 0.4,
-    roughness: 0.3,
-  });
-
-  const darkMat = new THREE.MeshStandardMaterial({
-    color: 0x111827,
-    metalness: 0.6,
-    roughness: 0.35,
-  });
 
   switch (shape) {
     case 'washing-drum': {
-      // 🧺 LaundryBot: Banded Gas Planet with double woven atmospheric rings
-      const planet = new THREE.Mesh(new THREE.SphereGeometry(0.55, 20, 20), planetMat);
-      const ring1 = new THREE.Mesh(new THREE.RingGeometry(0.72, 0.95, 32), ringMat);
-      ring1.rotation.x = Math.PI / 2.3;
-      const ring2 = new THREE.Mesh(new THREE.TorusGeometry(0.85, 0.04, 8, 24), ringMat);
-      ring2.rotation.x = Math.PI / 2.3;
-      group.add(planet, ring1, ring2);
+      // 🧺 LaundryBot: Detailed 3D Washing Machine with chrome porthole & control panel
+      const cabinetMat = new THREE.MeshStandardMaterial({ color: 0xf1f5f9, metalness: 0.1, roughness: 0.3 });
+      const cabinet = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.95, 0.8), cabinetMat);
+      
+      const panelMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.3, roughness: 0.4 });
+      const panel = new THREE.Mesh(new THREE.BoxGeometry(0.84, 0.2, 0.05), panelMat);
+      panel.position.set(0, 0.36, 0.41);
+      
+      const dialMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.8, roughness: 0.2 });
+      const dial = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 0.06, 16), dialMat);
+      dial.rotation.x = Math.PI / 2;
+      dial.position.set(-0.25, 0.36, 0.44);
+
+      const doorRingMat = new THREE.MeshStandardMaterial({ color: 0xcbd5e1, metalness: 0.85, roughness: 0.15 });
+      const doorRing = new THREE.Mesh(new THREE.TorusGeometry(0.28, 0.05, 12, 28), doorRingMat);
+      doorRing.position.set(0, -0.1, 0.41);
+
+      const glassMat = new THREE.MeshStandardMaterial({ color: 0x0284c7, transparent: true, opacity: 0.7, roughness: 0.1 });
+      const glass = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, 0.02, 24), glassMat);
+      glass.rotation.x = Math.PI / 2;
+      glass.position.set(0, -0.1, 0.41);
+
+      const clothesMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, roughness: 0.6 });
+      const clothes = new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.06, 8, 16), clothesMat);
+      clothes.position.set(0, -0.1, 0.38);
+
+      group.add(cabinet, panel, dial, doorRing, glass, clothes);
       break;
     }
+
     case 'phone-slab': {
-      // 📱 LifeOS: Crystalline tech planet with vertical polar bezel ring
-      const planet = new THREE.Mesh(new THREE.IcosahedronGeometry(0.54, 2), planetMat);
-      const bezelRing = new THREE.Mesh(new THREE.TorusGeometry(0.82, 0.04, 6, 28), ringMat);
-      bezelRing.rotation.y = Math.PI / 2.5;
-      group.add(planet, bezelRing);
+      // 📱 LifeOS: Sleek 3D Smartphone with glossy screen, glowing UI widgets, and camera bump
+      const frameMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.85, roughness: 0.2 });
+      const phoneBody = new THREE.Mesh(new THREE.BoxGeometry(0.62, 1.18, 0.08), frameMat);
+
+      const screenMat = new THREE.MeshStandardMaterial({ color: 0x090d16, roughness: 0.1, metalness: 0.1 });
+      const screen = new THREE.Mesh(new THREE.BoxGeometry(0.56, 1.1, 0.01), screenMat);
+      screen.position.z = 0.041;
+
+      // Glowing app widgets on screen
+      const w1Mat = new THREE.MeshStandardMaterial({ color: 0x06b6d4, emissive: 0x06b6d4, emissiveIntensity: 0.4 });
+      const widget1 = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.22, 0.01), w1Mat);
+      widget1.position.set(-0.12, 0.32, 0.047);
+
+      const w2Mat = new THREE.MeshStandardMaterial({ color: 0x8b5cf6, emissive: 0x8b5cf6, emissiveIntensity: 0.4 });
+      const widget2 = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.22, 0.01), w2Mat);
+      widget2.position.set(0.12, 0.32, 0.047);
+
+      const w3Mat = new THREE.MeshStandardMaterial({ color: 0x10b981, emissive: 0x10b981, emissiveIntensity: 0.3 });
+      const widget3 = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.16, 0.01), w3Mat);
+      widget3.position.set(0, 0.06, 0.047);
+
+      const cameraBump = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.22, 0.03), frameMat);
+      cameraBump.position.set(-0.14, 0.42, -0.05);
+
+      group.add(phoneBody, screen, widget1, widget2, widget3, cameraBump);
       break;
     }
+
     case 'lightning-octa': {
-      // ⚡ TEPO: Emerald lightning planet with orbiting energy octahedron crystal
-      const planet = new THREE.Mesh(new THREE.SphereGeometry(0.5, 18, 18), planetMat);
-      const ionRing = new THREE.Mesh(new THREE.RingGeometry(0.7, 0.88, 24), ringMat);
-      ionRing.rotation.x = Math.PI / 2.5;
-      const crystal = new THREE.Mesh(new THREE.OctahedronGeometry(0.24), ringMat);
-      crystal.position.set(0.72, 0.25, 0);
-      group.add(planet, ionRing, crystal);
+      // ⚡ TEPO: Extruded 3D Zigzag Lightning Bolt in radiant electric gold
+      const shape2D = new THREE.Shape();
+      shape2D.moveTo(0, 0.85);
+      shape2D.lineTo(0.38, 0.12);
+      shape2D.lineTo(0.08, 0.12);
+      shape2D.lineTo(0.32, -0.85);
+      shape2D.lineTo(-0.28, -0.05);
+      shape2D.lineTo(0.02, -0.05);
+      shape2D.closePath();
+
+      const boltGeom = new THREE.ExtrudeGeometry(shape2D, {
+        depth: 0.22,
+        bevelEnabled: true,
+        bevelThickness: 0.04,
+        bevelSize: 0.03,
+        bevelSegments: 2,
+      });
+      const boltMat = new THREE.MeshStandardMaterial({
+        color: 0xfacc15,
+        emissive: 0xeab308,
+        emissiveIntensity: 0.65,
+        metalness: 0.2,
+        roughness: 0.25,
+      });
+      const bolt = new THREE.Mesh(boltGeom, boltMat);
+      bolt.position.set(0, 0, -0.11);
+
+      // Orbiting energy halo spark
+      const haloMat = new THREE.MeshBasicMaterial({ color: 0xfef08a, transparent: true, opacity: 0.6 });
+      const halo = new THREE.Mesh(new THREE.TorusGeometry(0.72, 0.03, 6, 24), haloMat);
+      halo.rotation.x = Math.PI / 2.5;
+
+      group.add(bolt, halo);
       break;
     }
+
     case 'lens-ring': {
-      // 👁️ Quality Inspector: Ocular planet with concentric inspection lens aperture
-      const planet = new THREE.Mesh(new THREE.SphereGeometry(0.52, 20, 20), planetMat);
-      const lensRing = new THREE.Mesh(new THREE.RingGeometry(0.65, 0.92, 32), ringMat);
-      lensRing.rotation.x = Math.PI / 2.2;
-      const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.24, 12, 12), darkMat);
-      pupil.position.z = 0.44;
-      group.add(planet, lensRing, pupil);
+      // 👁️ Quality Inspector: 3D Eyeball with White Sclera, Crimson Iris, Black Pupil & Cybernetic Lens
+      const scleraMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.15, metalness: 0.05 });
+      const eyeball = new THREE.Mesh(new THREE.SphereGeometry(0.52, 24, 24), scleraMat);
+
+      const irisMat = new THREE.MeshStandardMaterial({ color: 0xf43f5e, roughness: 0.2, metalness: 0.4 });
+      const iris = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.26, 0.04, 32), irisMat);
+      iris.rotation.x = Math.PI / 2;
+      iris.position.set(0, 0, 0.46);
+
+      const pupilMat = new THREE.MeshStandardMaterial({ color: 0x020617, roughness: 0.1 });
+      const pupil = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.05, 24), pupilMat);
+      pupil.rotation.x = Math.PI / 2;
+      pupil.position.set(0, 0, 0.47);
+
+      // Metallic robotic aperture ring
+      const lensMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.85, roughness: 0.2 });
+      const lensRing = new THREE.Mesh(new THREE.TorusGeometry(0.72, 0.035, 8, 32), lensMat);
+
+      group.add(eyeball, iris, pupil, lensRing);
       break;
     }
+
     case 'folded-sheet': {
-      // 🧾 Receipt Scanner: Terraced golden strata planet with dual concentric rings
-      const planet = new THREE.Mesh(new THREE.SphereGeometry(0.52, 16, 16), planetMat);
-      const strata1 = new THREE.Mesh(new THREE.RingGeometry(0.68, 0.84, 28), ringMat);
-      strata1.rotation.x = Math.PI / 2.4;
-      const strata2 = new THREE.Mesh(new THREE.RingGeometry(0.92, 1.05, 28), ringMat);
-      strata2.rotation.x = Math.PI / 2.4;
-      group.add(planet, strata1, strata2);
+      // 🧾 Receipt Scanner: 3D Folded Paper Receipt with Barcode lines and Scanner Beam
+      const paperMat = new THREE.MeshStandardMaterial({ color: 0xfefefe, roughness: 0.5 });
+      const receipt = new THREE.Mesh(new THREE.BoxGeometry(0.68, 0.95, 0.03), paperMat);
+
+      // Angled top folded paper tab
+      const foldTab = new THREE.Mesh(new THREE.BoxGeometry(0.68, 0.24, 0.03), paperMat);
+      foldTab.position.set(0, 0.56, 0.06);
+      foldTab.rotation.x = 0.4;
+
+      // Dark barcode printed lines
+      const lineMat = new THREE.MeshBasicMaterial({ color: 0x334155 });
+      for (let i = 0; i < 4; i++) {
+        const line = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.035, 0.01), lineMat);
+        line.position.set(0, 0.2 - i * 0.14, 0.02);
+        group.add(line);
+      }
+
+      // Glowing laser scan line
+      const laserMat = new THREE.MeshBasicMaterial({ color: 0xf97316 });
+      const laser = new THREE.Mesh(new THREE.BoxGeometry(0.74, 0.02, 0.02), laserMat);
+      laser.position.set(0, -0.05, 0.04);
+
+      group.add(receipt, foldTab, laser);
       break;
     }
+
     case 'dials-cube': {
-      // 🎛️ OpenRouter Widget: Dodecahedral telemetry planet with dual gimbal rings
-      const planet = new THREE.Mesh(new THREE.DodecahedronGeometry(0.54), planetMat);
-      const gimbal1 = new THREE.Mesh(new THREE.TorusGeometry(0.8, 0.035, 6, 24), ringMat);
-      const gimbal2 = new THREE.Mesh(new THREE.TorusGeometry(0.8, 0.035, 6, 24), ringMat);
-      gimbal1.rotation.x = Math.PI / 3;
-      gimbal2.rotation.y = Math.PI / 3;
-      group.add(planet, gimbal1, gimbal2);
+      // 🎛️ OpenRouter Widget: 3D Audio Console with Knobs, Fader Sliders & Status LEDs
+      const bodyMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.4, roughness: 0.3 });
+      const consoleBody = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.82, 0.2), bodyMat);
+
+      // Rotary knobs
+      const knobMat = new THREE.MeshStandardMaterial({ color: 0x64748b, metalness: 0.8, roughness: 0.2 });
+      const knobColors = [0x38bdf8, 0xf59e0b, 0xef4444];
+      for (let i = 0; i < 3; i++) {
+        const knob = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.08, 16), knobMat);
+        knob.rotation.x = Math.PI / 2;
+        knob.position.set(-0.25 + i * 0.25, 0.2, 0.12);
+
+        const ledMat = new THREE.MeshBasicMaterial({ color: knobColors[i] });
+        const led = new THREE.Mesh(new THREE.SphereGeometry(0.03, 8, 8), ledMat);
+        led.position.set(-0.25 + i * 0.25, 0.32, 0.11);
+        group.add(knob, led);
+      }
+
+      // Vertical slider tracks
+      const faderMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.4 });
+      for (let i = 0; i < 2; i++) {
+        const track = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.32, 0.03), faderMat);
+        track.position.set(-0.16 + i * 0.32, -0.18, 0.1);
+
+        const cap = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.08, 0.06), knobMat);
+        cap.position.set(-0.16 + i * 0.32, -0.22 + i * 0.12, 0.12);
+        group.add(track, cap);
+      }
+
+      group.add(consoleBody);
       break;
     }
+
     case 'tent-pyramid': {
-      // ⛺ ScoutMealPlanner: Terra globe accompanied by twin scout pyramid moonlets
-      const planet = new THREE.Mesh(new THREE.SphereGeometry(0.5, 18, 18), planetMat);
-      const moon1 = new THREE.Mesh(new THREE.ConeGeometry(0.18, 0.28, 4), ringMat);
-      moon1.position.set(0.72, 0.15, 0);
-      moon1.rotation.y = Math.PI / 4;
-      const moon2 = new THREE.Mesh(new THREE.ConeGeometry(0.14, 0.22, 4), ringMat);
-      moon2.position.set(-0.68, -0.2, 0.2);
-      moon2.rotation.y = Math.PI / 4;
-      group.add(planet, moon1, moon2);
+      // ⛺ ScoutMealPlanner: 3D Forest Scout Tent with Wooden Ridgepole and Glowing Campfire
+      const tentMat = new THREE.MeshStandardMaterial({ color: 0x166534, roughness: 0.6 });
+      const tent = new THREE.Mesh(new THREE.ConeGeometry(0.68, 0.88, 4), tentMat);
+      tent.rotation.y = Math.PI / 4;
+
+      const doorMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.5 });
+      const door = new THREE.Mesh(new THREE.ConeGeometry(0.42, 0.6, 4), doorMat);
+      door.rotation.y = Math.PI / 4;
+      door.position.set(0, -0.15, 0.02);
+
+      const poleMat = new THREE.MeshStandardMaterial({ color: 0x78350f, roughness: 0.8 });
+      const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.98), poleMat);
+      pole.rotation.x = Math.PI / 2;
+      pole.position.set(0, 0.42, 0);
+
+      // Mini glowing campfire in front
+      const fireMat = new THREE.MeshStandardMaterial({ color: 0xf97316, emissive: 0xf97316, emissiveIntensity: 0.8 });
+      const fire = new THREE.Mesh(new THREE.DodecahedronGeometry(0.12), fireMat);
+      fire.position.set(0, -0.32, 0.55);
+
+      const logMat = new THREE.MeshStandardMaterial({ color: 0x451a03, roughness: 0.9 });
+      const log1 = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.04, 0.04), logMat);
+      log1.rotation.y = 0.6;
+      log1.position.set(0, -0.4, 0.55);
+
+      group.add(tent, door, pole, fire, log1);
       break;
     }
+
     case 'film-reel': {
-      // 🎬 MovieRecommender: Violet gas giant with wide cinematic reel ring
-      const planet = new THREE.Mesh(new THREE.SphereGeometry(0.54, 20, 20), planetMat);
-      const reelRing = new THREE.Mesh(new THREE.RingGeometry(0.7, 1.05, 32), ringMat);
-      reelRing.rotation.x = Math.PI / 2.2;
-      group.add(planet, reelRing);
+      // 🎬 MovieRecommender: 3D Hollywood Clapperboard with Black/White Zebra Stripes
+      const slateMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.3 });
+      const slate = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.65, 0.05), slateMat);
+
+      const clapperMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.3 });
+      const clapper = new THREE.Mesh(new THREE.BoxGeometry(0.88, 0.16, 0.06), clapperMat);
+      clapper.position.set(0.04, 0.4, 0.02);
+      clapper.rotation.z = 0.18;
+
+      // Diagonal zebra stripes on the clapper stick
+      const stripeMat = new THREE.MeshBasicMaterial({ color: 0xf8fafc });
+      for (let i = 0; i < 4; i++) {
+        const stripe = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.15, 0.07), stripeMat);
+        stripe.position.set(-0.3 + i * 0.2, 0.4, 0.02);
+        stripe.rotation.z = 0.45;
+        group.add(stripe);
+      }
+
+      // White chalk text lines on the slate
+      const textMat = new THREE.MeshBasicMaterial({ color: 0xe2e8f0 });
+      const line1 = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.03, 0.06), textMat);
+      line1.position.set(0, 0.12, 0.01);
+      const line2 = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.03, 0.06), textMat);
+      line2.position.set(0, -0.06, 0.01);
+
+      group.add(slate, clapper, line1, line2);
       break;
     }
+
     case 'disco-ball': {
-      // 🪩 Carnival Effects: Faceted reflective geodesic mirror planet
-      const planetMatFaceted = new THREE.MeshStandardMaterial({
-        color,
+      // 🪩 Carnival Effects: Faceted 3D Mirror Disco Ball with Pure Chrome Reflection & Sparkles
+      const mirrorMat = new THREE.MeshStandardMaterial({
+        color: 0xe2e8f0,
         flatShading: true,
-        metalness: 0.85,
-        roughness: 0.15,
-        emissive: color.clone().multiplyScalar(0.2),
+        metalness: 0.96,
+        roughness: 0.08,
       });
-      const planet = new THREE.Mesh(new THREE.IcosahedronGeometry(0.58, 1), planetMatFaceted);
-      const glitterRing = new THREE.Mesh(new THREE.TorusGeometry(0.85, 0.04, 8, 32), ringMat);
-      glitterRing.rotation.x = Math.PI / 2.3;
-      group.add(planet, glitterRing);
+      const ball = new THREE.Mesh(new THREE.IcosahedronGeometry(0.58, 2), mirrorMat);
+
+      const capMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.8 });
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.03, 6, 16), capMat);
+      ring.position.set(0, 0.62, 0);
+
+      // Colorful sparkles orbiting the mirror ball
+      const sparkColors = [0xec4899, 0x06b6d4, 0xeab308];
+      sparkColors.forEach((sc, idx) => {
+        const sm = new THREE.MeshBasicMaterial({ color: sc });
+        const sp = new THREE.Mesh(new THREE.OctahedronGeometry(0.06), sm);
+        const theta = (idx * Math.PI * 2) / 3;
+        sp.position.set(Math.cos(theta) * 0.78, Math.sin(theta) * 0.25, Math.sin(theta) * 0.78);
+        group.add(sp);
+      });
+
+      group.add(ball, ring);
       break;
     }
+
     case 'dice-cube': {
-      // ⏳ Pomodoro Cube: Copper celestial sphere with gyroscopic armillary rings
-      const planet = new THREE.Mesh(new THREE.SphereGeometry(0.5, 18, 18), planetMat);
-      const gyroRing = new THREE.Mesh(new THREE.TorusGeometry(0.78, 0.04, 8, 28), ringMat);
-      gyroRing.rotation.x = Math.PI / 4;
-      gyroRing.rotation.y = Math.PI / 4;
-      group.add(planet, gyroRing);
-      break;
-    }
-    case 'book-stack': {
-      // 📚 UniArchive: Terracotta academic planet with tiered horizontal shelf rings
-      const planet = new THREE.Mesh(new THREE.SphereGeometry(0.52, 18, 18), planetMat);
-      const shelf1 = new THREE.Mesh(new THREE.RingGeometry(0.68, 0.82, 28), ringMat);
-      const shelf2 = new THREE.Mesh(new THREE.RingGeometry(0.88, 1.02, 28), ringMat);
-      shelf1.rotation.x = Math.PI / 2.4;
-      shelf2.rotation.x = Math.PI / 2.4;
-      group.add(planet, shelf1, shelf2);
-      break;
-    }
-    case 'chart-wedge': {
-      // 📈 Quant-Tech-Rotator: Lime momentum planet with an inclined ascending trajectory ring
-      const planet = new THREE.Mesh(new THREE.SphereGeometry(0.5, 18, 18), planetMat);
-      const vectorRing = new THREE.Mesh(new THREE.TorusGeometry(0.82, 0.045, 8, 28), ringMat);
-      vectorRing.rotation.x = Math.PI / 3;
-      vectorRing.rotation.z = Math.PI / 6;
-      group.add(planet, vectorRing);
-      break;
-    }
-    case 'paper-layers': {
-      // 📑 PdfMerger: Sky-blue planet with interlocking orthogonal polar rings
-      const planet = new THREE.Mesh(new THREE.SphereGeometry(0.52, 18, 18), planetMat);
-      const ringH = new THREE.Mesh(new THREE.RingGeometry(0.7, 0.88, 24), ringMat);
-      ringH.rotation.x = Math.PI / 2;
-      const ringV = new THREE.Mesh(new THREE.RingGeometry(0.7, 0.88, 24), ringMat);
-      group.add(planet, ringH, ringV);
-      break;
-    }
-    case 'qr-tile': {
-      // ⬛ QR Generator: Basalt planet with geometric cubic nodes and square ring
-      const planetMatFaceted = new THREE.MeshStandardMaterial({
-        color,
-        flatShading: true,
-        metalness: 0.3,
-        roughness: 0.4,
-      });
-      const planet = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.65, 0.65), planetMatFaceted);
-      const squareRing = new THREE.Mesh(new THREE.RingGeometry(0.82, 0.98, 4), ringMat);
-      squareRing.rotation.x = Math.PI / 2;
-      squareRing.rotation.z = Math.PI / 4;
-      group.add(planet, squareRing);
-      break;
-    }
-    default: {
-      // 🌐 mirconegri.com: Blue-amber terrestrial globe encased in a wireframe network cage
-      const planet = new THREE.Mesh(new THREE.SphereGeometry(0.52, 20, 20), planetMat);
-      const cageMat = new THREE.MeshBasicMaterial({
-        color,
-        wireframe: true,
+      // ⏳ Pomodoro Gravity Cube: 3D Transparent Glass Hourglass with Wooden Caps & Golden Sand
+      const glassMat = new THREE.MeshStandardMaterial({
+        color: 0xe0f2fe,
         transparent: true,
         opacity: 0.45,
+        roughness: 0.1,
       });
-      const cage = new THREE.Mesh(new THREE.SphereGeometry(0.7, 10, 10), cageMat);
-      const equatorRing = new THREE.Mesh(new THREE.RingGeometry(0.82, 0.96, 32), ringMat);
-      equatorRing.rotation.x = Math.PI / 2.3;
-      group.add(planet, cage, equatorRing);
+      const topBulb = new THREE.Mesh(new THREE.ConeGeometry(0.32, 0.42, 16), glassMat);
+      topBulb.rotation.x = Math.PI;
+      topBulb.position.set(0, 0.22, 0);
+
+      const bottomBulb = new THREE.Mesh(new THREE.ConeGeometry(0.32, 0.42, 16), glassMat);
+      bottomBulb.position.set(0, -0.22, 0);
+
+      const sandMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, roughness: 0.6 });
+      const sand = new THREE.Mesh(new THREE.ConeGeometry(0.26, 0.26, 14), sandMat);
+      sand.position.set(0, -0.28, 0);
+
+      const woodMat = new THREE.MeshStandardMaterial({ color: 0x92400e, roughness: 0.7 });
+      const topPlate = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 0.07, 8), woodMat);
+      topPlate.position.set(0, 0.45, 0);
+      const bottomPlate = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 0.07, 8), woodMat);
+      bottomPlate.position.set(0, -0.45, 0);
+
+      const pillarMat = new THREE.MeshStandardMaterial({ color: 0xd97706, metalness: 0.7 });
+      for (let i = 0; i < 3; i++) {
+        const pillar = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.88), pillarMat);
+        const ang = (i * Math.PI * 2) / 3;
+        pillar.position.set(Math.cos(ang) * 0.32, 0, Math.sin(ang) * 0.32);
+        group.add(pillar);
+      }
+
+      group.add(topBulb, bottomBulb, sand, topPlate, bottomPlate);
+      break;
+    }
+
+    case 'book-stack': {
+      // 📚 UniArchive: 3D Stack of Hardcover University Books in Navy, Crimson & Green
+      const pageMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.4 });
+      
+      // Bottom navy book
+      const b1Cover = new THREE.Mesh(new THREE.BoxGeometry(0.92, 0.18, 0.72), new THREE.MeshStandardMaterial({ color: 0x1e3a8a, roughness: 0.3 }));
+      const b1Pages = new THREE.Mesh(new THREE.BoxGeometry(0.88, 0.14, 0.68), pageMat);
+      b1Pages.position.set(0.03, 0, 0);
+      const book1 = new THREE.Group();
+      book1.add(b1Cover, b1Pages);
+      book1.position.y = -0.2;
+
+      // Middle crimson book
+      const b2Cover = new THREE.Mesh(new THREE.BoxGeometry(0.84, 0.17, 0.65), new THREE.MeshStandardMaterial({ color: 0x991b1b, roughness: 0.3 }));
+      const b2Pages = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.13, 0.61), pageMat);
+      b2Pages.position.set(0.03, 0, 0);
+      const book2 = new THREE.Group();
+      book2.add(b2Cover, b2Pages);
+      book2.rotation.y = 0.18;
+
+      // Top forest green book
+      const b3Cover = new THREE.Mesh(new THREE.BoxGeometry(0.76, 0.16, 0.58), new THREE.MeshStandardMaterial({ color: 0x166534, roughness: 0.3 }));
+      const b3Pages = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.12, 0.54), pageMat);
+      b3Pages.position.set(0.03, 0, 0);
+      const book3 = new THREE.Group();
+      book3.add(b3Cover, b3Pages);
+      book3.position.y = 0.2;
+      book3.rotation.y = -0.12;
+
+      // Gold ribbon bookmark hanging from top book
+      const ribMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, roughness: 0.3 });
+      const ribbon = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.22, 0.02), ribMat);
+      ribbon.position.set(0.38, 0.12, 0.1);
+
+      group.add(book1, book2, book3, ribbon);
+      break;
+    }
+
+    case 'chart-wedge': {
+      // 📈 Quant-Tech-Rotator: 3D Stock Market Growth Chart with 3 Ascending Green Bars & Trajectory Arrow
+      const baseMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.3 });
+      const baseGrid = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.06, 0.65), baseMat);
+
+      const bar1Mat = new THREE.MeshStandardMaterial({ color: 0x16a34a, roughness: 0.2 });
+      const bar1 = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.28, 0.18), bar1Mat);
+      bar1.position.set(-0.28, 0.17, 0);
+
+      const bar2Mat = new THREE.MeshStandardMaterial({ color: 0x22c55e, roughness: 0.2 });
+      const bar2 = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.52, 0.18), bar2Mat);
+      bar2.position.set(0, 0.29, 0);
+
+      const bar3Mat = new THREE.MeshStandardMaterial({ color: 0x4ade80, roughness: 0.2, emissive: 0x22c55e, emissiveIntensity: 0.2 });
+      const bar3 = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.82, 0.18), bar3Mat);
+      bar3.position.set(0.28, 0.44, 0);
+
+      // Ascending trajectory arrow
+      const arrowMat = new THREE.MeshStandardMaterial({ color: 0x22c55e, emissive: 0x22c55e, emissiveIntensity: 0.6 });
+      const arrowShaft = new THREE.Mesh(new THREE.BoxGeometry(0.78, 0.04, 0.04), arrowMat);
+      arrowShaft.position.set(0, 0.44, 0.16);
+      arrowShaft.rotation.z = 0.42;
+
+      const arrowHead = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.2, 8), arrowMat);
+      arrowHead.position.set(0.38, 0.62, 0.16);
+      arrowHead.rotation.z = -1.15;
+
+      group.add(baseGrid, bar1, bar2, bar3, arrowShaft, arrowHead);
+      break;
+    }
+
+    case 'paper-layers': {
+      // 📑 PdfMerger: Two 3D Document Pages with Paperclip
+      const p1Mat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.4 });
+      const page1 = new THREE.Mesh(new THREE.BoxGeometry(0.68, 0.95, 0.03), p1Mat);
+
+      const p2Mat = new THREE.MeshStandardMaterial({ color: 0x0284c7, roughness: 0.4 });
+      const page2 = new THREE.Mesh(new THREE.BoxGeometry(0.68, 0.95, 0.03), p2Mat);
+      page2.position.set(0.08, -0.06, -0.04);
+      page2.rotation.z = -0.12;
+
+      const clipMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.9, roughness: 0.1 });
+      const clip = new THREE.Mesh(new THREE.TorusGeometry(0.1, 0.02, 6, 20), clipMat);
+      clip.position.set(-0.2, 0.48, 0.02);
+
+      group.add(page1, page2, clip);
+      break;
+    }
+
+    case 'qr-tile': {
+      // ⬛ QR Generator: 3D Beveled White Plate with Raised Black QR Corner Alignment Squares
+      const tileMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.2 });
+      const tile = new THREE.Mesh(new THREE.BoxGeometry(0.88, 0.88, 0.08), tileMat);
+
+      const blockMat = new THREE.MeshStandardMaterial({ color: 0x020617, roughness: 0.3 });
+      
+      // 3 Outer corner squares
+      const corners = [
+        [-0.26, 0.26],
+        [0.26, 0.26],
+        [-0.26, -0.26]
+      ];
+      corners.forEach(([cx, cy]) => {
+        const outer = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.24, 0.04), blockMat);
+        outer.position.set(cx, cy, 0.05);
+        const innerHole = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.12, 0.05), tileMat);
+        innerHole.position.set(cx, cy, 0.055);
+        const centerDot = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.06, 0.06), blockMat);
+        centerDot.position.set(cx, cy, 0.06);
+        group.add(outer, innerHole, centerDot);
+      });
+
+      // Data bit blocks
+      const dataBits = [
+        [0.08, -0.18], [0.22, -0.12], [0.26, -0.28], [0, 0], [0.12, 0.06]
+      ];
+      dataBits.forEach(([bx, by]) => {
+        const bit = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.07, 0.04), blockMat);
+        bit.position.set(bx, by, 0.05);
+        group.add(bit);
+      });
+
+      group.add(tile);
+      break;
+    }
+
+    default: {
+      // 🌐 mirconegri.com: Blue-and-Green 3D Terrestrial Globe with Network Orbit Ring & Satellite
+      const oceanMat = new THREE.MeshStandardMaterial({ color: 0x0284c7, roughness: 0.3, metalness: 0.1 });
+      const globe = new THREE.Mesh(new THREE.SphereGeometry(0.52, 24, 24), oceanMat);
+
+      // Elevated continent landmasses
+      const landMat = new THREE.MeshStandardMaterial({ color: 0x15803d, roughness: 0.7 });
+      const cont1 = new THREE.Mesh(new THREE.SphereGeometry(0.53, 12, 12, 0, Math.PI * 0.7, 0, Math.PI * 0.6), landMat);
+      const cont2 = new THREE.Mesh(new THREE.SphereGeometry(0.53, 12, 12, Math.PI, Math.PI * 0.6, Math.PI * 0.3, Math.PI * 0.5), landMat);
+
+      // Metallic meridian orbit ring
+      const ringMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, metalness: 0.8, roughness: 0.2 });
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(0.78, 0.03, 8, 36), ringMat);
+      ring.rotation.x = Math.PI / 2.3;
+
+      // Orbiting mini communications satellite
+      const satMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, metalness: 0.5 });
+      const satellite = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.08, 0.08), satMat);
+      satellite.position.set(0.78, 0, 0);
+      ring.add(satellite);
+
+      group.add(globe, cont1, cont2, ring);
       break;
     }
   }
@@ -648,8 +920,14 @@ function DesktopProjectOrbit({ isItalian }: { isItalian: boolean }) {
       const materials: THREE.MeshStandardMaterial[] = [];
       visualShape.traverse((child) => {
         if ((child as THREE.Mesh).isMesh) {
-          const m = (child as THREE.Mesh).material as THREE.MeshStandardMaterial;
-          if (m) materials.push(m);
+          const m = (child as THREE.Mesh).material;
+          if (Array.isArray(m)) {
+            m.forEach((mat) => {
+              if (mat instanceof THREE.MeshStandardMaterial) materials.push(mat);
+            });
+          } else if (m instanceof THREE.MeshStandardMaterial) {
+            materials.push(m);
+          }
         }
       });
 
