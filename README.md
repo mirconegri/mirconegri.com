@@ -14,7 +14,7 @@ Direct, pragmatic, and built by hand: software built from concrete problems, vol
 
 ---
 
-## 🏛️ Architecture & Philosophy
+## Architecture
 
 > *"A Three.js noise sphere with orbital particle swarm, a custom 2D canvas map, and no framework runtime beyond the islands that need one."*
 
@@ -33,7 +33,7 @@ Unlike monolithic single-page applications, **v4.0** is architected around **Pro
 
 ---
 
-## ✨ Features
+## Features
 
 - **Sections Structure**: `00 Home`, `01 Chi sono / About`, `02 Progetti / Works`, `03 Percorso / Path`, `04 Volontariato / Outside`, `05 Mappa / Places`, `06 Contatti / Contact`, `07 Revisioni / Revisions`.
 - **Real-Time Dual Theming**: Dark (`#08090b`) & Light (`#f3f1ec`) with instant pre-paint theme application to avoid flash of unstyled content (FOUC).
@@ -44,7 +44,7 @@ Unlike monolithic single-page applications, **v4.0** is architected around **Pro
 
 ---
 
-## 📸 Visual Showcase & Screenshots
+## Visual Showcase & Screenshots
 
 Tabella comparativa delle **6 sezioni della navmap** nei diversi temi e dispositivi:
 
@@ -64,7 +64,7 @@ Tabella comparativa delle **6 sezioni della navmap** nei diversi temi e disposit
 
 ---
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```
 mirconegri.com/
@@ -117,7 +117,7 @@ mirconegri.com/
 
 ---
 
-## 🛠️ Development & Tooling
+## Development & Tooling
 
 ### Prerequisites
 
@@ -145,7 +145,7 @@ npm install
 
 ---
 
-## 🚀 Deployment
+## Deployment
 
 The site is continuously deployed via **Cloudflare Pages** connected directly to the `main` branch.
 
@@ -159,7 +159,7 @@ The site is continuously deployed via **Cloudflare Pages** connected directly to
 
 ---
 
-## 📄 License
+## License
 
 Open-sourced under the [MIT License](LICENSE).
 © 2026 [Mirco Negri](https://mirconegri.com).
