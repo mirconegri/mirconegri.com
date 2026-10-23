@@ -48,19 +48,14 @@ Unlike monolithic single-page applications, **v4.0** is architected around **Pro
 
 Tabella comparativa delle **6 sezioni della navmap** nei diversi temi e dispositivi:
 
-| Sezione Navmap | ☀️ PC — Modalità Chiara | 🌙 PC — Modalità Scura | 📱 Telefono — Modalità Scura |
+| Navmap Section | PC — Light Mode | PC — Dark Mode | Mobile — Dark Mode |
 | :--- | :---: | :---: | :---: |
-| **01. Chi sono**<br>*(About)* | ![Chi sono - PC Chiara](assets/about_white.png) | ![Chi sono - PC Scura](assets/about.png) | ![Chi sono - Mobile Scura](assets/about_mobile.png) |
-| **02. Progetti**<br>*(Projects)* | ![Progetti - PC Chiara](assets/projects_white.png) | ![Progetti - PC Scura](assets/projects.png) | ![Progetti - Mobile Scura](assets/projects_mobile.png) |
-| **03. Percorso**<br>*(Education)* | ![Percorso - PC Chiara](assets/education_white.png) | ![Percorso - PC Scura](assets/education.png) | ![Percorso - Mobile Scura](assets/education_mobile.png) |
-| **04. Volontariato**<br>*(Volunteering)* | ![Volontariato - PC Chiara](assets/volunteering_white.png) | ![Volontariato - PC Scura](assets/volunteering.png) | ![Volontariato - Mobile Scura](assets/volunteering_mobile.png) |
-| **05. Mappa**<br>*(Map / Places)* | ![Mappa - PC Chiara](assets/places_white.png) | ![Mappa - PC Scura](assets/places.png) | ![Mappa - Mobile Scura](assets/places_mobile.png) |
-| **06. Contatti**<br>*(Contact)* | ![Contatti - PC Chiara](assets/contact_white.png) | ![Contatti - PC Scura](assets/contact.png) | ![Contatti - Mobile Scura](assets/contact_mobile.png) |
-
-> 💡 **Come aggiornare le immagini**: per sostituire o aggiungere screenshot è sufficiente incollare i file PNG nella cartella `assets/` seguendo la convenzione dei nomi:
-> - **PC Chiara**: `assets/<sezione>_white.png`
-> - **PC Scura**: `assets/<sezione>.png`
-> - **Telefono Scura**: `assets/<sezione>_mobile.png`
+| **01. About**<br>*(About)* | ![Chi sono - PC Chiara](assets/about_white.png) | ![Chi sono - PC Scura](assets/about.png) | ![Chi sono - Mobile Scura](assets/about_mobile.png) |
+| **02. Projects**<br>*(Projects)* | ![Progetti - PC Chiara](assets/projects_white.png) | ![Progetti - PC Scura](assets/projects.png) | ![Progetti - Mobile Scura](assets/projects_mobile.png) |
+| **03. Education**<br>*(Education)* | ![Percorso - PC Chiara](assets/education_white.png) | ![Percorso - PC Scura](assets/education.png) | ![Percorso - Mobile Scura](assets/education_mobile.png) |
+| **04. Volunteering**<br>*(Volunteering)* | ![Volontariato - PC Chiara](assets/volunteering_white.png) | ![Volontariato - PC Scura](assets/volunteering.png) | ![Volontariato - Mobile Scura](assets/volunteering_mobile.png) |
+| **05. Map**<br>*(Map / Places)* | ![Mappa - PC Chiara](assets/places_white.png) | ![Mappa - PC Scura](assets/places.png) | ![Mappa - Mobile Scura](assets/places_mobile.png) |
+| **06. Contact**<br>*(Contact)* | ![Contatti - PC Chiara](assets/contact_white.png) | ![Contatti - PC Scura](assets/contact.png) | ![Contatti - Mobile Scura](assets/contact_mobile.png) |
 
 ---
 
