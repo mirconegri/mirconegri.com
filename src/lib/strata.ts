@@ -283,18 +283,21 @@ class THREEScene {
     const width = window.innerWidth;
     const height = window.innerHeight;
     const aspect = width / height;
+    const isMobile = width < 768;
 
     this.camera = new THREE.PerspectiveCamera(40, aspect, 0.1, 1000);
-    this.camera.position.set(0, 0, 10);
+    const cameraZ = aspect < 1.0 ? Math.max(13, 7.5 / aspect) : 10;
+    const cameraY = aspect < 1.0 ? 0.6 : 0;
+    this.camera.position.set(0, cameraY, cameraZ);
 
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
-      antialias: true,
+      antialias: !isMobile,
       alpha: true,
       powerPreference: 'high-performance',
     });
     this.renderer.setSize(width, height);
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2));
 
     const isDark = document.documentElement.dataset.theme !== 'light' ? 1.0 : 0.0;
 
@@ -335,12 +338,13 @@ class THREEScene {
     });
 
     // Main organic morphing sphere
-    const sphereGeometry = new THREE.SphereGeometry(1, 140, 140);
+    const sphereDetail = isMobile ? 64 : 140;
+    const sphereGeometry = new THREE.SphereGeometry(1, sphereDetail, sphereDetail);
     this.sphere = new THREE.Mesh(sphereGeometry, this.sphereMaterial);
     this.scene.add(this.sphere);
 
     // Surrounding particle swarm
-    const N = 26000;
+    const N = isMobile ? 7000 : 26000;
     const positions = new Float32Array(N * 3);
     const particleGeometry = new THREE.BufferGeometry();
     const inc = Math.PI * (3 - Math.sqrt(5));
@@ -431,9 +435,42 @@ class THREEScene {
       const width = window.innerWidth;
       const height = window.innerHeight;
       this.camera.aspect = width / height;
+      const isMobile = width < 768;
+      const cameraZ = this.camera.aspect < 1.0 ? Math.max(13, 7.5 / this.camera.aspect) : 10;
+      const cameraY = this.camera.aspect < 1.0 ? 0.6 : 0;
+      this.camera.position.set(0, cameraY, cameraZ);
       this.camera.updateProjectionMatrix();
       this.renderer.setSize(width, height);
+      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2));
     });
+
+    const ground = select<HTMLElement>('#ground');
+    const strata = select<HTMLElement>('#strata');
+    if (ground && strata && 'IntersectionObserver' in window) {
+      let groundVis = true;
+      let strataVis = false;
+      const updateVis = () => {
+        const visible = groundVis || strataVis;
+        if (visible && !this.isRunning) {
+          this.isRunning = true;
+          this.clock.start();
+          requestAnimationFrame(this.render);
+        } else if (!visible) {
+          this.isRunning = false;
+        }
+      };
+
+      const obs = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          if (entry.target === ground) groundVis = entry.isIntersecting;
+          if (entry.target === strata) strataVis = entry.isIntersecting;
+        }
+        updateVis();
+      }, { threshold: 0.02 });
+
+      obs.observe(ground);
+      obs.observe(strata);
+    }
 
     on(window, 'pointermove', (event) => {
       const pointer = event as PointerEvent;

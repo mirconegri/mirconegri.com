@@ -421,25 +421,26 @@ export default function ProjectOrbit() {
     let focusedMesh: THREE.Mesh | null = null;
 
     const width = container.clientWidth || window.innerWidth;
-    const height = Math.max(400, Math.min(560, width * 0.46));
+    const isMobile = width < 768;
+    const height = Math.max(340, Math.min(560, isMobile ? 360 : width * 0.46));
 
     const scene = new THREE.Scene();
     scene.fog = new THREE.Fog(0x080b12, 35, 95);
 
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-    const defaultCameraPosition = new THREE.Vector3(14, 12, 36);
+    const defaultCameraPosition = new THREE.Vector3(isMobile ? 12 : 14, isMobile ? 14 : 12, isMobile ? 50 : 36);
     camera.position.copy(defaultCameraPosition);
     const lookTarget = new THREE.Vector3(0, 0, 0);
     camera.lookAt(lookTarget);
 
     const renderer = new THREE.WebGLRenderer({
       canvas,
-      antialias: true,
+      antialias: !isMobile,
       alpha: true,
       powerPreference: 'high-performance',
     });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2));
 
     // Lights
     const hemiLight = new THREE.HemisphereLight(0xffffff, 0x141b2d, 1.4);
@@ -783,17 +784,26 @@ export default function ProjectOrbit() {
     // Resize
     const onResize = () => {
       const w = container.clientWidth || window.innerWidth;
-      const h = Math.max(400, Math.min(560, w * 0.46));
+      const isMob = w < 768;
+      const h = Math.max(340, Math.min(560, isMob ? 360 : w * 0.46));
       renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMob ? 1.5 : 2));
       camera.aspect = w / h;
+      if (!focusedMesh) {
+        defaultCameraPosition.set(isMob ? 12 : 14, isMob ? 14 : 12, isMob ? 50 : 36);
+        camera.position.copy(defaultCameraPosition);
+      }
       camera.updateProjectionMatrix();
     };
     window.addEventListener('resize', onResize);
+
+    let isVisible = true;
 
     // ==========================================
     // ANIMATION LOOP (CONSTANT SLOW SPEED)
     // ==========================================
     const loop = () => {
+      if (!isVisible) return;
       animId = requestAnimationFrame(loop);
 
       // Rotate GitHub Central Planet
@@ -814,9 +824,22 @@ export default function ProjectOrbit() {
       renderer.render(scene, camera);
     };
 
+    // Pause rendering when scrolled out of view to preserve mobile GPU
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+      if (isVisible) {
+        cancelAnimationFrame(animId);
+        loop();
+      } else {
+        cancelAnimationFrame(animId);
+      }
+    }, { threshold: 0.05 });
+    observer.observe(container);
+
     loop();
 
     return () => {
+      observer.disconnect();
       cancelAnimationFrame(animId);
       window.removeEventListener('resize', onResize);
       canvas.removeEventListener('pointermove', onPointerMove);

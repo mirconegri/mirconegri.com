@@ -13,6 +13,7 @@ const REVEAL_SHIFT = 22;
 // Wires Lenis smooth scrolling, nav progress indicators, and GSAP scroll reveals.
 export function initMotion(): void {
   const reduced = prefersReducedMotion();
+  const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
   const progress = select<HTMLElement>('[data-nav-progress]');
   const navLinks = selectAll<HTMLAnchorElement>('[data-palette-nav]');
   const sections = sheets();
@@ -45,8 +46,9 @@ export function initMotion(): void {
   syncActive();
 
   let lenis: Lenis | null = null;
-  if (!reduced) {
-    lenis = new Lenis({ duration: 1.05, touchMultiplier: 1.6 });
+  // Use native momentum scroll on touch devices to avoid touch lag; use Lenis on desktop.
+  if (!reduced && !isTouch) {
+    lenis = new Lenis({ duration: 1.05 });
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add((time) => lenis?.raf(time * 1000));
     gsap.ticker.lagSmoothing(0);
@@ -59,11 +61,12 @@ export function initMotion(): void {
     const destination = document.querySelector(link.hash);
     if (!(destination instanceof HTMLElement)) return;
     event.preventDefault();
+    const navOffset = (select<HTMLElement>('.nav')?.offsetHeight ?? 0) + 8;
     if (lenis) {
-      const offset = -(select<HTMLElement>('.nav')?.offsetHeight ?? 0) - 8;
-      lenis.scrollTo(destination, { offset, duration: 1.1 });
+      lenis.scrollTo(destination, { offset: -navOffset, duration: 1.1 });
     } else {
-      destination.scrollIntoView({ block: 'start' });
+      const top = destination.getBoundingClientRect().top + window.scrollY - navOffset;
+      window.scrollTo({ top, behavior: 'smooth' });
     }
   });
 

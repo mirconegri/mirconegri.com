@@ -28371,68 +28371,68 @@ function $T() {
 	return (0, _.useEffect)(() => {
 		let n = t.current, i = e.current;
 		if (!n || !i) return;
-		let o, c = !1, d = null, f = null, p = i.clientWidth || window.innerWidth, m = Math.max(400, Math.min(560, p * .46)), h = new sy();
-		h.fog = new oy(527122, 35, 95);
-		let g = new rS(45, p / m, .1, 1e3), _ = new Q(14, 12, 36);
-		g.position.copy(_);
-		let v = new Q(0, 0, 0);
-		g.lookAt(v);
-		let y = new YT({
+		let o, c = !1, d = null, f = null, p = i.clientWidth || window.innerWidth, m = p < 768, h = Math.max(340, Math.min(560, m ? 360 : p * .46)), g = new sy();
+		g.fog = new oy(527122, 35, 95);
+		let _ = new rS(45, p / h, .1, 1e3), v = new Q(m ? 12 : 14, m ? 14 : 12, m ? 50 : 36);
+		_.position.copy(v);
+		let y = new Q(0, 0, 0);
+		_.lookAt(y);
+		let b = new YT({
 			canvas: n,
-			antialias: !0,
+			antialias: !m,
 			alpha: !0,
 			powerPreference: "high-performance"
 		});
-		y.setSize(p, m), y.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-		let b = new Gx(16777215, 1317677, 1.4);
-		h.add(b);
-		let x = new cS(16774118, 1.6);
-		x.position.set(50, 70, 40), h.add(x);
-		let S = new cS(7328736, 1.1);
-		S.position.set(-40, 25, -40), h.add(S);
-		let C = new aS(16738877, 2.8, 55, 1.8);
-		C.position.set(0, 0, 0), h.add(C);
-		let w = new tb(), T = [];
-		for (let e = 0; e < 320; e++) T.push((Math.random() - .5) * 240, (Math.random() - .5) * 180, (Math.random() - .5) * 240);
-		w.setAttribute("position", new Uy(T, 3));
-		let E = new Jb(w, new Ub({
+		b.setSize(p, h), b.setPixelRatio(Math.min(window.devicePixelRatio || 1, m ? 1.5 : 2));
+		let x = new Gx(16777215, 1317677, 1.4);
+		g.add(x);
+		let S = new cS(16774118, 1.6);
+		S.position.set(50, 70, 40), g.add(S);
+		let C = new cS(7328736, 1.1);
+		C.position.set(-40, 25, -40), g.add(C);
+		let w = new aS(16738877, 2.8, 55, 1.8);
+		w.position.set(0, 0, 0), g.add(w);
+		let T = new tb(), E = [];
+		for (let e = 0; e < 320; e++) E.push((Math.random() - .5) * 240, (Math.random() - .5) * 180, (Math.random() - .5) * 240);
+		T.setAttribute("position", new Uy(E, 3));
+		let D = new Jb(T, new Ub({
 			color: 16777215,
 			size: .38,
 			transparent: !0,
 			opacity: .65
 		}));
-		h.add(E);
-		let D = new Zv();
-		h.add(D);
-		let O = new Tb(new ux(3.2, 28, 28), new Sx({
+		g.add(D);
+		let O = new Zv();
+		g.add(O);
+		let k = new Tb(new ux(3.2, 28, 28), new Sx({
 			color: 988450,
 			metalness: .45,
 			roughness: .35,
 			emissive: 396312,
 			emissiveIntensity: .4
 		}));
-		D.add(O);
-		let k = ZT(), A = new nx(2.7, 2.7, .4, 32), j = new Sx({
+		O.add(k);
+		let A = ZT(), j = new nx(2.7, 2.7, .4, 32), M = new Sx({
 			color: 2041656,
 			metalness: .8,
 			roughness: .25
-		}), M = new pb({
-			map: k,
+		}), N = new pb({
+			map: A,
 			transparent: !0
-		}), N = new Tb(A, [
-			j,
+		}), P = new Tb(j, [
 			M,
-			M
+			N,
+			N
 		]);
-		N.rotation.x = Math.PI / 2, D.add(N);
-		let P = new Tb(new lx(3.6, 4, 48), new pb({
+		P.rotation.x = Math.PI / 2, O.add(P);
+		let F = new Tb(new lx(3.6, 4, 48), new pb({
 			color: 7328736,
 			side: 2,
 			transparent: !0,
 			opacity: .3
 		}));
-		P.rotation.x = Math.PI / 2.2, D.add(P);
-		let F = [], I = [];
+		F.rotation.x = Math.PI / 2.2, O.add(F);
+		let I = [], ee = [];
 		XT.forEach((e, t) => {
 			let n = new iy(e.color), r = new Zv(), i = QT(e.shape, n);
 			r.add(i);
@@ -28444,9 +28444,9 @@ function $T() {
 				}
 			});
 			let o = new Tb(new ux(1.8, 8, 8), new pb({ visible: !1 }));
-			o.userData = { projectIndex: t }, r.add(o), I.push(o);
+			o.userData = { projectIndex: t }, r.add(o), ee.push(o);
 			let s = 6.8 + t * 1.15, c = .0014 + t % 4 * 3e-4, l = Math.PI * 2 * t / XT.length, u = Math.sin(t * 1.6) * 1.4;
-			r.position.set(Math.cos(l) * s, u, Math.sin(l) * s), h.add(r);
+			r.position.set(Math.cos(l) * s, u, Math.sin(l) * s), g.add(r);
 			let d = new tb(), f = [];
 			for (let e = 0; e <= 64; e++) {
 				let t = e / 64 * Math.PI * 2;
@@ -28458,7 +28458,7 @@ function $T() {
 				transparent: !0,
 				opacity: .08
 			}));
-			h.add(p), F.push({
+			g.add(p), I.push({
 				group: r,
 				hitMesh: o,
 				radius: s,
@@ -28468,25 +28468,25 @@ function $T() {
 				materials: a
 			});
 		});
-		let ee = new ES(), L = new Q_(-999, -999), R = () => {
+		let L = new ES(), R = new Q_(-999, -999), te = () => {
 			l(!0);
 			let e = document.querySelector("#rAnim"), t = document.querySelector("#gAnim"), n = document.querySelector("#bAnim");
 			e?.beginElement?.(), t?.beginElement?.(), n?.beginElement?.(), setTimeout(() => l(!1), 350);
-		}, te = () => {
-			if (Ii.to(g.position, {
-				x: _.x,
-				y: _.y,
-				z: _.z,
+		}, z = () => {
+			if (Ii.to(_.position, {
+				x: v.x,
+				y: v.y,
+				z: v.z,
 				duration: 1.25,
 				ease: "power2.inOut"
-			}), Ii.to(v, {
+			}), Ii.to(y, {
 				x: 0,
 				y: 0,
 				z: 0,
 				duration: 1.25,
 				ease: "power2.inOut"
 			}), f) {
-				let e = F.find((e) => e.hitMesh === f);
+				let e = I.find((e) => e.hitMesh === f);
 				e && e.materials.forEach((e) => {
 					Ii.to(e.emissive, {
 						r: 0,
@@ -28498,11 +28498,11 @@ function $T() {
 			}
 			f = null, c = !1, r(null);
 		};
-		u.current = te;
-		let z = (e) => {
-			if (!e || f === e) te();
+		u.current = z;
+		let ne = (e) => {
+			if (!e || f === e) z();
 			else {
-				f && F.find((e) => e.hitMesh === f)?.materials.forEach((e) => {
+				f && I.find((e) => e.hitMesh === f)?.materials.forEach((e) => {
 					Ii.to(e.emissive, {
 						r: 0,
 						g: 0,
@@ -28510,7 +28510,7 @@ function $T() {
 						duration: .2
 					});
 				}), f = e, c = !0;
-				let t = F.find((t) => t.hitMesh === e);
+				let t = I.find((t) => t.hitMesh === e);
 				if (!t) return;
 				t.materials.forEach((e) => {
 					Ii.to(e.emissive, {
@@ -28521,34 +28521,34 @@ function $T() {
 					});
 				});
 				let n = t.group.position.clone(), i = n.clone().normalize(), o = new Q(n.x + i.x * 4.2 + 1.2, n.y + 2.2, n.z + i.z * 4.2 + 1.6);
-				Ii.to(g.position, {
+				Ii.to(_.position, {
 					x: o.x,
 					y: o.y,
 					z: o.z,
 					duration: 1.35,
 					ease: "power2.inOut"
-				}), Ii.to(v, {
+				}), Ii.to(y, {
 					x: n.x,
 					y: n.y,
 					z: n.z,
 					duration: 1.35,
 					ease: "power2.inOut"
-				}), r(t.project), a(t.radius), s(t.speed), R();
+				}), r(t.project), a(t.radius), s(t.speed), te();
 			}
-		}, ne = (e) => {
+		}, B = (e) => {
 			let t = n.getBoundingClientRect();
-			L.x = (e.clientX - t.left) / t.width * 2 - 1, L.y = -((e.clientY - t.top) / t.height) * 2 + 1, ee.setFromCamera(L, g);
-			let r = ee.intersectObjects(I);
+			R.x = (e.clientX - t.left) / t.width * 2 - 1, R.y = -((e.clientY - t.top) / t.height) * 2 + 1, L.setFromCamera(R, _);
+			let r = L.intersectObjects(ee);
 			if (r.length > 0) {
 				let e = r[0].object;
-				d && d !== e && d !== f && F.find((e) => e.hitMesh === d)?.materials.forEach((e) => {
+				d && d !== e && d !== f && I.find((e) => e.hitMesh === d)?.materials.forEach((e) => {
 					Ii.to(e.emissive, {
 						r: 0,
 						g: 0,
 						b: 0,
 						duration: .2
 					});
-				}), d = e, d !== f && F.find((e) => e.hitMesh === d)?.materials.forEach((e) => {
+				}), d = e, d !== f && I.find((e) => e.hitMesh === d)?.materials.forEach((e) => {
 					Ii.to(e.emissive, {
 						r: e.color.r,
 						g: e.color.g,
@@ -28556,7 +28556,7 @@ function $T() {
 						duration: .25
 					});
 				});
-			} else d && d !== f && (F.find((e) => e.hitMesh === d)?.materials.forEach((e) => {
+			} else d && d !== f && (I.find((e) => e.hitMesh === d)?.materials.forEach((e) => {
 				Ii.to(e.emissive, {
 					r: 0,
 					g: 0,
@@ -28564,8 +28564,8 @@ function $T() {
 					duration: .2
 				});
 			}), d = null);
-		}, B = () => {
-			d && d !== f && (F.find((e) => e.hitMesh === d)?.materials.forEach((e) => {
+		}, re = () => {
+			d && d !== f && (I.find((e) => e.hitMesh === d)?.materials.forEach((e) => {
 				Ii.to(e.emissive, {
 					r: 0,
 					g: 0,
@@ -28573,25 +28573,27 @@ function $T() {
 					duration: .2
 				});
 			}), d = null);
-		}, re = (e) => {
+		}, ie = (e) => {
 			let t = n.getBoundingClientRect();
-			L.x = (e.clientX - t.left) / t.width * 2 - 1, L.y = -((e.clientY - t.top) / t.height) * 2 + 1, ee.setFromCamera(L, g);
-			let r = ee.intersectObjects(I);
-			r.length > 0 && z(r[0].object);
+			R.x = (e.clientX - t.left) / t.width * 2 - 1, R.y = -((e.clientY - t.top) / t.height) * 2 + 1, L.setFromCamera(R, _);
+			let r = L.intersectObjects(ee);
+			r.length > 0 && ne(r[0].object);
 		};
-		n.addEventListener("pointermove", ne, { passive: !0 }), n.addEventListener("pointerleave", B), n.addEventListener("click", re);
-		let ie = () => {
-			let e = i.clientWidth || window.innerWidth, t = Math.max(400, Math.min(560, e * .46));
-			y.setSize(e, t), g.aspect = e / t, g.updateProjectionMatrix();
-		};
-		window.addEventListener("resize", ie);
+		n.addEventListener("pointermove", B, { passive: !0 }), n.addEventListener("pointerleave", re), n.addEventListener("click", ie);
 		let ae = () => {
-			o = requestAnimationFrame(ae), D.rotation.y += .0035, c || F.forEach((e) => {
-				e.angle += e.speed, e.group.position.x = Math.cos(e.angle) * e.radius, e.group.position.z = Math.sin(e.angle) * e.radius, e.group.rotation.y += .012, e.group.rotation.x += .006;
-			}), g.lookAt(v), y.render(h, g);
+			let e = i.clientWidth || window.innerWidth, t = e < 768, n = Math.max(340, Math.min(560, t ? 360 : e * .46));
+			b.setSize(e, n), b.setPixelRatio(Math.min(window.devicePixelRatio || 1, t ? 1.5 : 2)), _.aspect = e / n, f || (v.set(t ? 12 : 14, t ? 14 : 12, t ? 50 : 36), _.position.copy(v)), _.updateProjectionMatrix();
 		};
-		return ae(), () => {
-			cancelAnimationFrame(o), window.removeEventListener("resize", ie), n.removeEventListener("pointermove", ne), n.removeEventListener("pointerleave", B), n.removeEventListener("click", re), y.dispose();
+		window.addEventListener("resize", ae);
+		let V = !0, oe = () => {
+			V && (o = requestAnimationFrame(oe), O.rotation.y += .0035, c || I.forEach((e) => {
+				e.angle += e.speed, e.group.position.x = Math.cos(e.angle) * e.radius, e.group.position.z = Math.sin(e.angle) * e.radius, e.group.rotation.y += .012, e.group.rotation.x += .006;
+			}), _.lookAt(y), b.render(g, _));
+		}, se = new IntersectionObserver(([e]) => {
+			V = e.isIntersecting, V ? (cancelAnimationFrame(o), oe()) : cancelAnimationFrame(o);
+		}, { threshold: .05 });
+		return se.observe(i), oe(), () => {
+			se.disconnect(), cancelAnimationFrame(o), window.removeEventListener("resize", ae), n.removeEventListener("pointermove", B), n.removeEventListener("pointerleave", re), n.removeEventListener("click", ie), b.dispose();
 		};
 	}, []), /* @__PURE__ */ (0, X.jsxs)("div", {
 		className: "orbit-viewport-wrap",
@@ -29566,42 +29568,44 @@ function qE(e = document) {
 Ii.registerPlugin(tc);
 var JE = .85, YE = 22;
 function XE() {
-	let e = UE(), t = y("[data-nav-progress]"), n = b("[data-palette-nav]"), r = qE(), i = -1, a = () => {
-		let e = document.documentElement.scrollHeight - window.innerHeight, n = e > 0 ? HE(window.scrollY / e, 0, 1) : 0;
-		t?.style.setProperty("--progress", n.toFixed(4));
-	}, o = () => {
-		if (r.length === 0) return;
-		let e = KE(GE(r), window.innerHeight / 2);
-		if (e === i) return;
-		i = e;
-		let t = r[e]?.id;
-		for (let e of n) t && e.hash === `#${t}` ? e.setAttribute("aria-current", "true") : e.removeAttribute("aria-current");
+	let e = UE(), t = "ontouchstart" in window || navigator.maxTouchPoints > 0, n = y("[data-nav-progress]"), r = b("[data-palette-nav]"), i = qE(), a = -1, o = () => {
+		let e = document.documentElement.scrollHeight - window.innerHeight, t = e > 0 ? HE(window.scrollY / e, 0, 1) : 0;
+		n?.style.setProperty("--progress", t.toFixed(4));
+	}, s = () => {
+		if (i.length === 0) return;
+		let e = KE(GE(i), window.innerHeight / 2);
+		if (e === a) return;
+		a = e;
+		let t = i[e]?.id;
+		for (let e of r) t && e.hash === `#${t}` ? e.setAttribute("aria-current", "true") : e.removeAttribute("aria-current");
 		document.dispatchEvent(new CustomEvent("mn:sectionchange", { detail: e }));
 	};
 	x(window, "scroll", () => {
-		a(), o();
-	}, { passive: !0 }), a(), o();
-	let s = null;
-	e || (s = new VE({
-		duration: 1.05,
-		touchMultiplier: 1.6
-	}), s.on("scroll", tc.update), Ii.ticker.add((e) => s?.raf(e * 1e3)), Ii.ticker.lagSmoothing(0), x(window, "load", () => tc.refresh())), x(document, "click", (e) => {
+		o(), s();
+	}, { passive: !0 }), o(), s();
+	let c = null;
+	!e && !t && (c = new VE({ duration: 1.05 }), c.on("scroll", tc.update), Ii.ticker.add((e) => c?.raf(e * 1e3)), Ii.ticker.lagSmoothing(0), x(window, "load", () => tc.refresh())), x(document, "click", (e) => {
 		let t = e.target?.closest("a[href^=\"#\"]");
 		if (!(t instanceof HTMLAnchorElement)) return;
 		let n = document.querySelector(t.hash);
-		if (n instanceof HTMLElement) {
-			if (e.preventDefault(), s) {
-				let e = -(y(".nav")?.offsetHeight ?? 0) - 8;
-				s.scrollTo(n, {
-					offset: e,
-					duration: 1.1
-				});
-			} else n.scrollIntoView({ block: "start" });
+		if (!(n instanceof HTMLElement)) return;
+		e.preventDefault();
+		let r = (y(".nav")?.offsetHeight ?? 0) + 8;
+		if (c) c.scrollTo(n, {
+			offset: -r,
+			duration: 1.1
+		});
+		else {
+			let e = n.getBoundingClientRect().top + window.scrollY - r;
+			window.scrollTo({
+				top: e,
+				behavior: "smooth"
+			});
 		}
 	});
-	let c = b("[data-reveal]");
-	if (e) for (let e of c) e.style.opacity = "1", e.style.clipPath = "none";
-	else for (let e of c) {
+	let l = b("[data-reveal]");
+	if (e) for (let e of l) e.style.opacity = "1", e.style.clipPath = "none";
+	else for (let e of l) {
 		let t = e.dataset.reveal === "mask", n = {
 			opacity: 0,
 			y: t ? 0 : YE,
@@ -29768,14 +29772,16 @@ var oD = "\nfloat hue2rgb(float f1, float f2, float hue) {\n    if (hue < 0.0)\n
 	isRunning = !0;
 	constructor(e) {
 		this.canvas = e, this.isReduced = UE(), this.scene = new sy(), this.clock = new kS();
-		let t = window.innerWidth, n = window.innerHeight, r = t / n;
-		this.camera = new rS(40, r, .1, 1e3), this.camera.position.set(0, 0, 10), this.renderer = new YT({
+		let t = window.innerWidth, n = window.innerHeight, r = t / n, i = t < 768;
+		this.camera = new rS(40, r, .1, 1e3);
+		let a = r < 1 ? Math.max(13, 7.5 / r) : 10, o = r < 1 ? .6 : 0;
+		this.camera.position.set(0, o, a), this.renderer = new YT({
 			canvas: this.canvas,
-			antialias: !0,
+			antialias: !i,
 			alpha: !0,
 			powerPreference: "high-performance"
-		}), this.renderer.setSize(t, n), this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-		let i = document.documentElement.dataset.theme === "light" ? 0 : 1;
+		}), this.renderer.setSize(t, n), this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, i ? 1.5 : 2));
+		let s = document.documentElement.dataset.theme === "light" ? 0 : 1;
 		this.sphereMaterial = new bx({
 			vertexShader: dD,
 			fragmentShader: uD,
@@ -29794,7 +29800,7 @@ var oD = "\nfloat hue2rgb(float f1, float f2, float hue) {\n    if (hue < 0.0)\n
 			uniforms: {
 				u_time: { value: 0 },
 				u_progress: { value: 0 },
-				u_isDark: { value: i }
+				u_isDark: { value: s }
 			}
 		}), this.backgroundMaterial = new bx({
 			vertexShader: sD,
@@ -29804,19 +29810,19 @@ var oD = "\nfloat hue2rgb(float f1, float f2, float hue) {\n    if (hue < 0.0)\n
 			uniforms: {
 				u_time: { value: 0 },
 				u_progress: { value: 0 },
-				u_isDark: { value: i }
+				u_isDark: { value: s }
 			}
 		});
-		let a = new ux(1, 140, 140);
-		this.sphere = new Tb(a, this.sphereMaterial), this.scene.add(this.sphere);
-		let o = 26e3, s = new Float32Array(o * 3), c = new tb(), l = Math.PI * (3 - Math.sqrt(5)), u = 2 / o;
-		for (let e = 0; e < o; e++) {
-			let t = e * u - 1 + u / 2, n = Math.sqrt(Math.max(0, 1 - t * t)), r = e * l;
-			s[3 * e] = 2 * Math.cos(r) * n, s[3 * e + 1] = 2 * t, s[3 * e + 2] = 2 * Math.sin(r) * n;
+		let c = i ? 64 : 140, l = new ux(1, c, c);
+		this.sphere = new Tb(l, this.sphereMaterial), this.scene.add(this.sphere);
+		let u = i ? 7e3 : 26e3, d = new Float32Array(u * 3), f = new tb(), p = Math.PI * (3 - Math.sqrt(5)), m = 2 / u;
+		for (let e = 0; e < u; e++) {
+			let t = e * m - 1 + m / 2, n = Math.sqrt(Math.max(0, 1 - t * t)), r = e * p;
+			d[3 * e] = 2 * Math.cos(r) * n, d[3 * e + 1] = 2 * t, d[3 * e + 2] = 2 * Math.sin(r) * n;
 		}
-		c.setAttribute("position", new By(s, 3)), this.points = new Jb(c, this.pointsMaterial), this.scene.add(this.points);
-		let d = new cx(120, 80, 16);
-		this.backgroundMesh = new Tb(d, this.backgroundMaterial), this.backgroundMesh.position.z = -5, this.scene.add(this.backgroundMesh), this.eventListeners(), this.animate(), this.render();
+		f.setAttribute("position", new By(d, 3)), this.points = new Jb(f, this.pointsMaterial), this.scene.add(this.points);
+		let h = new cx(120, 80, 16);
+		this.backgroundMesh = new Tb(h, this.backgroundMaterial), this.backgroundMesh.position.z = -5, this.scene.add(this.backgroundMesh), this.eventListeners(), this.animate(), this.render();
 	}
 	animate() {
 		this.isReduced ? (this.sphereMaterial.uniforms.u_progress.value = 1.2, this.pointsMaterial.uniforms.u_progress.value = .35) : (Ii.timeline({
@@ -29844,8 +29850,22 @@ var oD = "\nfloat hue2rgb(float f1, float f2, float hue) {\n    if (hue < 0.0)\n
 	eventListeners() {
 		x(window, "resize", () => {
 			let e = window.innerWidth, t = window.innerHeight;
-			this.camera.aspect = e / t, this.camera.updateProjectionMatrix(), this.renderer.setSize(e, t);
-		}), x(window, "pointermove", (e) => {
+			this.camera.aspect = e / t;
+			let n = e < 768, r = this.camera.aspect < 1 ? Math.max(13, 7.5 / this.camera.aspect) : 10, i = this.camera.aspect < 1 ? .6 : 0;
+			this.camera.position.set(0, i, r), this.camera.updateProjectionMatrix(), this.renderer.setSize(e, t), this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, n ? 1.5 : 2));
+		});
+		let e = y("#ground"), t = y("#strata");
+		if (e && t && "IntersectionObserver" in window) {
+			let n = !0, r = !1, i = () => {
+				let e = n || r;
+				e && !this.isRunning ? (this.isRunning = !0, this.clock.start(), requestAnimationFrame(this.render)) : e || (this.isRunning = !1);
+			}, a = new IntersectionObserver((a) => {
+				for (let i of a) i.target === e && (n = i.isIntersecting), i.target === t && (r = i.isIntersecting);
+				i();
+			}, { threshold: .02 });
+			a.observe(e), a.observe(t);
+		}
+		x(window, "pointermove", (e) => {
 			let t = e;
 			this.targetYaw = (t.clientX / window.innerWidth * 2 - 1) * .4, this.targetPitch = -(t.clientY / window.innerHeight * 2 - 1) * .25;
 		}, { passive: !0 }), x(document, "visibilitychange", () => {
