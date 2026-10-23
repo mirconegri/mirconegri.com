@@ -16,8 +16,6 @@ Direct, pragmatic, and built by hand: software built from concrete problems, vol
 
 ## Architecture
 
-> *"A Three.js noise sphere with orbital particle swarm, a custom 2D canvas map, and no framework runtime beyond the islands that need one."*
-
 Unlike monolithic single-page applications, **v4.0** is architected around **Progressive Enhancement & Adaptive Dual-Tier Platform Architecture**:
 
 - **Static HTML First**: Semantic HTML5 document containing all text and structure. Fast first paint, SEO-ready, and fully legible even if JavaScript is disabled.
