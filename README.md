@@ -44,16 +44,16 @@ Unlike monolithic single-page applications, **v4.0** is architected around **Pro
 
 ## Visual Showcase & Screenshots
 
-Tabella comparativa delle **6 sezioni della navmap** nei diversi temi e dispositivi:
+Comparative preview table of the **6 navmap sections** across desktop and mobile devices:
 
 | Navmap Section | PC — Light Mode | PC — Dark Mode | Mobile — Dark Mode |
 | :--- | :---: | :---: | :---: |
-| **01. About**<br>*(About)* | ![Chi sono - PC Chiara](assets/about_white.png) | ![Chi sono - PC Scura](assets/about.png) | ![Chi sono - Mobile Scura](assets/about_mobile.png) |
-| **02. Projects**<br>*(Projects)* | ![Progetti - PC Chiara](assets/projects_white.png) | ![Progetti - PC Scura](assets/projects.png) | ![Progetti - Mobile Scura](assets/projects_mobile.png) |
-| **03. Education**<br>*(Education)* | ![Percorso - PC Chiara](assets/education_white.png) | ![Percorso - PC Scura](assets/education.png) | ![Percorso - Mobile Scura](assets/education_mobile.png) |
-| **04. Volunteering**<br>*(Volunteering)* | ![Volontariato - PC Chiara](assets/volunteering_white.png) | ![Volontariato - PC Scura](assets/volunteering.png) | ![Volontariato - Mobile Scura](assets/volunteering_mobile.png) |
-| **05. Map**<br>*(Map / Places)* | ![Mappa - PC Chiara](assets/places_white.png) | ![Mappa - PC Scura](assets/places.png) | ![Mappa - Mobile Scura](assets/places_mobile.png) |
-| **06. Contact**<br>*(Contact)* | ![Contatti - PC Chiara](assets/contact_white.png) | ![Contatti - PC Scura](assets/contact.png) | ![Contatti - Mobile Scura](assets/contact_mobile.png) |
+| **01. About** | ![About - PC Light](assets/about_white.png) | ![About - PC Dark](assets/about.png) | ![About - Mobile Dark](assets/about_mobile.png) |
+| **02. Projects** | ![Projects - PC Light](assets/projects_white.png) | ![Projects - PC Dark](assets/projects.png) | ![Projects - Mobile Dark](assets/projects_mobile.png) |
+| **03. Education** | ![Education - PC Light](assets/education_white.png) | ![Education - PC Dark](assets/education.png) | ![Education - Mobile Dark](assets/education_mobile.png) |
+| **04. Volunteering** | ![Volunteering - PC Light](assets/volunteering_white.png) | ![Volunteering - PC Dark](assets/volunteering.png) | ![Volunteering - Mobile Dark](assets/volunteering_mobile.png) |
+| **05. Map** | ![Map - PC Light](assets/places_white.png) | ![Map - PC Dark](assets/places.png) | ![Map - Mobile Dark](assets/places_mobile.png) |
+| **06. Contact** | ![Contact - PC Light](assets/contact_white.png) | ![Contact - PC Dark](assets/contact.png) | ![Contact - Mobile Dark](assets/contact_mobile.png) |
 
 ---
 
