@@ -357,6 +357,16 @@ html[data-theme='light'] .sheet-title {
   border-bottom: 0;
 }
 
+
+.revision--major {
+  background: color-mix(in oklab, var(--accent) 3.5%, transparent);
+}
+
+.revision--major .revision-version {
+  font-weight: 700;
+  color: var(--accent);
+}
+
 .revision-version {
   font-family: var(--font-mono);
   font-size: var(--step--1);
